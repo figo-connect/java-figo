@@ -1,5 +1,7 @@
 package me.figo;
 
+import me.figo.models.*;
+
 /***
  * Main entry point to the data access-part of the figo connect java library. Here you can retrieve all the
  * data the user granted your app access to.
@@ -19,5 +21,9 @@ public class FigoSession {
 	 */
 	public FigoSession(String access_token) {
 		this.access_token = access_token;
+	}
+	
+	public Account getAccount(String accountId) {
+		throw new UnsupportedOperationException();
 	}
 }
