@@ -22,7 +22,7 @@ session = FigoSession("ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22u
 // print out a list of accounts including its balance
 for(Account account : session.accounts) {
  	System.out.println(account.name);
-	System.out.println(account.balance.balance);
+	System.out.println(session.getAccountBalance(account).balance);
 }
 
 // print out the list of all transactions on a specific account
@@ -30,3 +30,5 @@ for(Transaction transaction: session.get_account("A1.2").transactions) {
 	System.out.println(transaction.purpose);
 }
 ```
+
+A more detailed documentation of the figo connect API can be found at http://developer.figo.me.
