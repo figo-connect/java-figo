@@ -8,7 +8,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+
 import me.figo.FigoException.ErrorResponse;
+import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
@@ -30,6 +35,15 @@ public class FigoSession {
 	private String access_token = null;
 
 	/***
+	 * Creates a FigoSession instance
+	 * 
+	 * @param access_token the access token to bind this session to a user
+	 */
+	public FigoSession(String access_token) {
+		this.access_token = access_token;
+	}
+	
+	/***
 	 * Query the figo API via HTTP
 	 * 
 	 * @param path Endpoint to query
@@ -38,10 +52,19 @@ public class FigoSession {
 	 * @return decoded response
 	 */
 	private <T> T queryApi(String path, Object data, String method, Type typeOfT) throws FigoException, IOException {
-		URL url = new URL(API_ENDPOINT + path);
-		
 		// configure URL connection, i.e. the HTTP request
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) (new URL(API_ENDPOINT + path)).openConnection();
+		if (connection instanceof HttpsURLConnection) {
+	        // Setup and install the trust manager
+	        try {
+	        	final SSLContext sc = SSLContext.getInstance("SSL");
+	        	sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
+	        	((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+	        } catch (Exception e) {
+	        	throw new IOException("Connection setup failed", e);
+	        }
+		}
+		
 		connection.setRequestMethod(method);
 		connection.setRequestProperty("Authorization", "Bearer " + this.access_token);
 		connection.setRequestProperty("Accept", "application/json");
@@ -63,6 +86,8 @@ public class FigoSession {
 			throw new FigoException((ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
 		} else if (code == 401) {
 			throw new FigoException("access_denied", "Access Denied");
+		} else if (code == 404) {
+			return null;
 		} else {
 			//return decode(connection.getErrorStream(), resultType);
 			throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
@@ -91,23 +116,16 @@ public class FigoSession {
 		return gson.fromJson(body, typeOfT);
 	}
 	
-	
-	/***
-	 * Creates a FigoSession instance
-	 * 
-	 * @param access_token the access token to bind this session to a user
-	 */
-	public FigoSession(String access_token) {
-		this.access_token = access_token;
-	}
-	
 	/***
 	 * All accounts the user has granted your App access to
 	 * @return List of Accounts
 	 */
 	public List<Account> getAccounts() throws FigoException, IOException {
 		Account.AccountsResponse response = this.queryApi("/rest/accounts", null, "GET", Account.AccountsResponse.class);
-		return response.getAccounts();
+		if(response == null)
+			return null;
+		else
+			return response.getAccounts();
 	}
 	
 	/***
@@ -135,7 +153,10 @@ public class FigoSession {
 	 */
 	public List<Transaction> getTransactions() throws FigoException, IOException {
 		Transaction.TransactionsResponse response = this.queryApi("/rest/transactions", null, "GET", Transaction.TransactionsResponse.class);
-		return response.getTransactions();
+		if (response == null)
+			return null;
+		else
+			return response.getTransactions();
 	}
 
 	/***
@@ -144,7 +165,10 @@ public class FigoSession {
 	 */
 	public List<Transaction> getTransactions(String accountId) throws FigoException, IOException {
 		Transaction.TransactionsResponse response = this.queryApi("/rest/accounts/" + accountId +"/transactions", null, "GET", Transaction.TransactionsResponse.class);
-		return response.getTransactions();
+		if (response == null)
+			return null;
+		else
+			return response.getTransactions();
 	}
 	
 	/***
@@ -170,7 +194,10 @@ public class FigoSession {
 	 */
 	public List<Notification> getNotifications() throws FigoException, IOException {
 		Notification.NotificationsResponse response = this.queryApi("/rest/notifications", null, "GET", Notification.NotificationsResponse.class);
-		return response.getNotifications();
+		if (response == null)
+			return null;
+		else
+			return response.getNotifications();
 	}
 	
 	/***
