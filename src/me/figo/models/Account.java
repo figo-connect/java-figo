@@ -1,5 +1,7 @@
 package me.figo.models;
 
+import java.util.List;
+
 /***
  * Object representing one bank account of the user, independent of the exact account type
  * 
@@ -165,4 +167,23 @@ public class Account {
 	public String getIconUrl() {
 		return icon;
 	}
+	
+    /***
+     * Helper type to match actual response from figo API
+     */
+    public class AccountsResponse {
+    	/***
+    	 * List of accounts asked for
+    	 */
+    	private List<Account> accounts;
+    	
+    	public AccountsResponse() {}
+
+    	/***
+    	 * List of accounts asked for
+    	 */
+    	public List<Account> getAccounts() {
+    		return accounts;
+    	}
+    }
 }

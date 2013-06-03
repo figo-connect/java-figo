@@ -1,6 +1,7 @@
 package me.figo.models;
 
 import java.util.Date;
+import java.util.List;
 
 /***
  * Object representing one bank transaction on a certain bank account of the user
@@ -177,6 +178,37 @@ public class Transaction {
      */
     public boolean isBooked() {
     	return booked;
+    }
+    
+    /***
+     * Helper type to represent the actual answer from the figo API
+     */
+    public class TransactionsResponse {
+    	/***
+    	 * List of transactions asked for
+    	 */
+    	private List<Transaction> transactions;
+    	
+    	/***
+    	 * Synchronization status between figo and bank servers
+    	 */
+    	private SynchronizationStatus status;
+    	
+    	public TransactionsResponse() {}
+    	
+    	/***
+    	 * List of transactions asked for
+    	 */
+    	public List<Transaction> getTransactions() {
+    		return transactions;
+    	}
+
+    	/***
+    	 * Synchronization status between figo and bank servers
+    	 */
+    	public SynchronizationStatus getStatus() {
+    		return status;
+    	}
     }
 }
 
