@@ -37,6 +37,7 @@ import javax.net.ssl.TrustManager;
 import me.figo.FigoException.ErrorResponse;
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
+import me.figo.internal.ActionTypes;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Notification;
@@ -244,8 +245,8 @@ public class FigoSession {
 	 * Update a stored notification
 	 * @param notification Notification with updated values
 	 */
-	public Notification updateNotification(Notification notification) throws FigoException, IOException {
-		return this.queryApi("/rest/notifications/" + notification.getNotificationId(), notification, "PUT", Notification.class);
+	public void updateNotification(Notification notification) throws FigoException, IOException {
+		this.queryApi("/rest/notifications/" + notification.getNotificationId(), notification, "PUT", null);
 	}
 
 	/***
@@ -255,7 +256,7 @@ public class FigoSession {
 	public void removeNotification(Notification notification) throws FigoException, IOException {
 		this.queryApi("/rest/notifications/" + notification.getNotificationId(), null, "DELETE", null);
 	}
-	
+
 	/***
 	 * URL to trigger a synchronisation.
      * 
@@ -266,21 +267,7 @@ public class FigoSession {
 	 * @return the URL to be opened by the user
 	 */
 	public String getSyncURL(String state, String redirect_url) throws FigoException, IOException {
-		@SuppressWarnings("unused")
-		class SyncTokenRequest {
-			public String state;
-			public String redirect_uri;
-			
-			public SyncTokenRequest(String state, String redirect_uri) {
-				this.state = state;
-				this.redirect_uri = redirect_uri;
-			}
-		}
-		class SyncTokenResponse {
-			public String task_token;
-		}
-		
-		SyncTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url), "POST", SyncTokenResponse.class);
+		ActionTypes.SyncTokenResponse response = this.queryApi("/rest/sync", new ActionTypes.SyncTokenRequest(state, redirect_url), "POST", ActionTypes.SyncTokenResponse.class);
 		
 		return response.task_token;
 	}

@@ -59,15 +59,8 @@ public class SessionTest {
     }
 	
 	@Test
-	public void testErrorHandling() throws IOException {
-		try {
-			sut.getAccount("A1.3");
-		} catch (FigoException e) {
-			assertNotNull(e.getErrorCode());
-			return;
-		}
-		
-		fail();
+	public void testMissingHandling() throws IOException, FigoException {
+		assertNull(sut.getAccount("A1.5"));
 	}
 	
 	@Test
@@ -93,7 +86,9 @@ public class SessionTest {
 		assertEquals(addedNotificaton.getState(), "qwe");
 		
 		addedNotificaton.setState("asd");
-		Notification updatedNotification = sut.updateNotification(addedNotificaton);
+		sut.updateNotification(addedNotificaton);
+		
+		Notification updatedNotification = sut.getNotification(addedNotificaton.getNotificationId());
 		assertEquals(updatedNotification.getNotificationId(), addedNotificaton.getNotificationId());
 		assertEquals(updatedNotification.getObserveKey(), "/rest/transactions");
 		assertEquals(updatedNotification.getNotifyURI(), "http://figo.me/test");
