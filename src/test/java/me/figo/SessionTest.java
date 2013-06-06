@@ -20,7 +20,7 @@
 // THE SOFTWARE.
 //
 
-package me.figo.test;
+package me.figo;
 
 import java.io.IOException;
 import java.util.List;
