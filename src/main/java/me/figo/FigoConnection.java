@@ -48,7 +48,7 @@ import me.figo.internal.GsonAdapter;
  */
 public class FigoConnection {
 
-    private final String API_ENDPOINT = "https://api.leanbank.com";
+    static final String API_ENDPOINT = "https://api.leanbank.com";
 
     private String clientId = null;
     private String clientSecret = null;
@@ -149,7 +149,7 @@ public class FigoConnection {
      public String getLoginUrl(String scope, String state) {
     	try {
 			StringBuilder sb = new StringBuilder();
-			sb.append(this.API_ENDPOINT);
+			sb.append(FigoConnection.API_ENDPOINT);
 			sb.append("/auth/code?response_type=code&client_id=");
 			sb.append(URLEncoder.encode(this.clientId, "ISO-8859-1"));
 			sb.append("&redirect_uri=");

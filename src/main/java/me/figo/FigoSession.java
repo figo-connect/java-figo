@@ -52,7 +52,7 @@ import com.google.gson.Gson;
  */
 public class FigoSession {
 	
-	private final String API_ENDPOINT = "https://api.leanbank.com";
+	static String API_ENDPOINT = "https://api.leanbank.com";
 	
 	private String access_token = null;
 
