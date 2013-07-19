@@ -88,7 +88,7 @@ public class Account {
     private String bic;
     
     /***
-     * Account type: Giro account, Savings account, Credit card, Loan account, PayPal or Unknown
+     * Account type: Giro account, Savings account, Credit card, Loan account, PayPal, Cash book or Unknown
      */
     private String type;
     
