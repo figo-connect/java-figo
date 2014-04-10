@@ -48,7 +48,7 @@ import me.figo.internal.GsonAdapter;
  */
 public class FigoConnection {
 
-    static final String API_ENDPOINT = "https://api.leanbank.com";
+    static final String API_ENDPOINT = "https://api.figo.me";
 
     private String clientId = null;
     private String clientSecret = null;

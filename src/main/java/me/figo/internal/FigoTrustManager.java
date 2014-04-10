@@ -37,9 +37,7 @@ public class FigoTrustManager implements X509TrustManager {
 	private static final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 	
 	private static final List<String> VALID_FINGERPRINTS = Arrays.asList(
-			"A6:FE:08:F4:A8:86:F9:C1:BF:4E:70:0A:BD:72:AE:B8:8E:B7:78:52",
-			"AD:A0:E3:2B:1F:CE:E8:44:F2:83:BA:AE:E4:7D:F2:AD:44:48:7F:1E",
-			"E0:46:84:06:D0:1B:0B:6E:3D:3F:7F:A4:F5:D7:32:C2:56:BA:2F:0A");
+			"3A:62:54:4D:86:B4:34:38:EA:34:64:4E:95:10:A9:FF:37:27:69:C0");
 
 	public java.security.cert.X509Certificate[] getAcceptedIssuers() {
 		return null;
