@@ -4,7 +4,7 @@
 	
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.0.snapshot</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>	
 
 	<name>Figo Java SDK</name>
