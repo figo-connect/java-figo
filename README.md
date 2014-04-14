@@ -8,7 +8,7 @@ Simply add to your pom.xml:
 ```xml
 <dependency>
         <groupId>me.figo</groupId>
-        <artifactId>java-figo</artifactId>
+        <artifactId>sdk</artifactId>
         <version>1.0.1</version>
 </dependency>
 ```
