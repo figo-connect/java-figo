@@ -44,3 +44,8 @@ public class FigoExample {
 ```
 
 A more detailed documentation of the figo connect API can be found at http://docs.figo.io.
+
+Demos
+-----
+In this repository you can also have a look at a simple console(src/console_demo) and web demo(src/web_demo). While the console demo 
+simply accesses the figo API, the web demo implements the full OAuth flow.
