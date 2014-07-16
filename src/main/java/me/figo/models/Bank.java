@@ -1,5 +1,7 @@
 package me.figo.models;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing a Bank
  * 
@@ -9,16 +11,19 @@ public class Bank {
     /**
      * Internal ID of the bank
      */
+    @Expose(serialize = false)
     private String  bank_id;
 
     /**
      * SEPA direct debit creditor ID
      */
+    @Expose
     private String  sepa_creditor_id;
 
     /**
      * This flag indicates whether the user has chosen to save the PIN on the figo Connect server
      */
+    @Expose(serialize = false)
     private boolean save_pin;
 
     public Bank() {

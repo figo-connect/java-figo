@@ -25,6 +25,8 @@ package me.figo.models;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing one bank account of the user, independent of the exact account type
  * 
@@ -35,76 +37,91 @@ public class Account {
     /**
      * Internal figo Connect account ID
      */
+    @Expose(serialize = false)
     private String                  account_id;
 
     /**
      * Internal figo Connect bank ID
      */
+    @Expose(serialize = false)
     private String                  bank_id;
 
     /**
      * Account name
      */
+    @Expose
     private String                  name;
 
     /**
      * Account owner
      */
+    @Expose
     private String                  owner;
 
     /**
      * This flag indicates whether the account will be automatically synchronized
      */
+    @Expose
     private boolean                 auto_sync;
 
     /**
      * Account number
      */
+    @Expose(serialize = false)
     private String                  account_number;
 
     /**
      * Bank code
      */
+    @Expose(serialize = false)
     private String                  bank_code;
 
     /**
      * Bank name
      */
+    @Expose(serialize = false)
     private String                  bank_name;
 
     /**
      * Three-character currency code
      */
+    @Expose(serialize = false)
     private String                  currency;
 
     /**
      * IBAN
      */
+    @Expose(serialize = false)
     private String                  iban;
 
     /**
      * BIC
      */
+    @Expose(serialize = false)
     private String                  bic;
 
     /**
      * Account type: Giro account, Savings account, Credit card, Loan account, PayPal, Cash book or Unknown
      */
+    @Expose(serialize = false)
     private String                  type;
 
     /**
      * Account icon URL
      */
+    @Expose(serialize = false)
     private String                  icon;
-    
+
     /**
      * Account balance details
      */
+    @Expose(serialize = false)
     private AccountBalance          balance;
 
     /**
      * Account icon in other resolutions
      */
+    @Expose(serialize = false)
     private HashMap<String, String> addtional_icons;
 
     public Account() {
@@ -217,7 +234,7 @@ public class Account {
     public String getType() {
         return type;
     }
-    
+
     /**
      * @return balance details
      */
@@ -246,6 +263,7 @@ public class Account {
         /**
          * List of accounts asked for
          */
+        @Expose
         private List<Account> accounts;
 
         public AccountsResponse() {

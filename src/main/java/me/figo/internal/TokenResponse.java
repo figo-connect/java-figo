@@ -1,10 +1,17 @@
 package me.figo.internal;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Helper type for OAuth token API
  */
 public class TokenResponse {
-    public String  access_token  = null;
-    public String  refresh_token = null;
-    public Integer expires       = 0;
+    @Expose
+    public String  access_token;
+
+    @Expose
+    public String  refresh_token;
+
+    @Expose
+    public Integer expires;
 }

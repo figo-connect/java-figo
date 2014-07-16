@@ -65,6 +65,6 @@ public class GsonAdapter {
             }
         };
 
-        return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).create();
+        return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).excludeFieldsWithoutExposeAnnotation().create();
     }
 }

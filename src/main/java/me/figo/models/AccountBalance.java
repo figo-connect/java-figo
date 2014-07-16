@@ -24,6 +24,8 @@ package me.figo.models;
 
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing the balance of a certain bank account of the user
  * 
@@ -33,21 +35,25 @@ public class AccountBalance {
     /**
      * Account balance or None if the balance is not yet known
      */
+    @Expose(serialize = false)
     private float balance;
 
     /**
      * Bank server timestamp of balance or None if the balance is not yet known.
      */
+    @Expose(serialize = false)
     private Date  balance_date;
 
     /**
      * Credit line
      */
+    @Expose
     private float credit_line;
 
     /**
      * User-defined spending limit
      */
+    @Expose
     private float monthly_spending_limit;
 
     public AccountBalance() {

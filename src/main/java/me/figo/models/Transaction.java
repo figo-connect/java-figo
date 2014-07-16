@@ -25,6 +25,8 @@ package me.figo.models;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing one bank transaction on a certain bank account of the user
  * 
@@ -35,71 +37,85 @@ public class Transaction {
     /**
      * Internal figo Connect transaction ID
      */
+    @Expose(serialize = false)
     private String  transaction_id;
 
     /**
      * Internal figo Connect account ID
      */
+    @Expose(serialize = false)
     private String  account_id;
 
     /**
      * Name of originator or recipient
      */
+    @Expose(serialize = false)
     private String  name;
 
     /**
      * Account number of originator or recipient
      */
+    @Expose(serialize = false)
     private String  account_number;
 
     /**
      * Bank code of originator or recipient
      */
+    @Expose(serialize = false)
     private String  bank_code;
 
     /**
      * Bank name of originator or recipient
      */
+    @Expose(serialize = false)
     private String  bank_name;
 
     /**
      * Transaction amount
      */
+    @Expose(serialize = false)
     private float   amount;
 
     /**
      * Three-character currency code
      */
+    @Expose(serialize = false)
     private String  currency;
 
     /**
      * Booking date
      */
+    @Expose(serialize = false)
     private Date    booking_date;
 
     /**
      * Value date
      */
+    @Expose(serialize = false)
     private Date    value_date;
 
     /**
      * Purpose text
      */
+    @Expose(serialize = false)
     private String  purpose;
 
     /**
      * Transaction type: Transfer, Standing order, Direct debit, Salary or rent, Electronic cash, GeldKarte, ATM, Charges or interest or Unknown
      */
+    @Expose(serialize = false)
     private String  type;
 
     /**
      * Booking text
      */
+    @Expose(serialize = false)
     private String  booking_text;
 
     /**
      * This flag indicates whether the transaction is booked or pending
      */
+    @Expose(serialize = false)
     private boolean booked;
 
     public Transaction() {
@@ -210,11 +226,13 @@ public class Transaction {
         /**
          * List of transactions asked for
          */
+        @Expose
         private List<Transaction>     transactions;
 
         /**
          * Synchronization status between figo and bank servers
          */
+        @Expose
         private SynchronizationStatus status;
 
         public TransactionsResponse() {

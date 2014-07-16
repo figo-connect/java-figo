@@ -3,6 +3,8 @@ package me.figo.models;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing an user
  * 
@@ -12,56 +14,67 @@ public class User {
     /**
      * Internal figo Connect user ID
      */
+    @Expose(serialize = false)
     private String                  user_id;
 
     /**
      * First and last name
      */
+    @Expose
     private String                  name;
 
     /**
      * Email address
      */
+    @Expose(serialize = false)
     private String                  email;
 
     /**
      * Postal address for bills, etc.
      */
+    @Expose
     private HashMap<String, String> address;
 
     /**
      * This flag indicates whether the email address has been verified
      */
+    @Expose(serialize = false)
     private boolean                 verified_email;
 
     /**
      * This flag indicates whether the user has agreed to be contacted by email
      */
+    @Expose
     private boolean                 send_newsletter;
 
     /**
      * Two-letter code of preferred language
      */
+    @Expose
     private String                  language;
 
     /**
      * This flag indicates whether the figo Account plan is free or premium
      */
+    @Expose(serialize = false)
     private boolean                 premium;
 
     /**
      * Timestamp of premium figo Account expiry
      */
+    @Expose(serialize = false)
     private Date                    premium_expires_on;
 
     /**
      * Provider for premium subscription or Null of no subscription is active
      */
+    @Expose(serialize = false)
     private String                  premium_subscription;
 
     /**
      * Timestamp of figo Account registration
      */
+    @Expose(serialize = false)
     private Date                    join_date;
 
     public User() {

@@ -24,6 +24,8 @@ package me.figo.models;
 
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Object representing a configured notification, e.g a webhook or email hook
  * 
@@ -34,21 +36,25 @@ public class Notification {
     /**
      * Internal figo Connect notification ID from the notification registration response
      */
+    @Expose(serialize = false)
     private String notification_id;
 
     /**
      * Notification key: see http://developer.figo.me/#notification_keys
      */
+    @Expose
     private String observe_key;
 
     /**
      * Notification messages will be sent to this URL
      */
+    @Expose
     private String notify_uri;
 
     /**
      * State similar to sync and login process. It will passed as POST payload for webhooks
      */
+    @Expose
     private String state;
 
     public Notification() {
@@ -119,6 +125,7 @@ public class Notification {
         /**
          * List of notifications asked for
          */
+        @Expose
         private List<Notification> notifications;
 
         public NotificationsResponse() {

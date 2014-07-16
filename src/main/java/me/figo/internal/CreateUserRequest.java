@@ -1,13 +1,24 @@
 package me.figo.internal;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Helper type for user creation
  */
 public class CreateUserRequest {
-    public String  name            = null;
-    public String  email           = null;
-    public String  password        = null;
-    public String  language        = null;
+    @Expose
+    public String  name;
+
+    @Expose
+    public String  email;
+    
+    @Expose
+    public String  password;
+    
+    @Expose
+    public String  language;
+    
+    @Expose
     public boolean send_newsletter = true;
 
     public CreateUserRequest(String name, String email, String password, String language, boolean send_newsletter) {

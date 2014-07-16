@@ -1,13 +1,22 @@
 package me.figo.internal;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Helper type for OAuth token API
  */
 public class TokenRequest {
-    public String refresh_token = null;
-    public String code          = null;
-    public String redirect_uri  = null;
-    public String grant_type    = null;
+    @Expose
+    public String refresh_token;
+
+    @Expose
+    public String code;
+
+    @Expose
+    public String redirect_uri;
+
+    @Expose
+    public String grant_type;
 
     public TokenRequest(String refresh_token, String code, String redirect_uri, String grant_type) {
         this.refresh_token = refresh_token;

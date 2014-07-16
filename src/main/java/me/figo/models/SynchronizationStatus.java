@@ -24,6 +24,8 @@ package me.figo.models;
 
 import java.util.Date;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Represents the status of the synchonisation between figo and the bank servers
  * 
@@ -33,21 +35,25 @@ public class SynchronizationStatus {
     /**
      * Internal figo status code
      */
+    @Expose(serialize = false)
     private Integer code;
 
     /**
      * Human-readable error message.
      */
+    @Expose(serialize = false)
     private String  message;
 
     /**
      * Timestamp of last synchronization
      */
+    @Expose(serialize = false)
     private Date    sync_timestamp;
 
     /**
      * Timestamp of last successful synchronization
      */
+    @Expose(serialize = false)
     private Date    success_timestamp;
 
     public SynchronizationStatus() {
