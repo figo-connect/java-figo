@@ -1,7 +1,7 @@
 java-figo [![Build Status](https://travis-ci.org/figo-connect/java-figo.png)](https://travis-ci.org/figo-connect/java-figo)
 ===========
 
-Java bindings for the figo connect API: http://figo.me
+Java bindings for the figo connect API: http://figo.io
 
 Simply add to your pom.xml:
 
@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
 </dependency>
 ```
 
@@ -43,4 +43,4 @@ public class FigoExample {
 }
 ```
 
-A more detailed documentation of the figo connect API can be found at http://developer.figo.me.
+A more detailed documentation of the figo connect API can be found at http://docs.figo.io.
