@@ -25,7 +25,7 @@ package me.figo;
 /***
  * Base Class for all figo Exceptions. It extends the normal Java exceptions with an error_code field, which carries the computer readable error reason.
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class FigoException extends Exception {
 

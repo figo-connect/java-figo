@@ -29,7 +29,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Object representing the balance of a certain bank account of the user
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class AccountBalance {
     /**

@@ -30,7 +30,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Object representing one bank account of the user, independent of the exact account type
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class Account {
 

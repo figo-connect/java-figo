@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Object representing a Payment
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class Payment {
     /**

@@ -29,7 +29,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Represents the status of the synchonisation between figo and the bank servers
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class SynchronizationStatus {
     /**

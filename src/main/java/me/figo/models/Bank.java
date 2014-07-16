@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Object representing a Bank
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class Bank {
     /**

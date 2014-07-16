@@ -45,7 +45,7 @@ import com.google.gson.Gson;
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API.
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class FigoConnection {
 
@@ -121,11 +121,13 @@ public class FigoConnection {
      *            path on the server to call
      * @param data
      *            Payload of the request
-     * @param typeofT
+     * @param method
+     *            the HTTP verb to use
+     * @param typeOfT
      *            Type of expected response
-     * @return
-     * @throws IOException
-     * @throws FigoException
+     * @param <T>
+     *            Type of expected response
+     * @return the parsed result of the request
      */
     protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
         URL url = new URL(apiEndpoint + path);
@@ -161,7 +163,7 @@ public class FigoConnection {
             throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
         }
     }
-    
+
     /**
      * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
      * 
@@ -277,9 +279,9 @@ public class FigoConnection {
      * @param name
      *            First and last name
      * @param email
-     *            Email address; It must obey the figo username & password policy
+     *            Email address; It must obey the figo username and password policy
      * @param password
-     *            New figo Account password; It must obey the figo username & password policy
+     *            New figo Account password; It must obey the figo username and password policy
      * @param language
      *            Two-letter code of preferred language
      * @param send_newsletter

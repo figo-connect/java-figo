@@ -54,7 +54,7 @@ import com.google.gson.Gson;
 /**
  * Main entry point to the data access-part of the figo connect java library. Here you can retrieve all the data the user granted your app access to.
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class FigoSession {
 
@@ -67,7 +67,7 @@ public class FigoSession {
     /**
      * Creates a FigoSession instance
      * 
-     * @param access_token
+     * @param accessToken
      *            the access token to bind this session to a user
      */
     public FigoSession(String accessToken) {
@@ -77,7 +77,7 @@ public class FigoSession {
     /**
      * Creates a FigoSession instance
      * 
-     * @param access_token
+     * @param accessToken
      *            the access token to bind this session to a user
      * @param timeout
      *            the timeout used for queries
@@ -111,6 +111,10 @@ public class FigoSession {
      *            Payload to send
      * @param method
      *            HTTP verb to use
+     * @param typeOfT
+     *            Type of expected response
+     * @param <T>
+     *            Type of expected response
      * @return decoded response
      */
     protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws FigoException, IOException {
@@ -577,7 +581,7 @@ public class FigoSession {
      * 
      * @param accountId
      *            ID of the account on which the payment can be found
-     * @param paymentID
+     * @param paymentId
      *            ID of the payment to be retrieved
      * @return Payment or Null
      */

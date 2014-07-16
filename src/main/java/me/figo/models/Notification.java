@@ -29,7 +29,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Object representing a configured notification, e.g a webhook or email hook
  * 
- * @author Stefan Richter <stefan.richter@figo.me>
+ * @author Stefan Richter
  */
 public class Notification {
 
