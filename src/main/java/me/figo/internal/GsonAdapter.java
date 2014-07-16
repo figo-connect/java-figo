@@ -38,7 +38,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class GsonAdapter {
-    public static Gson createGson(boolean useForSerialization) {
+    public static Gson createGson() {
         JsonSerializer<Date> serializer = new JsonSerializer<Date>() {
             @Override
             public JsonElement serialize(Date src, Type type, JsonSerializationContext context) {
@@ -65,10 +65,6 @@ public class GsonAdapter {
             }
         };
 
-        if (useForSerialization) {
-            return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).create();
-        } else {
-            return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).create();
-        }
+        return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).create();
     }
 }

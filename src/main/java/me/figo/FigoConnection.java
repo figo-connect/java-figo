@@ -49,14 +49,14 @@ import com.google.gson.Gson;
  */
 public class FigoConnection {
 
-    static final String API_ENDPOINT  = "https://api.figo.me";
+    protected String apiEndpoint;
 
-    private String      clientId      = null;
-    private String      clientSecret  = null;
-    private String      basicAuthInfo = null;
-    private String      redirectUri   = null;
+    protected String clientId;
+    protected String clientSecret;
+    private String   basicAuthInfo;
+    protected String redirectUri;
 
-    private int         timeout       = 5000;
+    private int      timeout;
 
     /**
      * Creates a FigoConnection instance
@@ -69,15 +69,9 @@ public class FigoConnection {
      *            the URI the users gets redirected to after the login is finished or if he presses cancels
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.redirectUri = redirectUri;
-
-        // compute basic auth information
-        String authInfo = this.clientId + ":" + this.clientSecret;
-        this.basicAuthInfo = Base64.encodeBase64String(authInfo.getBytes());
+        this(clientId, clientSecret, redirectUri, 5000);
     }
-    
+
     /**
      * Creates a FigoConnection instance
      * 
@@ -91,10 +85,29 @@ public class FigoConnection {
      *            the timeout used for queries
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout) {
+        this(clientId, clientSecret, redirectUri, timeout, "https://api.figo.me");
+    }
+
+    /**
+     * Creates a FigoConnection instance
+     * 
+     * @param clientId
+     *            the OAuth Client ID as provided by your figo developer contact
+     * @param clientSecret
+     *            the OAuth Client Secret as provided by your figo developer contact
+     * @param redirectUri
+     *            the URI the users gets redirected to after the login is finished or if he presses cancels
+     * @param timeout
+     *            the timeout used for queries
+     * @param apiEndpoint
+     *            which endpoint to use (customize for different figo deployment)
+     */
+    public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout, String apiEndpoint) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
         this.timeout = timeout;
+        this.apiEndpoint = apiEndpoint;
 
         // compute basic auth information
         String authInfo = this.clientId + ":" + this.clientSecret;
@@ -114,8 +127,8 @@ public class FigoConnection {
      * @throws IOException
      * @throws FigoException
      */
-    public <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
-        URL url = new URL(API_ENDPOINT + path);
+    protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
+        URL url = new URL(apiEndpoint + path);
 
         // configure URL connection, i.e. the HTTP request
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -129,7 +142,7 @@ public class FigoConnection {
 
         // add payload
         if (data != null) {
-            String encodedData = GsonAdapter.createGson(true).toJson(data);
+            String encodedData = createGson().toJson(data);
 
             connection.setDoOutput(true);
             connection.getOutputStream().write(encodedData.getBytes("UTF-8"));
@@ -147,6 +160,15 @@ public class FigoConnection {
             // return decode(connection.getErrorStream(), resultType);
             throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
         }
+    }
+    
+    /**
+     * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
+     * 
+     * @return GSON instance
+     */
+    protected Gson createGson() {
+        return GsonAdapter.createGson();
     }
 
     /**
@@ -170,8 +192,7 @@ public class FigoConnection {
         s.close();
 
         // decode JSON payload
-        Gson gson = GsonAdapter.createGson(false);
-        return gson.fromJson(body, typeOfT);
+        return createGson().fromJson(body, typeOfT);
     }
 
     /**
@@ -188,7 +209,7 @@ public class FigoConnection {
     public String getLoginUrl(String scope, String state) {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append(FigoConnection.API_ENDPOINT);
+            sb.append(apiEndpoint);
             sb.append("/auth/code?response_type=code&client_id=");
             sb.append(URLEncoder.encode(this.clientId, "ISO-8859-1"));
             sb.append("&redirect_uri=");

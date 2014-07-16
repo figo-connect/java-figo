@@ -58,11 +58,11 @@ import com.google.gson.Gson;
  */
 public class FigoSession {
 
-    static String  API_ENDPOINT = "https://api.figo.me";
+    protected String apiEndpoint;
 
-    private String access_token = null;
+    protected String access_token;
 
-    private int    timeout      = 5000;
+    protected int    timeout;
 
     /**
      * Creates a FigoSession instance
@@ -70,8 +70,8 @@ public class FigoSession {
      * @param access_token
      *            the access token to bind this session to a user
      */
-    public FigoSession(String access_token) {
-        this.access_token = access_token;
+    public FigoSession(String accessToken) {
+        this(accessToken, 5000);
     }
 
     /**
@@ -82,9 +82,24 @@ public class FigoSession {
      * @param timeout
      *            the timeout used for queries
      */
-    public FigoSession(String access_token, int timeout) {
-        this.access_token = access_token;
+    public FigoSession(String accessToken, int timeout) {
+        this(accessToken, timeout, "https://api.figo.me");
+    }
+
+    /**
+     * Creates a FigoSession instance
+     * 
+     * @param accessToken
+     *            the access token to bind this session to a user
+     * @param timeout
+     *            the timeout used for queries
+     * @param apiEndpoint
+     *            which endpoint to use (customize for different figo deployment)
+     */
+    public FigoSession(String accessToken, int timeout, String apiEndpoint) {
+        this.access_token = accessToken;
         this.timeout = timeout;
+        this.apiEndpoint = apiEndpoint;
     }
 
     /**
@@ -98,9 +113,9 @@ public class FigoSession {
      *            HTTP verb to use
      * @return decoded response
      */
-    private <T> T queryApi(String path, Object data, String method, Type typeOfT) throws FigoException, IOException {
+    protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws FigoException, IOException {
         // configure URL connection, i.e. the HTTP request
-        HttpURLConnection connection = (HttpURLConnection) (new URL(API_ENDPOINT + path)).openConnection();
+        HttpURLConnection connection = (HttpURLConnection) (new URL(apiEndpoint + path)).openConnection();
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
 
@@ -122,7 +137,7 @@ public class FigoSession {
 
         // add payload
         if (data != null) {
-            String encodedData = GsonAdapter.createGson(true).toJson(data);
+            String encodedData = createGson().toJson(data);
 
             connection.setDoOutput(true);
             connection.getOutputStream().write(encodedData.getBytes("UTF-8"));
@@ -148,6 +163,15 @@ public class FigoSession {
     }
 
     /**
+     * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
+     * 
+     * @return GSON instance
+     */
+    protected Gson createGson() {
+        return GsonAdapter.createGson();
+    }
+    
+    /**
      * Handle the response of a request by decoding its JSON payload
      * 
      * @param stream
@@ -168,8 +192,7 @@ public class FigoSession {
         s.close();
 
         // decode JSON payload
-        Gson gson = GsonAdapter.createGson(false);
-        return gson.fromJson(body, typeOfT);
+        return createGson().fromJson(body, typeOfT);
     }
 
     /**
@@ -305,29 +328,31 @@ public class FigoSession {
      * @return List of Transaction objects
      */
     public List<Transaction> getTransactions() throws FigoException, IOException {
-        return getTransactions((String)null);
+        return getTransactions((String) null);
     }
 
     /**
      * Retrieve all transactions on a specific account of the user
      * 
-     * @param accountId the ID of the account for which to retrieve the transactions
+     * @param accountId
+     *            the ID of the account for which to retrieve the transactions
      * @return List of Transactions
      */
     public List<Transaction> getTransactions(String accountId) throws FigoException, IOException {
         return this.getTransactions(accountId, null, null, null, null);
     }
-    
+
     /**
      * Retrieve all transactions on a specific account of the user
      * 
-     * @param account the account for which to retrieve the transactions
+     * @param account
+     *            the account for which to retrieve the transactions
      * @return List of Transactions
      */
     public List<Transaction> getTransactions(Account account) throws FigoException, IOException {
         return this.getTransactions(account, null, null, null, null);
     }
-    
+
     /**
      * Get an array of Transaction objects, one for each transaction of the user matching the criteria. Provide null values to not use the option.
      * 
@@ -348,7 +373,7 @@ public class FigoSession {
             IOException {
         return getTransactions(account == null ? null : account.getAccountId(), since, count, offset, include_pending);
     }
-    
+
     /**
      * Get an array of Transaction objects, one for each transaction of the user matching the criteria. Provide null values to not use the option.
      * 
@@ -636,7 +661,7 @@ public class FigoSession {
     public String submitPayment(Payment payment, String tanSchemeId, String state, String redirectUri) throws FigoException, IOException {
         TaskTokenResponse response = this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments/" + payment.getPaymentId() + "/submit",
                 new SubmitPaymentRequest(tanSchemeId, state, redirectUri), "POST", TaskTokenResponse.class);
-        return API_ENDPOINT + "/task/start?id=" + response.task_token;
+        return apiEndpoint + "/task/start?id=" + response.task_token;
     }
 
     /**
@@ -652,6 +677,6 @@ public class FigoSession {
      */
     public String getSyncURL(String state, String redirect_url) throws FigoException, IOException {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url), "POST", TaskTokenResponse.class);
-        return API_ENDPOINT + "/task/start?id=" + response.task_token;
+        return apiEndpoint + "/task/start?id=" + response.task_token;
     }
 }
