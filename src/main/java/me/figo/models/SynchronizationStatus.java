@@ -1,16 +1,16 @@
 //
 // Copyright (c) 2013 figo GmbH
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,62 +24,60 @@ package me.figo.models;
 
 import java.util.Date;
 
-/***
+/**
  * Represents the status of the synchonisation between figo and the bank servers
  * 
  * @author Stefan Richter <stefan.richter@figo.me>
- *
  */
 public class SynchronizationStatus {
-	/***
-	 * Internal figo status code
-	 */
-	private Integer code;
-	
-	/***
-	 * Human-readable error message. 
-	 */
-	private String message;
-	
-	/***
-	 * Timestamp of last synchronization
-	 */
-	private Date sync_timestamp;
-	
-	/***
-	 * Timestamp of last successful synchronization
-	 */
-	private Date success_timestamp;
+    /**
+     * Internal figo status code
+     */
+    private Integer code;
 
+    /**
+     * Human-readable error message.
+     */
+    private String  message;
 
-	public SynchronizationStatus() {}
-	
-	/***
-	 * Internal figo status code
-	 */
-	public Integer getCode() {
-		return code;
-	}
-	
-	/***
-	 * Human-readable error message
-	 */
-	public String getMessage() {
-		return message;
-	}
-	
-	/***
-	 * Timestamp of last synchronization
-	 */
-	public Date getSyncTimestamp() {
-		return sync_timestamp;
-	}
-	
-	/***
-	 * Timestamp of last successful synchronization
-	 * @return
-	 */
-	public Date getSuccessTimestamp() {
-		return success_timestamp;
-	}
+    /**
+     * Timestamp of last synchronization
+     */
+    private Date    sync_timestamp;
+
+    /**
+     * Timestamp of last successful synchronization
+     */
+    private Date    success_timestamp;
+
+    public SynchronizationStatus() {
+    }
+
+    /**
+     * @return the internal figo status code
+     */
+    public Integer getCode() {
+        return code;
+    }
+
+    /**
+     * @return the human-readable error message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @return the timestamp of last synchronization
+     */
+    public Date getSyncTimestamp() {
+        return sync_timestamp;
+    }
+
+    /**
+     * @return the timestamp of last successful synchronization
+     */
+    public Date getSuccessTimestamp() {
+        return success_timestamp;
+    }
 }

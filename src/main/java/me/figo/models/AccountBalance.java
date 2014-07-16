@@ -1,16 +1,16 @@
 //
 // Copyright (c) 2013 figo GmbH
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,59 +24,76 @@ package me.figo.models;
 
 import java.util.Date;
 
-/***
+/**
  * Object representing the balance of a certain bank account of the user
  * 
  * @author Stefan Richter <stefan.richter@figo.me>
  */
 public class AccountBalance {
-    /***
+    /**
      * Account balance or None if the balance is not yet known
      */
-	private float balance;
-    
-	/***
-	 * Bank server timestamp of balance or None if the balance is not yet known.
-	 */
-    private Date balance_date;
-    
-    /***
+    private float balance;
+
+    /**
+     * Bank server timestamp of balance or None if the balance is not yet known.
+     */
+    private Date  balance_date;
+
+    /**
      * Credit line
      */
     private float credit_line;
-    
-    /***
+
+    /**
      * User-defined spending limit
      */
     private float monthly_spending_limit;
-    
-    public AccountBalance() {}
-    
-    /***
-     * Account balance or null if the balance is not yet known
+
+    public AccountBalance() {
+    }
+
+    /**
+     * @return the account balance or null if the balance is not yet known
      */
     public float getBalance() {
-    	return balance;
+        return balance;
     }
-    
-    /***
-     * Bank server timestamp of balance or null if the balance is not yet known.
+
+    /**
+     * @return the bank server timestamp of balance or null if the balance is not yet known.
      */
     public Date getBalanceDate() {
-    	return balance_date;
+        return balance_date;
     }
-    
-    /***
-     * Credit line
+
+    /**
+     * @return the credit line
      */
     public float getCreditLine() {
-    	return credit_line;
+        return credit_line;
     }
-    
-    /***
-     * User-defined spending limit
+
+    /**
+     * @param credit_line
+     *            the credit line to set
+     */
+    public void setCreditLine(float credit_line) {
+        this.credit_line = credit_line;
+    }
+
+    /**
+     * @return the user-defined spending limit
      */
     public float getMonthlySpendingLimit() {
-    	return monthly_spending_limit;
+        return monthly_spending_limit;
+    }
+
+    /**
+     * @param spending_limit
+     *            the user-defined spending limit to set
+     */
+    public void setMonthlySpendingLimit(float spending_limit) {
+        this.monthly_spending_limit = spending_limit;
     }
 }
