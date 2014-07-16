@@ -125,7 +125,7 @@ public class FigoConnection {
         connection.setRequestMethod(method);
         connection.setRequestProperty("Authorization", "Basic " + this.basicAuthInfo);
         connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Content-Type", "application/json");
 
         // add payload
         if (data != null) {
@@ -212,7 +212,7 @@ public class FigoConnection {
      *         FigoSession and access the users data - `refresh_token` - if the scope contained the `offline` flag, also a refresh token is generated. It can be
      *         used to generate new access tokens, when the first one has expired. - `expires` - absolute time the access token expires
      */
-    public String convertAuthenticationCode(String authenticationCode) throws FigoException, IOException {
+    public TokenResponse convertAuthenticationCode(String authenticationCode) throws FigoException, IOException {
         if (!authenticationCode.startsWith("O")) {
             throw new FigoException("invalid_code", "Invalid authentication code");
         }
@@ -228,7 +228,7 @@ public class FigoConnection {
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
      *         get a FigoSession and access the users data - `expires` - absolute time the access token expires
      */
-    public String convertRefreshToken(String refreshToken) throws IOException, FigoException {
+    public TokenResponse convertRefreshToken(String refreshToken) throws IOException, FigoException {
         if (!refreshToken.startsWith("R")) {
             throw new FigoException("invalid_code", "Invalid authentication code");
         }

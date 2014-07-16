@@ -305,9 +305,19 @@ public class FigoSession {
      * @return List of Transaction objects
      */
     public List<Transaction> getTransactions() throws FigoException, IOException {
-        return getTransactions(null);
+        return getTransactions((String)null);
     }
 
+    /**
+     * Retrieve all transactions on a specific account of the user
+     * 
+     * @param accountId the ID of the account for which to retrieve the transactions
+     * @return List of Transactions
+     */
+    public List<Transaction> getTransactions(String accountId) throws FigoException, IOException {
+        return this.getTransactions(accountId, null, null, null, null);
+    }
+    
     /**
      * Retrieve all transactions on a specific account of the user
      * 
