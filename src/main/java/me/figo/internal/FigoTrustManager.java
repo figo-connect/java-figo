@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class FigoTrustManager implements X509TrustManager {
 
     private static final char[]       hexDigits          = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-    private static List<String> VALID_FINGERPRINTS = Arrays.asList("3A:62:54:4D:86:B4:34:38:EA:34:64:4E:95:10:A9:FF:37:27:69:C0",
-                                                                 "CF:C1:BC:7F:6A:16:09:2B:10:83:8A:B0:22:4F:3A:65:D2:70:D7:3E");
+    private static List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList("3A:62:54:4D:86:B4:34:38:EA:34:64:4E:95:10:A9:FF:37:27:69:C0",
+                                                                 "CF:C1:BC:7F:6A:16:09:2B:10:83:8A:B0:22:4F:3A:65:D2:70:D7:3E"));
 
     /**
      * @return the list of trusted certificate fingerprints using SHA1
