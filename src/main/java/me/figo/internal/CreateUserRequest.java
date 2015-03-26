@@ -7,25 +7,56 @@ import com.google.gson.annotations.Expose;
  */
 public class CreateUserRequest {
     @Expose
-    public String  name;
+    private String  name;
 
     @Expose
-    public String  email;
+    private String  email;
     
     @Expose
-    public String  password;
+    private String  password;
     
     @Expose
-    public String  language;
-    
-    @Expose
-    public boolean send_newsletter = true;
+    private String  language;
 
-    public CreateUserRequest(String name, String email, String password, String language, boolean send_newsletter) {
+    public CreateUserRequest(String name, String email, String password, String language) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.language = language;
-        this.send_newsletter = send_newsletter;
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+    
+    
+    
 }

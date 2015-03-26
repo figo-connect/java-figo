@@ -33,6 +33,7 @@ import java.util.List;
 import me.figo.models.Account;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
+import me.figo.models.PaymentProposal;
 import me.figo.models.Transaction;
 import me.figo.models.User;
 
@@ -52,12 +53,25 @@ public class SessionTest {
     public void testGetAccount() throws FigoException, IOException {
         Account a = sut.getAccount("A1.2");
         assertEquals(a.getAccountId(), "A1.2");
+    }
+    
+    @Test
+    public void testGetAccountBalance() throws FigoException, IOException	{
+    	Account a = sut.getAccount("A1.2");
         assertNotNull(a.getBalance().getBalance());
         assertNotNull(a.getBalance().getBalanceDate());
-
+    }
+    
+    @Test
+    public void testGetAccountTransactions() throws FigoException, IOException	{
+    	Account a = sut.getAccount("A1.2");
         List<Transaction> ts = sut.getTransactions(a);
         assertTrue(ts.size() > 0);
-        
+    }
+    
+    @Test
+    public void testGetAccountPayments() throws FigoException, IOException	{
+    	Account a = sut.getAccount("A1.2");
         List<Payment> ps = sut.getPayments(a);
         assertTrue(ps.size() >= 0);
     }
@@ -141,5 +155,10 @@ public class SessionTest {
         
         Payment reretrievedPayment = sut.getPayment(addedPayment.getAccountId(), addedPayment.getPaymentId());
         assertNull(reretrievedPayment);
+    }
+    
+    public void testGetPaymentProposals() throws FigoException, IOException	{
+    	List<PaymentProposal> proposals = sut.getPaymentProposals();
+    	assertEquals(2, proposals.size());
     }
 }

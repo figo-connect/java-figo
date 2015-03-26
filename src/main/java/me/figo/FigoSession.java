@@ -36,14 +36,27 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
 import me.figo.FigoException.ErrorResponse;
+import me.figo.internal.AccountOrderRequest;
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
+import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.SubmitPaymentRequest;
 import me.figo.internal.SyncTokenRequest;
+import me.figo.internal.TaskStatusRequest;
+import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
+import me.figo.internal.VisitedRequest;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
+import me.figo.models.BusinessProcess;
+import me.figo.models.LoginSettings;
+import me.figo.models.PaymentContainer;
+import me.figo.models.PaymentProposal;
+import me.figo.models.PaymentProposal.PaymentProposalResponse;
+import me.figo.models.ProcessToken;
+import me.figo.models.Security;
+import me.figo.models.Service;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.Transaction;
@@ -225,6 +238,38 @@ public class FigoSession {
     public void removeUser() throws FigoException, IOException {
         this.queryApi("/rest/user", null, "DELETE", null);
     }
+    
+    /**
+     * Returns a list of all supported credit cards and payment services for a country
+     * @param countryCode
+     * @return List of Services
+     */
+    public List<Service> getSupportedServices(String countryCode) throws FigoException, IOException	{
+    	Service.ServiceResponse response = this.queryApi("/rest/catalog/services/" + countryCode, null, "GET", Service.ServiceResponse.class);
+    	return response == null ? null : response.getServices();
+    }
+    
+    /**
+     * Returns the login settings for a specified banking or payment service
+     * @param countryCode
+     * @param bankCode
+     * @return LoginSettings
+     */
+    public LoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
+    	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
+    }    
+    
+    /**
+     * Returns a TaskToken for a new account creation task
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
+     * @return
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
+    }
 
     /**
      * All accounts the user has granted your App access to
@@ -324,6 +369,15 @@ public class FigoSession {
      */
     public AccountBalance updateAccountBalance(Account account, AccountBalance accountBalance) throws FigoException, IOException {
         return updateAccountBalance(account.getAccountId(), accountBalance);
+    }
+    
+    /**
+     * Set new bank account sorting order
+     * @param orderedList
+     * 			List of accounts in the new order
+     */
+    public void setAccountOrder(List<Account> orderedList) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts", new AccountOrderRequest(orderedList), "PUT", null);
     }
 
     /**
@@ -436,6 +490,153 @@ public class FigoSession {
      */
     public Transaction getTransaction(String accountId, String transactionId) throws FigoException, IOException {
         return this.queryApi("/rest/accounts/" + accountId + "/transactions/" + transactionId, null, "GET", Transaction.class);
+    }
+    
+    /**
+     * Modifies the visited field of a specific transaction
+     * @param transaction
+     * 				transaction which will be modified
+     * @param visited
+     * 				new value for the visited field
+     */
+    public void modifyTransaction(Transaction transaction, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), new VisitedRequest(visited), "PUT", null);
+    }
+    
+    
+    /**
+     * Modifies the visited field of all transactions of the current user
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifyTransactions(boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/transactions", new VisitedRequest(visited), "PUT", null);
+    }
+    
+    /**
+     * Modifies the visited field of all transactions of a specific account
+     * @param account
+     * 			account which owns the transactions
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifyTransactions(Account account, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/transactions", new VisitedRequest(visited), "PUT", null);
+    }    
+    
+    /**
+     * Modifies the visited field of all transactions of a specific account
+     * @param accountId
+     * 			Id of the account which owns the transactions
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifyTransactions(String accountId, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + accountId + "/transactions", new VisitedRequest(visited), "PUT", null);
+    }
+
+    /**
+     * Removes a Transaction
+     * @param transaction
+     * 				transaction which will be removed
+     */
+    public void removeTransaction(Transaction transaction) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), null, "DELETE", null);
+    }
+    
+    /**
+     * Retrieves a specific security
+     * @param accountId
+     * 			id of the security owning account
+     * @param securityId
+     * 			id of the security which will be retrieved
+     * @return	Security or null
+     */
+    public Security getSecurity(String accountId, String securityId) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts/" + accountId + "/securities/" + securityId, null, "GET", Security.class);
+    }
+    
+    /**
+     * Retrieves a specific security
+     * @param account
+     * 			owning account
+     * @param securityId
+     * 			id of the security which will be retrieved
+     * @return	Security or null
+     */
+    public Security getSecurity(Account account, String securityId) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities/" + securityId, null, "GET", Security.class);
+    }
+    
+    /**
+     * Retrieves all securities of the current user
+     * @return List of Securities or null
+     */
+    public List<Security> getSecurities() throws FigoException, IOException	{
+    	Security.SecurityResponse response = this.queryApi("/rest/securities", null, "GET", Security.SecurityResponse.class);
+    	return response == null ? null : response.getSecurities();
+    }
+    
+    /**
+     * Retrieves all securities of a specific account
+     * @param account Security owning account
+     * @return List of Securities or null
+     */
+    public List<Security> getSecurities(Account account) throws FigoException, IOException	{
+    	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", null, "GET", Security.SecurityResponse.class);
+    	return response == null ? null : response.getSecurities();
+    }
+    
+    /**
+     * Retrieves all securities of a specific account
+     * @param accountId Security owning account id
+     * @return List of Securities or null
+     */
+    public List<Security> getSecurities(String accountId) throws FigoException, IOException	{
+    	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + accountId + "/securities", null, "GET", Security.SecurityResponse.class);
+    	return response == null ? null : response.getSecurities();
+    }
+    
+    /**
+     * Modifies the visited field of a specific security
+     * @param security
+     * 			security which will be modified
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifySecurity(Security security, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + security.getAccountId() + "/securities/" + security.getSecurityId(), new VisitedRequest(visited), "PUT", null);
+    }
+    
+    /**
+     * Modifies the visited field of all securities of the current user
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifySecurities(boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/securities", new VisitedRequest(visited), "PUT", null);
+    }
+    
+    /**
+     * Modifies the visited field of all securities of a specific account
+     * @param account
+     * 			account which owns the securities
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifySecurities(Account account, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", new VisitedRequest(visited), "PUT", null);
+    }
+    
+    /**
+     * Modifies the visited field of all securities of a specific account
+     * @param accountId
+     * 			Id of the account which owns the securities
+     * @param visited
+     * 			new value for the visited field
+     */
+    public void modifySecurities(String accountId, boolean visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + accountId + "/securities", new VisitedRequest(visited), "PUT", null);
     }
 
     /**
@@ -612,6 +813,18 @@ public class FigoSession {
     public Payment addPayment(Payment payment) throws FigoException, IOException {
         return this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments", payment, "POST", Payment.class);
     }
+    
+    public Payment addContainerPayment(PaymentContainer container) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts/" + container.getAccountId() + "/payments", container, "POST", PaymentContainer.class);
+    }
+    
+    /**
+     * Returns a list of PaymentProposals
+     */
+    public List<PaymentProposal> getPaymentProposals() throws FigoException, IOException	{
+    	PaymentProposalResponse response = this.queryApi("/rest/adress_book", null, "GET", PaymentProposalResponse.class);
+    	return response == null ? null : response.getPaymentProposals();
+    }
 
     /**
      * Update a stored payment
@@ -682,5 +895,70 @@ public class FigoSession {
     public String getSyncURL(String state, String redirect_url) throws FigoException, IOException {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url), "POST", TaskTokenResponse.class);
         return apiEndpoint + "/task/start?id=" + response.task_token;
+    }
+    
+    /**
+     * Get the current status of a Task
+     * @param tokenResponse
+     * 			A TaskTokenResponse Object for the task which will be checked
+     * @return	A TaskStatusResponse Object with information about the task
+     */
+    public TaskStatusResponse getTaskState(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
+    	return this.queryApi("/task/progress?id=" + tokenResponse.task_token, new TaskStatusRequest(tokenResponse), "POST", TaskStatusResponse.class);
+    }
+    
+    /**
+     * Get the current status of a Task by id
+     * @param tokenId
+     * 			ID of the TaskToken which will be checked
+     * @return	A TaskStatusResponse Object with information about the task. This object
+     * 			can also provide further options for the task processing
+     */
+    public TaskStatusResponse getTaskState(String tokenId) throws FigoException, IOException	{
+    	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId), "POST", TaskStatusResponse.class);
+    }
+
+    /**
+     * Start communication with bank server.
+     * @param tokenResponse
+     * 				TokenResponse Object
+     */
+    public void startTask(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
+    	this.queryApi("/task/start?id=" + tokenResponse.task_token, null, "GET", null);
+    }
+    
+    /**
+     * Start communication with bank server.
+     * @param taskToken
+     * 				Token ID
+     */
+    public void startTask(String taskToken) throws FigoException, IOException	{
+    	this.queryApi("/task/start?id=" + taskToken, null, "GET", null);
+    }
+    
+    /**
+     * Cancels a given task if possible
+     * @param tokenResponse
+     * 				Token Response Object
+     */
+    public void cancelTask(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
+    	this.queryApi("/task/cancel?id=" + tokenResponse.task_token, null, "POST", null);
+    }
+    
+    /**
+     * Cancels a given task if possible
+     * @param taskToken
+     * 				Token ID
+     */
+    public void cancelTask(String taskToken) throws FigoException, IOException	{
+    	this.queryApi("/task/cancel?id=" + taskToken, null, "POST", null);
+    }
+    
+    public void startProcess(ProcessToken processToken) throws FigoException, IOException	{
+    	this.queryApi("/process/start?id=" + processToken.getProcessToken(), null, "GET", null);
+    }
+    
+    public ProcessToken createProcess(BusinessProcess process) throws FigoException, IOException	{
+    	return this.queryApi("/client/process", process, "POST", ProcessToken.class);
     }
 }

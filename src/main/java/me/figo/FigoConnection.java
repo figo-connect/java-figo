@@ -34,6 +34,7 @@ import java.util.Scanner;
 import me.figo.FigoException.ErrorResponse;
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
+import me.figo.internal.CredentialLoginRequest;
 import me.figo.internal.GsonAdapter;
 import me.figo.internal.TokenRequest;
 import me.figo.internal.TokenResponse;
@@ -258,6 +259,19 @@ public class FigoConnection {
 
         return this.queryApi("/auth/token", new TokenRequest(refreshToken, null, this.redirectUri, "refresh_token"), "POST", TokenResponse.class);
     }
+    
+    /**
+     * Login an user with his figo username and password credentials
+     * @param username
+     * 			the user's figo username
+     * @param password
+     * 			the user's figo password
+     * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
+     *         get a FigoSession and access the users data - `expires` - absolute time the access token expires
+     */
+    public TokenResponse credentialLogin(String username, String password) throws IOException, FigoException	{
+    	return this.queryApi("/auth/token", new CredentialLoginRequest(username, password), "POST", TokenResponse.class);
+    }
 
     /**
      * Revoke a granted access or refresh token and thereby invalidate it. Note: this action has immediate effect, i.e. you will not be able use that token
@@ -288,8 +302,8 @@ public class FigoConnection {
      *            whether the user has agreed to be contacted by email
      * @return Auto-generated recovery password
      */
-    public String addUser(String name, String email, String password, String language, boolean send_newsletter) throws IOException, FigoException {
-        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language, send_newsletter), "POST",
+    public String addUser(String name, String email, String password, String language) throws IOException, FigoException {
+        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
                 CreateUserResponse.class);
         return response.recovery_password;
     }

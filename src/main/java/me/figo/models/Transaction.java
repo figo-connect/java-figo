@@ -117,6 +117,9 @@ public class Transaction {
      */
     @Expose(serialize = false)
     private boolean booked;
+    
+    @Expose(serialize = false)
+    private boolean visited;
 
     public Transaction() {
     }
@@ -217,6 +220,13 @@ public class Transaction {
      */
     public boolean isBooked() {
         return booked;
+    }
+    
+    /**
+     * @return whether the transaction has been visited or not
+     */
+    public boolean isVisited()	{
+    	return visited;
     }
 
     /**
