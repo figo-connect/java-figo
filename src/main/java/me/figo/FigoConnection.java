@@ -298,13 +298,30 @@ public class FigoConnection {
      *            New figo Account password; It must obey the figo username and password policy
      * @param language
      *            Two-letter code of preferred language
-     * @param send_newsletter
-     *            whether the user has agreed to be contacted by email
+     *            
      * @return Auto-generated recovery password
      */
     public String addUser(String name, String email, String password, String language) throws IOException, FigoException {
         CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
                 CreateUserResponse.class);
         return response.recovery_password;
+    }
+    
+    /**
+     * Creates a new figo User and returns a login token
+     * @param name
+     *            First and last name
+     * @param email
+     *            Email address; It must obey the figo username and password policy
+     * @param password
+     *            New figo Account password; It must obey the figo username and password policy
+     * @param language
+     *            Two-letter code of preferred language
+     * @return TokenResponse for further API requests
+     */
+    public TokenResponse addUserAndLogin(String name, String email, String password, String language) throws IOException, FigoException {
+        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
+                CreateUserResponse.class);
+        return this.credentialLogin(email, password);
     }
 }

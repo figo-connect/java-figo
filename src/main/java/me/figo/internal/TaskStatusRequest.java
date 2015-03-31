@@ -1,6 +1,7 @@
 package me.figo.internal;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class TaskStatusRequest {
 
@@ -10,6 +11,7 @@ public class TaskStatusRequest {
 	@Expose
 	private String pin;
 	
+	@SerializedName("continue")
 	@Expose
 	private String _continue;
 	
@@ -25,6 +27,12 @@ public class TaskStatusRequest {
 	
 	public TaskStatusRequest(String tokenId)	{
 		this.id = tokenId;
+	}
+	
+	public TaskStatusRequest(String tokenId, String pin)	{
+		this.id = tokenId;
+		this._continue = "1";
+		this.pin = pin;
 	}
 
 	public String getId() {

@@ -270,6 +270,43 @@ public class FigoSession {
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
     }
+    
+    /**
+     * Setups an account an starts the initial syncronization directly
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
+     * @return TaskStatusResponse
+     */
+    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
+    	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
+    	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
+    	while(taskStatus.getMessage().equals("Connecting to server..."))	{
+    		taskStatus = this.getTaskState(tokenResponse);
+			Thread.sleep(1000);
+    	}
+    	if(taskStatus.isErroneous() &&
+    			taskStatus.getMessage().equals("Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."))	{
+    		throw new FigoPinException(bankCode, countryCode, loginName, pin);
+    	}
+    	else if(taskStatus.isErroneous() && taskStatus.getMessage().equals("Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.")){
+    		throw new FigoException("", taskStatus.getMessage());
+    	}
+    	return taskStatus;
+    }
+    
+    /**
+     * Exception handler for a wrong pin. Starts a new task for account creation with a new pin
+     * @param exception
+     * 				FigoPinException which provides info about the account which should be created
+     * @param newPin
+     * 				new PIN
+     * @return
+     */
+    public TaskStatusResponse setupAndSyncAccount(FigoPinException exception, String newPin) throws FigoException, IOException, FigoPinException, InterruptedException	{
+    	return setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), exception.getLoginName(), newPin);
+    }
 
     /**
      * All accounts the user has granted your App access to
@@ -911,11 +948,22 @@ public class FigoSession {
      * Get the current status of a Task by id
      * @param tokenId
      * 			ID of the TaskToken which will be checked
-     * @return	A TaskStatusResponse Object with information about the task. This object
-     * 			can also provide further options for the task processing
+     * @return	A TaskStatusResponse Object with information about the task.
      */
     public TaskStatusResponse getTaskState(String tokenId) throws FigoException, IOException	{
     	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId), "POST", TaskStatusResponse.class);
+    }
+    
+    /**
+     * Retrieves the current status of a Task and provide a PIN
+     * @param tokenId
+     * 			ID of the TaskToken which will be checked
+     * @param pin
+     * 			PIN which will be submitted
+     * @return A TaskStatusResponse Object with information about the task.
+     */
+    public TaskStatusResponse getTaskState(String tokenId, String pin) throws FigoException, IOException	{
+    	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId, pin), "POST", TaskStatusResponse.class);
     }
 
     /**
