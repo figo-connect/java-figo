@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.1.2</version>
+        <version>1.2</version>
 </dependency>
 ```
 
@@ -47,5 +47,5 @@ A more detailed documentation of the figo connect API can be found at http://doc
 
 Demos
 -----
-In this repository you can also have a look at a simple console(src/console_demo) and web demo(src/web_demo). While the console demo 
+In this repository you can also have a look at a simple console(src/console_demo) and web demo(src/web_demo). While the console demo
 simply accesses the figo API, the web demo implements the full OAuth flow.
