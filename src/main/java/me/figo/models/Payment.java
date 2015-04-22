@@ -1,5 +1,6 @@
 package me.figo.models;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +71,7 @@ public class Payment {
      * Order amount
      */
     @Expose
-    private float                   amount;
+    private BigDecimal              amount;
 
     /**
      * Three-character currency code
@@ -111,7 +112,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String type, String account_id, String account_number, String bank_code, String name, String purpose, float amount) {
+    public Payment(String type, String account_id, String account_number, String bank_code, String name, String purpose, BigDecimal amount) {
         this.type = type;
         this.account_id = account_id;
         this.account_number = account_number;
@@ -122,7 +123,7 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Payment(String type, String account_id, String account_number, String bank_code, String name, String purpose, String currency, float amount) {
+    public Payment(String type, String account_id, String account_number, String bank_code, String name, String purpose, String currency, BigDecimal amount) {
         this.type = type;
         this.account_id = account_id;
         this.account_number = account_number;
@@ -239,7 +240,7 @@ public class Payment {
     /**
      * @return the order amount
      */
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -247,7 +248,7 @@ public class Payment {
      * @param amount
      *            the order amount to set
      */
-    public void setAmount(float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

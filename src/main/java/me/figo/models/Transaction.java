@@ -24,12 +24,13 @@ package me.figo.models;
 
 import java.util.Date;
 import java.util.List;
+import java.math.BigDecimal;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Object representing one bank transaction on a certain bank account of the user
- * 
+ *
  * @author Stefan Richter
  */
 public class Transaction {
@@ -74,7 +75,7 @@ public class Transaction {
      * Transaction amount
      */
     @Expose(serialize = false)
-    private float   amount;
+    private BigDecimal   amount;
 
     /**
      * Three-character currency code
@@ -117,7 +118,7 @@ public class Transaction {
      */
     @Expose(serialize = false)
     private boolean booked;
-    
+
     @Expose(serialize = false)
     private boolean visited;
 
@@ -169,7 +170,7 @@ public class Transaction {
     /**
      * @return the transaction amount
      */
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -221,7 +222,7 @@ public class Transaction {
     public boolean isBooked() {
         return booked;
     }
-    
+
     /**
      * @return whether the transaction has been visited or not
      */

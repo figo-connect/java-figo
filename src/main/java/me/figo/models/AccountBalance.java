@@ -23,12 +23,13 @@
 package me.figo.models;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Object representing the balance of a certain bank account of the user
- * 
+ *
  * @author Stefan Richter
  */
 public class AccountBalance {
@@ -36,7 +37,7 @@ public class AccountBalance {
      * Account balance or None if the balance is not yet known
      */
     @Expose(serialize = false)
-    private float balance;
+    private BigDecimal balance;
 
     /**
      * Bank server timestamp of balance or None if the balance is not yet known.
@@ -48,13 +49,13 @@ public class AccountBalance {
      * Credit line
      */
     @Expose
-    private float credit_line;
+    private BigDecimal credit_line;
 
     /**
      * User-defined spending limit
      */
     @Expose
-    private float monthly_spending_limit;
+    private BigDecimal monthly_spending_limit;
 
     public AccountBalance() {
     }
@@ -62,7 +63,7 @@ public class AccountBalance {
     /**
      * @return the account balance or null if the balance is not yet known
      */
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
@@ -76,7 +77,7 @@ public class AccountBalance {
     /**
      * @return the credit line
      */
-    public float getCreditLine() {
+    public BigDecimal getCreditLine() {
         return credit_line;
     }
 
@@ -84,14 +85,14 @@ public class AccountBalance {
      * @param credit_line
      *            the credit line to set
      */
-    public void setCreditLine(float credit_line) {
+    public void setCreditLine(BigDecimal credit_line) {
         this.credit_line = credit_line;
     }
 
     /**
      * @return the user-defined spending limit
      */
-    public float getMonthlySpendingLimit() {
+    public BigDecimal getMonthlySpendingLimit() {
         return monthly_spending_limit;
     }
 
@@ -99,7 +100,7 @@ public class AccountBalance {
      * @param spending_limit
      *            the user-defined spending limit to set
      */
-    public void setMonthlySpendingLimit(float spending_limit) {
+    public void setMonthlySpendingLimit(BigDecimal spending_limit) {
         this.monthly_spending_limit = spending_limit;
     }
 }
