@@ -4,7 +4,7 @@
 
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.2</version>
+	<version>1.2.1</version>
 	<packaging>jar</packaging>
 
 	<name>Figo Java SDK</name>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

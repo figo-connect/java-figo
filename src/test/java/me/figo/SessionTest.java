@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import me.figo.models.Account;
@@ -54,21 +55,21 @@ public class SessionTest {
         Account a = sut.getAccount("A1.2");
         assertEquals(a.getAccountId(), "A1.2");
     }
-    
+
     @Test
     public void testGetAccountBalance() throws FigoException, IOException	{
     	Account a = sut.getAccount("A1.2");
         assertNotNull(a.getBalance().getBalance());
         assertNotNull(a.getBalance().getBalanceDate());
     }
-    
+
     @Test
     public void testGetAccountTransactions() throws FigoException, IOException	{
     	Account a = sut.getAccount("A1.2");
         List<Transaction> ts = sut.getTransactions(a);
         assertTrue(ts.size() > 0);
     }
-    
+
     @Test
     public void testGetAccountPayments() throws FigoException, IOException	{
     	Account a = sut.getAccount("A1.2");
@@ -87,7 +88,7 @@ public class SessionTest {
         List<Notification> notifications = sut.getNotifications();
         assertTrue(notifications.size() > 0);
     }
-    
+
     @Test
     public void testGetPayments() throws FigoException, IOException {
         List<Payment> payments = sut.getPayments();
@@ -103,7 +104,7 @@ public class SessionTest {
     public void testExceptionHandling() throws IOException, FigoException {
         sut.getSyncURL("", "http://localhost:3003/");
     }
-    
+
     @Test
     public void testSyncUri() throws FigoException, IOException {
         assertNotNull(sut.getSyncURL("qwe", "http://figo.me/test"));
@@ -114,7 +115,7 @@ public class SessionTest {
         User user = sut.getUser();
         assertEquals("demo@figo.me", user.getEmail());
     }
-    
+
     @Test
     public void testCreateUpdateDeleteNotification() throws FigoException, IOException {
         Notification addedNotificaton = sut.addNotification(new Notification("/rest/transactions", "http://figo.me/test", "qwe"));
@@ -131,32 +132,32 @@ public class SessionTest {
         assertEquals(updatedNotification.getState(), "asd");
 
         sut.removeNotification(updatedNotification);
-        
+
         Notification reretrievedNotification = sut.getNotification(addedNotificaton.getNotificationId());
         assertNull(reretrievedNotification);
     }
-    
+
     @Test
     public void testCreateUpdateDeletePayment() throws FigoException, IOException {
-        Payment addedPayment = sut.addPayment(new Payment("Transfer", "A1.1", "4711951501", "90090042", "figo", "Thanks for all the fish.", 0.89f));
+        Payment addedPayment = sut.addPayment(new Payment("Transfer", "A1.1", "4711951501", "90090042", "figo", "Thanks for all the fish.", new BigDecimal(0.89)));
         assertNotNull(addedPayment.getPaymentId());
         assertEquals("A1.1", addedPayment.getAccountId());
         assertEquals("Demobank", addedPayment.getBankName());
-        assertEquals(0.89f, addedPayment.getAmount(), 0.0001);
+        assertEquals(0.89f, addedPayment.getAmount().floatValue(), 0.0001);
 
-        addedPayment.setAmount(2.39f);
+        addedPayment.setAmount(new BigDecimal(2.39));
         Payment updatedPayment = sut.updatePayment(addedPayment);
         assertEquals(addedPayment.getPaymentId(), updatedPayment.getPaymentId());
         assertEquals("A1.1", updatedPayment.getAccountId());
         assertEquals("Demobank", updatedPayment.getBankName());
-        assertEquals(2.39f, updatedPayment.getAmount(), 0.0001);
+        assertEquals(2.39f, updatedPayment.getAmount().floatValue(), 0.0001);
 
         sut.removePayment(updatedPayment);
-        
+
         Payment reretrievedPayment = sut.getPayment(addedPayment.getAccountId(), addedPayment.getPaymentId());
         assertNull(reretrievedPayment);
     }
-    
+
     public void testGetPaymentProposals() throws FigoException, IOException	{
     	List<PaymentProposal> proposals = sut.getPaymentProposals();
     	assertEquals(2, proposals.size());
