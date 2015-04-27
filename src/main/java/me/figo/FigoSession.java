@@ -28,6 +28,8 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -270,7 +272,42 @@ public class FigoSession {
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
     }
-    
+
+    /**
+     * Returns a TaskToken for a new account creation task
+     * @param bankCode
+     * @param countryCode
+     * @param credentials
+     * @return
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException	{
+        return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials), "POST", TaskTokenResponse.class);
+    }
+
+    /**
+     * Setups an account an starts the initial syncronization directly
+     * @param bankCode
+     * @param countryCode
+     * @param credentials
+     * @return TaskStatusResponse
+     */
+    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException, FigoPinException, InterruptedException	{
+        TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, credentials);
+        TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
+        while(taskStatus.getMessage().equals("Connecting to server..."))	{
+            taskStatus = this.getTaskState(tokenResponse);
+            Thread.sleep(1000);
+        }
+        if(taskStatus.isErroneous() &&
+                taskStatus.getMessage().equals("Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."))	{
+            throw new FigoPinException(bankCode, countryCode, credentials);
+        }
+        else if(taskStatus.isErroneous() && taskStatus.getMessage().equals("Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.")){
+            throw new FigoException("", taskStatus.getMessage());
+        }
+        return taskStatus;
+    }
+
     /**
      * Setups an account an starts the initial syncronization directly
      * @param bankCode
@@ -280,20 +317,7 @@ public class FigoSession {
      * @return TaskStatusResponse
      */
     public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
-    	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
-    	while(taskStatus.getMessage().equals("Connecting to server..."))	{
-    		taskStatus = this.getTaskState(tokenResponse);
-			Thread.sleep(1000);
-    	}
-    	if(taskStatus.isErroneous() &&
-    			taskStatus.getMessage().equals("Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."))	{
-    		throw new FigoPinException(bankCode, countryCode, loginName, pin);
-    	}
-    	else if(taskStatus.isErroneous() && taskStatus.getMessage().equals("Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.")){
-    		throw new FigoException("", taskStatus.getMessage());
-    	}
-    	return taskStatus;
+        return this.setupAndSyncAccount(bankCode, countryCode, new ArrayList<String>(Arrays.asList(loginName, pin)));
     }
     
     /**
@@ -305,7 +329,16 @@ public class FigoSession {
      * @return
      */
     public TaskStatusResponse setupAndSyncAccount(FigoPinException exception, String newPin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	return setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), exception.getLoginName(), newPin);
+
+        // Assume the PIN is always the last thing in the credential set, so replace the last element in the list
+        List<String> credentials = exception.getCredentials();
+        if (credentials.size() > 1) {
+            credentials.set(credentials.size() - 1, newPin);
+        } else {
+            credentials.add(newPin);
+        }
+
+        return setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), credentials);
     }
 
     /**
