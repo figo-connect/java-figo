@@ -13,5 +13,5 @@ public class TokenResponse {
     public String  refresh_token;
 
     @Expose
-    public Integer expires;
+    public Integer expires_in;
 }
