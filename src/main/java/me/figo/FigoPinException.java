@@ -2,6 +2,7 @@ package me.figo;
 
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.TaskStatusResponse;
+import java.util.List;
 
 public class FigoPinException extends Exception {
 
@@ -11,21 +12,18 @@ public class FigoPinException extends Exception {
 	private static final long serialVersionUID = -3142403349349283593L;
 	private String bankCode;
 	private String countryCode;
-	private String loginName;
-	private String pin;
-	
+	private List<String> credentials;
+
 	public FigoPinException(SetupAccountRequest request)	{
 		this.bankCode = request.getBankCode();
 		this.countryCode = request.getCountry();
-		this.loginName = request.getCredentials().get(0);
-		this.pin = request.getCredentials().get(1);
+        this.credentials = request.getCredentials();
 	}
 	
-	public FigoPinException(String bankCode, String countryCode, String loginName, String pin)	{
+	public FigoPinException(String bankCode, String countryCode, List<String> credentials)	{
 		this.bankCode = bankCode;
 		this.countryCode = countryCode;
-		this.loginName = loginName;
-		this.pin = pin;
+        this.credentials = credentials;
 	}
 	
 	public String getBankCode() {
@@ -34,12 +32,9 @@ public class FigoPinException extends Exception {
 	public String getCountryCode() {
 		return countryCode;
 	}
-	public String getLoginName() {
-		return loginName;
-	}
-	public String getPin() {
-		return pin;
-	}
-	
+    public List<String> getCredentials() {
+        return credentials;
+    }
+
 	
 }

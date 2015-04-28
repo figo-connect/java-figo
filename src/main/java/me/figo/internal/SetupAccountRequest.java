@@ -1,6 +1,7 @@
 package me.figo.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -17,11 +18,13 @@ public class SetupAccountRequest {
 	private List<String> credentials;
 	
 	public SetupAccountRequest(String bankCode, String countryCode, String loginName, String pin)	{
+        this(bankCode, countryCode, new ArrayList<String>(Arrays.asList(loginName, pin)));
+    }
+
+	public SetupAccountRequest(String bankCode, String countryCode, List<String> credentials)	{
 		this.bank_code = bankCode;
 		this.country = countryCode;
-		this.credentials = new ArrayList<String>();
-		this.credentials.add(loginName);
-		this.credentials.add(pin);
+		this.credentials = credentials;
 	}
 
 	public String getBankCode() {

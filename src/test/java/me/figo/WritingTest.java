@@ -91,6 +91,8 @@ public class WritingTest {
 		}
 		assertTrue(fs.getAccounts().size() == 1);
 	}
+
+    // TODO test setup: FigoSession.setupNewAccount where credentials have more than 2 attributes
 	
 	public void test_050_addBankAccountAndSyncWithWrongPin() throws IOException, FigoException, FigoPinException, InterruptedException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
