@@ -24,18 +24,14 @@ package me.figo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
 import me.figo.internal.CredentialLoginRequest;
 import me.figo.internal.TokenRequest;
 import me.figo.internal.TokenResponse;
-
 import org.apache.commons.codec.binary.Base64;
-
-import java.nio.charset.Charset;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API.
