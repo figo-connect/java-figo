@@ -24,6 +24,8 @@ package me.figo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;

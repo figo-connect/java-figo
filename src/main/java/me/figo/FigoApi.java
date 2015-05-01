@@ -70,7 +70,7 @@ public class FigoApi {
      *            Type of expected response
      * @return the parsed result of the request
      */
-    protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
+    public <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
         URL url = new URL(apiEndpoint + path);
 
         // configure URL connection, i.e. the HTTP request
@@ -78,18 +78,7 @@ public class FigoApi {
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
         
-        if (connection instanceof HttpsURLConnection) {
-            // Setup and install the trust manager
-            try {
-                final SSLContext sc = SSLContext.getInstance("SSL");
-                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
-                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
-            } catch (NoSuchAlgorithmException e) {
-                throw new IOException("Connection setup failed", e);
-            } catch (KeyManagementException e) {
-                throw new IOException("Connection setup failed", e);
-            }
-        }
+        setupTrustManager(connection);
 
         connection.setRequestMethod(method);
         connection.setRequestProperty("Authorization", authorization);
@@ -104,6 +93,36 @@ public class FigoApi {
             connection.getOutputStream().write(encodedData.getBytes(Charset.forName("UTF-8")));
         }
 
+        return processResponse(connection, typeOfT);
+    }
+
+    /**
+     * Method to configure TrustManager.
+     * @param connection
+     */
+    protected void setupTrustManager(HttpURLConnection connection) throws IOException {
+        if (connection instanceof HttpsURLConnection) {
+            // Setup and install the trust manager
+            try {
+                final SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
+                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException("Connection setup failed", e);
+            } catch (KeyManagementException e) {
+                throw new IOException("Connection setup failed", e);
+            }
+        }
+    }
+
+    /**
+     * Method to process the response.
+     * @param <T>
+     * @param connection
+     * @param typeOfT
+     * @return
+     */
+    protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
         int code = connection.getResponseCode();
         if (code >= 200 && code < 300) {
@@ -127,7 +146,7 @@ public class FigoApi {
      *            Type of the data to be expected
      * @return Decoded data
      */
-    private <T> T handleResponse(InputStream stream, Type typeOfT) {
+    protected <T> T handleResponse(InputStream stream, Type typeOfT) {
         // check whether decoding is actual requested
         if (typeOfT == null)
             return null;

@@ -23,6 +23,8 @@
 package me.figo;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.List;
 import me.figo.internal.AccountOrderRequest;
@@ -52,7 +54,8 @@ import me.figo.models.User;
 import java.util.Collections;
 
 /**
- * Main entry point to the data access-part of the figo connect java library. Here you can retrieve all the data the user granted your app access to.
+ * Main entry point to the data access-part of the figo connect java library. 
+ * Here you can retrieve all the data the user granted your app access to.
  * 
  * @author Stefan Richter
  */
@@ -103,105 +106,6 @@ public class FigoSession extends FigoApi {
     public FigoSession(String accessToken, int timeout, String apiEndpoint) {
         super(apiEndpoint, "Bearer " + accessToken, timeout);
     }
-
-//    /**
-//     * Query the figo API via HTTP
-//     * 
-//     * @param path
-//     *            Endpoint to query
-//     * @param data
-//     *            Payload to send
-//     * @param method
-//     *            HTTP verb to use
-//     * @param typeOfT
-//     *            Type of expected response
-//     * @param <T>
-//     *            Type of expected response
-//     * @return decoded response
-//     */
-//    protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws FigoException, IOException {
-//        // configure URL connection, i.e. the HTTP request
-//        HttpURLConnection connection = (HttpURLConnection) (new URL(apiEndpoint + path)).openConnection();
-//        connection.setConnectTimeout(timeout);
-//        connection.setReadTimeout(timeout);
-//
-//        if (connection instanceof HttpsURLConnection) {
-//            // Setup and install the trust manager
-//            try {
-//                final SSLContext sc = SSLContext.getInstance("SSL");
-//                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
-//                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
-//            } catch (NoSuchAlgorithmException e) {
-//                throw new IOException("Connection setup failed", e);
-//            } catch (KeyManagementException e) {
-//                throw new IOException("Connection setup failed", e);
-//            }
-//        }
-//
-//        connection.setRequestMethod(method);
-//        connection.setRequestProperty("Authorization", "Bearer " + this.access_token);
-//        connection.setRequestProperty("Accept", "application/json");
-//        connection.setRequestProperty("Content-Type", "application/json");
-//
-//        // add payload
-//        if (data != null) {
-//            String encodedData = createGson().toJson(data);
-//
-//            connection.setDoOutput(true);
-//            connection.getOutputStream().write(encodedData.getBytes(UTF_8));
-//        }
-//
-//        // process response
-//        int code = connection.getResponseCode();
-//        if (code >= 200 && code < 300) {
-//            if (typeOfT == null)
-//                return null;
-//            else
-//                return handleResponse(connection.getInputStream(), typeOfT);
-//        } else if (code == 400) {
-//            throw new FigoException((ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
-//        } else if (code == 401) {
-//            throw new FigoException("access_denied", "Access Denied");
-//        } else if (code == 404) {
-//            return null;
-//        } else {
-//            // return decode(connection.getErrorStream(), resultType);
-//            throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
-//        }
-//    }
-
-//    /**
-//     * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
-//     * 
-//     * @return GSON instance
-//     */
-//    protected Gson createGson() {
-//        return GsonAdapter.createGson();
-//    }
-    
-//    /**
-//     * Handle the response of a request by decoding its JSON payload
-//     * 
-//     * @param stream
-//     *            Stream containing the JSON data
-//     * @param typeOfT
-//     *            Type of the data to be expected
-//     * @return Decoded data
-//     */
-//    private <T> T handleResponse(InputStream stream, Type typeOfT) {
-//        // check whether decoding is actual requested
-//        if (typeOfT == null)
-//            return null;
-//
-//        // read stream body
-//        Scanner s = new Scanner(stream, "UTF-8");
-//        s.useDelimiter("\\A");
-//        String body = s.hasNext() ? s.next() : "";
-//        s.close();
-//
-//        // decode JSON payload
-//        return createGson().fromJson(body, typeOfT);
-//    }
 
     /**
      * Get the current figo Account
@@ -991,5 +895,15 @@ public class FigoSession extends FigoApi {
     
     public ProcessToken createProcess(BusinessProcess process) throws FigoException, IOException	{
     	return this.queryApi("/client/process", process, "POST", ProcessToken.class);
+    }
+    
+    @Override
+    protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
+        // process response
+        int code = connection.getResponseCode();
+        if (code == 404) {
+            return null;
+        }
+        return super.processResponse(connection, typeOfT);
     }
 }
