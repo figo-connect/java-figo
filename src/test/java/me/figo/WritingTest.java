@@ -53,11 +53,6 @@ public class WritingTest {
 		String response = this.fc.addUser("Test", rand+USER, PASSWORD, "de");
 		assertTrue(response.length() == 19);
 	}
-	
-	public void test_010_addUserAndLogin() throws IOException, FigoException	{
-		FigoSession fs = new FigoSession(this.fc.addUserAndLogin("Test", rand+USER, PASSWORD, "de").access_token);
-		assertTrue(fs instanceof FigoSession);
-	}
 
 	public void test_02_credentialLogin() throws FigoException, IOException {
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);

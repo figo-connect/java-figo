@@ -197,21 +197,4 @@ public class FigoConnection extends FigoApi {
         CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST", CreateUserResponse.class);
         return response.recovery_password;
     }
-    
-    /**
-     * Creates a new figo User and returns a login token
-     * @param name
-     *            First and last name
-     * @param email
-     *            Email address; It must obey the figo username and password policy
-     * @param password
-     *            New figo Account password; It must obey the figo username and password policy
-     * @param language
-     *            Two-letter code of preferred language
-     * @return TokenResponse for further API requests
-     */
-    public TokenResponse addUserAndLogin(String name, String email, String password, String language) throws IOException, FigoException {
-        this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST", CreateUserResponse.class);
-        return this.credentialLogin(email, password);
-    }
 }

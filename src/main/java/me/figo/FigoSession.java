@@ -165,44 +165,6 @@ public class FigoSession extends FigoApi {
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
     }
-    
-    /**
-     * Setups an account an starts the initial synchronization directly
-     * @param bankCode
-     * @param countryCode
-     * @param loginName
-     * @param pin
-     * @return TaskStatusResponse
-     */
-    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
-    	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
-    	while("Connecting to server...".equals(taskStatus.getMessage()))	{
-    		taskStatus = this.getTaskState(tokenResponse);
-			Thread.sleep(1000);
-    	}
-    	if(taskStatus.isErroneous()
-                && "Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten.".equals(taskStatus.getMessage())) {
-    		throw new FigoPinException(bankCode, countryCode, loginName, pin);
-    	}
-    	else if(taskStatus.isErroneous()
-                && "Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.".equals(taskStatus.getMessage())){
-    		throw new FigoException("", taskStatus.getMessage());
-    	}
-    	return taskStatus;
-    }
-    
-    /**
-     * Exception handler for a wrong pin. Starts a new task for account creation with a new pin
-     * @param exception
-     * 				FigoPinException which provides info about the account which should be created
-     * @param newPin
-     * 				new PIN
-     * @return
-     */
-    public TaskStatusResponse setupAndSyncAccount(FigoPinException exception, String newPin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	return setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), exception.getLoginName(), newPin);
-    }
 
     /**
      * All accounts the user has granted your app access to
