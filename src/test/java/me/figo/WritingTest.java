@@ -18,26 +18,25 @@ import me.figo.internal.TaskTokenResponse;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WritingTest {
 
-	private String CLIENT_ID = "CaESKmC8MAhNpDe5rvmWnSkRE_7pkkVIIgMwclgzGcQY";
-	private String CLIENT_SECRET = "STdzfv0GXtEj_bwYn7AgCVszN1kKq5BdgEIKOM_fzybQ";
-	private String USER = "testuser@test.de";
-	private String PASSWORD = "some_words";
+	private final String CLIENT_ID = "CaESKmC8MAhNpDe5rvmWnSkRE_7pkkVIIgMwclgzGcQY";
+	private final String CLIENT_SECRET = "STdzfv0GXtEj_bwYn7AgCVszN1kKq5BdgEIKOM_fzybQ";
+	private final String USER = "testuser@test.de";
+	private final String PASSWORD = "some_words";
 	
 	// Bank account infos needed
-	private String ACCOUNT = "figo";
-	private String BANKCODE = "90090042";
-	private String PIN = "figo";
+	private final String ACCOUNT = "figo";
+	private final String BANKCODE = "90090042";
+	private final String PIN = "figo";
 	
 	private static String rand = null;
 	
 	
-	private FigoConnection fc = new FigoConnection(CLIENT_ID, CLIENT_SECRET, "https://127.0.0.1/");
+	private final FigoConnection fc = new FigoConnection(CLIENT_ID, CLIENT_SECRET, "https://127.0.0.1/");
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -132,6 +131,4 @@ public class WritingTest {
 		assertTrue(transactions.size() > fs.getTransactions().size());
 		fs.removeUser();
 	}
-	
-
 }
