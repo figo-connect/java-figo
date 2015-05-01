@@ -12,13 +12,13 @@ public class Bank {
      * Internal ID of the bank
      */
     @Expose(serialize = false)
-    private String  bank_id;
+    private String bank_id;
 
     /**
      * SEPA direct debit creditor ID
      */
     @Expose
-    private String  sepa_creditor_id;
+    private String sepa_creditor_id;
 
     /**
      * This flag indicates whether the user has chosen to save the PIN on the figo Connect server

@@ -1,18 +1,14 @@
 package me.figo;
 
 import me.figo.internal.SetupAccountRequest;
-import me.figo.internal.TaskStatusResponse;
 
 public class FigoPinException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3142403349349283593L;
-	private String bankCode;
-	private String countryCode;
-	private String loginName;
-	private String pin;
+    private static final long serialVersionUID = -3142403349349283593L;
+	private final String bankCode;
+	private final String countryCode;
+	private final String loginName;
+	private final String pin;
 	
 	public FigoPinException(SetupAccountRequest request)	{
 		this.bankCode = request.getBankCode();

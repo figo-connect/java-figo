@@ -42,6 +42,13 @@ import me.figo.internal.TokenResponse;
 import org.apache.commons.codec.binary.Base64;
 
 import com.google.gson.Gson;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import me.figo.internal.FigoTrustManager;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API.
@@ -54,10 +61,13 @@ public class FigoConnection {
 
     protected String clientId;
     protected String clientSecret;
-    private String   basicAuthInfo;
+    private String basicAuthInfo;
     protected String redirectUri;
 
-    private int      timeout;
+    private int timeout;
+    
+    private final Charset UTF_8 = Charset.forName("UTF-8");
+
 
     /**
      * Creates a FigoConnection instance
@@ -112,7 +122,7 @@ public class FigoConnection {
 
         // compute basic auth information
         String authInfo = this.clientId + ":" + this.clientSecret;
-        this.basicAuthInfo = Base64.encodeBase64String(authInfo.getBytes());
+        this.basicAuthInfo = Base64.encodeBase64String(authInfo.getBytes(UTF_8));
     }
 
     /**
@@ -137,6 +147,19 @@ public class FigoConnection {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
+        
+        if (connection instanceof HttpsURLConnection) {
+            // Setup and install the trust manager
+            try {
+                final SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
+                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException("Connection setup failed", e);
+            } catch (KeyManagementException e) {
+                throw new IOException("Connection setup failed", e);
+            }
+        }
 
         connection.setRequestMethod(method);
         connection.setRequestProperty("Authorization", "Basic " + this.basicAuthInfo);
@@ -148,7 +171,7 @@ public class FigoConnection {
             String encodedData = createGson().toJson(data);
 
             connection.setDoOutput(true);
-            connection.getOutputStream().write(encodedData.getBytes("UTF-8"));
+            connection.getOutputStream().write(encodedData.getBytes(UTF_8));
         }
 
         // process response
@@ -211,18 +234,13 @@ public class FigoConnection {
      */
     public String getLoginUrl(String scope, String state) {
         try {
-            StringBuilder sb = new StringBuilder();
-            sb.append(apiEndpoint);
-            sb.append("/auth/code?response_type=code&client_id=");
-            sb.append(URLEncoder.encode(this.clientId, "ISO-8859-1"));
-            sb.append("&redirect_uri=");
-            sb.append(URLEncoder.encode(this.redirectUri, "ISO-8859-1"));
-            sb.append("&scope=");
-            sb.append(URLEncoder.encode(scope, "ISO-8859-1"));
-            sb.append("&state=");
-            sb.append(URLEncoder.encode(state, "ISO-8859-1"));
-            return sb.toString();
+            return apiEndpoint
+                    + "/auth/code?response_type=code&client_id=" + URLEncoder.encode(this.clientId, "ISO-8859-1") 
+                    + "&redirect_uri=" + URLEncoder.encode(this.redirectUri, "ISO-8859-1")
+                    + "&scope=" + URLEncoder.encode(scope, "ISO-8859-1") 
+                    + "&state=" + URLEncoder.encode(state, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
+            // Every implementation of the Java platform has to support the ISO-8859-1 charsets.
             return null;
         }
     }
@@ -281,10 +299,7 @@ public class FigoConnection {
      *            access or refresh token to be revoked
      */
     public void revokeToken(String token) throws IOException, FigoException {
-        try {
-            this.queryApi("/auth/revoke?token=" + URLEncoder.encode(token, "ISO-8859-1"), null, "GET", null);
-        } catch (UnsupportedEncodingException e) {
-        }
+        this.queryApi("/auth/revoke?token=" + URLEncoder.encode(token, "ISO-8859-1"), null, "GET", null);
     }
 
     /**
@@ -302,8 +317,7 @@ public class FigoConnection {
      * @return Auto-generated recovery password
      */
     public String addUser(String name, String email, String password, String language) throws IOException, FigoException {
-        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
-                CreateUserResponse.class);
+        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST", CreateUserResponse.class);
         return response.recovery_password;
     }
     
@@ -320,8 +334,7 @@ public class FigoConnection {
      * @return TokenResponse for further API requests
      */
     public TokenResponse addUserAndLogin(String name, String email, String password, String language) throws IOException, FigoException {
-        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
-                CreateUserResponse.class);
+        this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST", CreateUserResponse.class);
         return this.credentialLogin(email, password);
     }
 }

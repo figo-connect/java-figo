@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Scanner;
+import java.nio.charset.Charset;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -63,6 +64,9 @@ import me.figo.models.Transaction;
 import me.figo.models.User;
 
 import com.google.gson.Gson;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 
 /**
  * Main entry point to the data access-part of the figo connect java library. Here you can retrieve all the data the user granted your app access to.
@@ -70,12 +74,24 @@ import com.google.gson.Gson;
  * @author Stefan Richter
  */
 public class FigoSession {
+    
+    public enum PendingTransactions {
+        INCLUDED,
+        EXCLUDED
+    }
+    
+    public enum FieldVisited {
+        VISITED,
+        NOT_VISITED
+    }
 
-    protected String apiEndpoint;
+    private final String apiEndpoint;
 
-    protected String access_token;
+    private final String access_token;
 
-    protected int    timeout;
+    private final int timeout;
+    
+    private final Charset UTF_8 = Charset.forName("UTF-8");
 
     /**
      * Creates a FigoSession instance
@@ -142,7 +158,9 @@ public class FigoSession {
                 final SSLContext sc = SSLContext.getInstance("SSL");
                 sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
                 ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
-            } catch (Exception e) {
+            } catch (NoSuchAlgorithmException e) {
+                throw new IOException("Connection setup failed", e);
+            } catch (KeyManagementException e) {
                 throw new IOException("Connection setup failed", e);
             }
         }
@@ -157,7 +175,7 @@ public class FigoSession {
             String encodedData = createGson().toJson(data);
 
             connection.setDoOutput(true);
-            connection.getOutputStream().write(encodedData.getBytes("UTF-8"));
+            connection.getOutputStream().write(encodedData.getBytes(UTF_8));
         }
 
         // process response
@@ -282,15 +300,16 @@ public class FigoSession {
     public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
     	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
     	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
-    	while(taskStatus.getMessage().equals("Connecting to server..."))	{
+    	while("Connecting to server...".equals(taskStatus.getMessage()))	{
     		taskStatus = this.getTaskState(tokenResponse);
 			Thread.sleep(1000);
     	}
-    	if(taskStatus.isErroneous() &&
-    			taskStatus.getMessage().equals("Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."))	{
+    	if(taskStatus.isErroneous()
+                && "Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten.".equals(taskStatus.getMessage())) {
     		throw new FigoPinException(bankCode, countryCode, loginName, pin);
     	}
-    	else if(taskStatus.isErroneous() && taskStatus.getMessage().equals("Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.")){
+    	else if(taskStatus.isErroneous()
+                && "Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.".equals(taskStatus.getMessage())){
     		throw new FigoException("", taskStatus.getMessage());
     	}
     	return taskStatus;
@@ -464,11 +483,10 @@ public class FigoSession {
      *            set, regardless of the `since` parameter
      * @return an array of Transaction objects
      */
-    public List<Transaction> getTransactions(Account account, String since, Integer count, Integer offset, Boolean include_pending) throws FigoException,
-            IOException {
+    public List<Transaction> getTransactions(Account account, String since, Integer count, Integer offset, PendingTransactions include_pending) throws FigoException, IOException {
         return getTransactions(account == null ? null : account.getAccountId(), since, count, offset, include_pending);
     }
-
+    
     /**
      * Get an array of Transaction objects, one for each transaction of the user matching the criteria. Provide null values to not use the option.
      * 
@@ -485,35 +503,27 @@ public class FigoSession {
      *            set, regardless of the `since` parameter
      * @return an array of Transaction objects
      */
-    public List<Transaction> getTransactions(String accountId, String since, Integer count, Integer offset, Boolean include_pending) throws FigoException,
-            IOException {
-        StringBuilder sb = new StringBuilder();
+    public List<Transaction> getTransactions(String accountId, String since, Integer count, Integer offset, PendingTransactions include_pending) throws FigoException, IOException {
+        String path = "";
         if (accountId == null) {
-            sb.append("/rest/transactions?");
+            path += "/rest/transactions?";
         } else {
-            sb.append("/rest/accounts/" + accountId + "/transactions?");
+            path += "/rest/accounts/" + accountId + "/transactions?";
         }
         if (since != null) {
-            sb.append("since=");
-            sb.append(URLEncoder.encode(since, "ISO-8859-1"));
-            sb.append("&");
+            path += "since=" + URLEncoder.encode(since, "ISO-8859-1") + "&";
         }
         if (count != null) {
-            sb.append("count=");
-            sb.append(count);
-            sb.append("&");
+            path += "count=" + count + "&";
         }
         if (offset != null) {
-            sb.append("offset=");
-            sb.append(offset);
-            sb.append("&");
+            path += "offset=" + offset + "&";
         }
         if (include_pending != null) {
-            sb.append("include_pending=");
-            sb.append(include_pending ? "1" : "0");
+            path += "include_pending=" + (include_pending == PendingTransactions.INCLUDED ? "1" : "0");
         }
-        Transaction.TransactionsResponse response = this.queryApi(sb.toString(), null, "GET", Transaction.TransactionsResponse.class);
-        return response == null ? null : response.getTransactions();
+        Transaction.TransactionsResponse response = this.queryApi(path, null, "GET", Transaction.TransactionsResponse.class);
+        return response == null ? Collections.<Transaction>emptyList() : response.getTransactions();
     }
 
     /**
@@ -536,8 +546,8 @@ public class FigoSession {
      * @param visited
      * 				new value for the visited field
      */
-    public void modifyTransaction(Transaction transaction, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), new VisitedRequest(visited), "PUT", null);
+    public void modifyTransaction(Transaction transaction, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
     
     
@@ -546,8 +556,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifyTransactions(boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/transactions", new VisitedRequest(visited), "PUT", null);
+    public void modifyTransactions(FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/transactions", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
     
     /**
@@ -557,8 +567,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifyTransactions(Account account, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/transactions", new VisitedRequest(visited), "PUT", null);
+    public void modifyTransactions(Account account, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/transactions", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }    
     
     /**
@@ -568,8 +578,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifyTransactions(String accountId, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + accountId + "/transactions", new VisitedRequest(visited), "PUT", null);
+    public void modifyTransactions(String accountId, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + accountId + "/transactions", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
 
     /**
@@ -611,7 +621,7 @@ public class FigoSession {
      */
     public List<Security> getSecurities() throws FigoException, IOException	{
     	Security.SecurityResponse response = this.queryApi("/rest/securities", null, "GET", Security.SecurityResponse.class);
-    	return response == null ? null : response.getSecurities();
+    	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
     
     /**
@@ -621,7 +631,7 @@ public class FigoSession {
      */
     public List<Security> getSecurities(Account account) throws FigoException, IOException	{
     	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", null, "GET", Security.SecurityResponse.class);
-    	return response == null ? null : response.getSecurities();
+    	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
     
     /**
@@ -631,7 +641,7 @@ public class FigoSession {
      */
     public List<Security> getSecurities(String accountId) throws FigoException, IOException	{
     	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + accountId + "/securities", null, "GET", Security.SecurityResponse.class);
-    	return response == null ? null : response.getSecurities();
+    	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
     
     /**
@@ -641,8 +651,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifySecurity(Security security, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + security.getAccountId() + "/securities/" + security.getSecurityId(), new VisitedRequest(visited), "PUT", null);
+    public void modifySecurity(Security security, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + security.getAccountId() + "/securities/" + security.getSecurityId(), new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
     
     /**
@@ -650,8 +660,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifySecurities(boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/securities", new VisitedRequest(visited), "PUT", null);
+    public void modifySecurities(FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
     
     /**
@@ -661,8 +671,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifySecurities(Account account, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", new VisitedRequest(visited), "PUT", null);
+    public void modifySecurities(Account account, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
     
     /**
@@ -672,8 +682,8 @@ public class FigoSession {
      * @param visited
      * 			new value for the visited field
      */
-    public void modifySecurities(String accountId, boolean visited) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts/" + accountId + "/securities", new VisitedRequest(visited), "PUT", null);
+    public void modifySecurities(String accountId, FieldVisited visited) throws FigoException, IOException	{
+    	this.queryApi("/rest/accounts/" + accountId + "/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
 
     /**
@@ -736,7 +746,7 @@ public class FigoSession {
      */
     public List<Notification> getNotifications() throws FigoException, IOException {
         Notification.NotificationsResponse response = this.queryApi("/rest/notifications", null, "GET", Notification.NotificationsResponse.class);
-        return response == null ? null : response.getNotifications();
+        return response == null ? Collections.<Notification>emptyList() : response.getNotifications();
     }
 
     /**
@@ -788,7 +798,7 @@ public class FigoSession {
      */
     public List<Payment> getPayments() throws FigoException, IOException {
         Payment.PaymentsResponse response = this.queryApi("/rest/payments", null, "GET", Payment.PaymentsResponse.class);
-        return response == null ? null : response.getPayments();
+        return response == null ? Collections.<Payment>emptyList() : response.getPayments();
     }
 
     /**
@@ -800,7 +810,7 @@ public class FigoSession {
      */
     public List<Payment> getPayments(String accountId) throws FigoException, IOException {
         Payment.PaymentsResponse response = this.queryApi("/rest/accounts/" + accountId + "/payments", null, "GET", Payment.PaymentsResponse.class);
-        return response == null ? null : response.getPayments();
+        return response == null ? Collections.<Payment>emptyList() : response.getPayments();
     }
 
     /**
@@ -860,7 +870,7 @@ public class FigoSession {
      */
     public List<PaymentProposal> getPaymentProposals() throws FigoException, IOException	{
     	PaymentProposalResponse response = this.queryApi("/rest/adress_book", null, "GET", PaymentProposalResponse.class);
-    	return response == null ? null : response.getPaymentProposals();
+    	return response == null ? Collections.<PaymentProposal>emptyList() : response.getPaymentProposals();
     }
 
     /**

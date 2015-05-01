@@ -127,10 +127,10 @@ public class WritingTest {
 		Account testAccount = fs.getAccounts().get(0);
 		Transaction testTransaction = fs.getTransactions(testAccount).get(0);
 		String transactionId = testTransaction.getTransactionId();
-		fs.modifyTransaction(testTransaction, false);
+		fs.modifyTransaction(testTransaction, FigoSession.FieldVisited.NOT_VISITED);
 		testTransaction = fs.getTransaction(testAccount.getAccountId(), transactionId);
 		assertFalse(testTransaction.isVisited());
-		fs.modifyTransaction(testTransaction, true);
+		fs.modifyTransaction(testTransaction, FigoSession.FieldVisited.VISITED);
 		testTransaction = fs.getTransaction(testAccount.getAccountId(), transactionId);
 		assertTrue(testTransaction.isVisited());		
 	}
@@ -139,10 +139,10 @@ public class WritingTest {
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		Account testAccount = fs.getAccounts().get(0);
-		fs.modifyTransactions(testAccount, false);
+		fs.modifyTransactions(testAccount, FigoSession.FieldVisited.NOT_VISITED);
 		Transaction testTransaction = fs.getTransactions(testAccount).get(4);
 		assertFalse(testTransaction.isVisited());
-		fs.modifyTransactions(testAccount, true);
+		fs.modifyTransactions(testAccount, FigoSession.FieldVisited.VISITED);
 		testTransaction = fs.getTransactions().get(4);
 		assertTrue(testTransaction.isVisited());
 	}
@@ -150,10 +150,10 @@ public class WritingTest {
 	public void test_08_modifyUserTransaction() throws FigoException, IOException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
-		fs.modifyTransactions(false);
+		fs.modifyTransactions(FigoSession.FieldVisited.NOT_VISITED);
 		Transaction testTransaction = fs.getTransactions().get(3);
 		assertFalse(testTransaction.isVisited());
-		fs.modifyTransactions(true);
+		fs.modifyTransactions(FigoSession.FieldVisited.VISITED);
 		testTransaction = fs.getTransactions().get(3);
 		assertTrue(testTransaction.isVisited());
 	}

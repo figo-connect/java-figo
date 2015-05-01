@@ -7,13 +7,13 @@ import com.google.gson.annotations.Expose;
  */
 public class CredentialLoginRequest {
 	@Expose
-    private String  grant_type = "password";
+    private String grant_type = "password";
 
     @Expose
-    private String  username;
+    private String username;
     
     @Expose
-    private String  password;
+    private String password;
     
     public CredentialLoginRequest(String username, String password) {
         this.username = username;
