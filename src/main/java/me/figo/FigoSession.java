@@ -167,7 +167,7 @@ public class FigoSession extends FigoApi {
     }
     
     /**
-     * Setups an account an starts the initial syncronization directly
+     * Setups an account an starts the initial synchronization directly
      * @param bankCode
      * @param countryCode
      * @param loginName
