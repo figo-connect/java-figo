@@ -23,51 +23,28 @@
 package me.figo;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Scanner;
-
-import me.figo.FigoException.ErrorResponse;
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
 import me.figo.internal.CredentialLoginRequest;
-import me.figo.internal.GsonAdapter;
 import me.figo.internal.TokenRequest;
 import me.figo.internal.TokenResponse;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.google.gson.Gson;
 import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import me.figo.internal.FigoTrustManager;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API.
  * 
  * @author Stefan Richter
  */
-public class FigoConnection {
-
-    protected String apiEndpoint;
+public class FigoConnection extends FigoApi {
 
     protected String clientId;
     protected String clientSecret;
-    private String basicAuthInfo;
     protected String redirectUri;
-
-    private int timeout;
-    
-    private final Charset UTF_8 = Charset.forName("UTF-8");
-
 
     /**
      * Creates a FigoConnection instance
@@ -114,111 +91,13 @@ public class FigoConnection {
      *            which endpoint to use (customize for different figo deployment)
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout, String apiEndpoint) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+        super(apiEndpoint, buildAuthorizationString(clientId, clientSecret), timeout);
         this.redirectUri = redirectUri;
-        this.timeout = timeout;
-        this.apiEndpoint = apiEndpoint;
-
-        // compute basic auth information
-        String authInfo = this.clientId + ":" + this.clientSecret;
-        this.basicAuthInfo = Base64.encodeBase64String(authInfo.getBytes(UTF_8));
     }
 
-    /**
-     * Helper method for making a OAuth2-compliant API call
-     * 
-     * @param path
-     *            path on the server to call
-     * @param data
-     *            Payload of the request
-     * @param method
-     *            the HTTP verb to use
-     * @param typeOfT
-     *            Type of expected response
-     * @param <T>
-     *            Type of expected response
-     * @return the parsed result of the request
-     */
-    protected <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
-        URL url = new URL(apiEndpoint + path);
-
-        // configure URL connection, i.e. the HTTP request
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setConnectTimeout(timeout);
-        connection.setReadTimeout(timeout);
-        
-        if (connection instanceof HttpsURLConnection) {
-            // Setup and install the trust manager
-            try {
-                final SSLContext sc = SSLContext.getInstance("SSL");
-                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
-                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
-            } catch (NoSuchAlgorithmException e) {
-                throw new IOException("Connection setup failed", e);
-            } catch (KeyManagementException e) {
-                throw new IOException("Connection setup failed", e);
-            }
-        }
-
-        connection.setRequestMethod(method);
-        connection.setRequestProperty("Authorization", "Basic " + this.basicAuthInfo);
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("Content-Type", "application/json");
-
-        // add payload
-        if (data != null) {
-            String encodedData = createGson().toJson(data);
-
-            connection.setDoOutput(true);
-            connection.getOutputStream().write(encodedData.getBytes(UTF_8));
-        }
-
-        // process response
-        int code = connection.getResponseCode();
-        if (code >= 200 && code < 300) {
-            return handleResponse(connection.getInputStream(), typeOfT);
-        } else if (code == 400) {
-            throw new FigoException((ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
-        } else if (code == 401) {
-            throw new FigoException("access_denied", "Access Denied");
-        } else {
-            // return decode(connection.getErrorStream(), resultType);
-            throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
-        }
-    }
-
-    /**
-     * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
-     * 
-     * @return GSON instance
-     */
-    protected Gson createGson() {
-        return GsonAdapter.createGson();
-    }
-
-    /**
-     * Handle the response of a request by decoding its JSON payload
-     * 
-     * @param stream
-     *            Stream containing the JSON data
-     * @param typeOfT
-     *            Type of the data to be expected
-     * @return Decoded data
-     */
-    private <T> T handleResponse(InputStream stream, Type typeOfT) {
-        // check whether decoding is actual requested
-        if (typeOfT == null)
-            return null;
-
-        // read stream body
-        Scanner s = new Scanner(stream, "UTF-8");
-        s.useDelimiter("\\A");
-        String body = s.hasNext() ? s.next() : "";
-        s.close();
-
-        // decode JSON payload
-        return createGson().fromJson(body, typeOfT);
+    private static String buildAuthorizationString(String clientId1, String clientSecret1) {
+        String authInfo = clientId1 + ":" + clientSecret1;
+        return "Basic " + Base64.encodeBase64String(authInfo.getBytes(Charset.forName("UTF-8")));
     }
 
     /**
@@ -234,7 +113,7 @@ public class FigoConnection {
      */
     public String getLoginUrl(String scope, String state) {
         try {
-            return apiEndpoint
+            return getApiEndpoint()
                     + "/auth/code?response_type=code&client_id=" + URLEncoder.encode(this.clientId, "ISO-8859-1") 
                     + "&redirect_uri=" + URLEncoder.encode(this.redirectUri, "ISO-8859-1")
                     + "&scope=" + URLEncoder.encode(scope, "ISO-8859-1") 
@@ -249,7 +128,7 @@ public class FigoConnection {
      * Convert the authentication code received as result of the login process into an access token usable for data access.
      * 
      * @param authenticationCode
-     *            the code received as part of the call to the redirect URL at the end of the logon process
+     *            the code received as part of the call to the redirect URL at the end of the long process
      * @return HashMap with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to get a
      *         FigoSession and access the users data - `refresh_token` - if the scope contained the `offline` flag, also a refresh token is generated. It can be
      *         used to generate new access tokens, when the first one has expired. - `expires` - absolute time the access token expires
@@ -263,7 +142,7 @@ public class FigoConnection {
     }
 
     /**
-     * Convert a refresh token (granted for offline access and returned by `convert_authentication_code`) into an access token usabel for data acccess.
+     * Convert a refresh token (granted for offline access and returned by `convert_authentication_code`) into an access token usable for data access.
      * 
      * @param refreshToken
      *            refresh token returned by `convert_authentication_code`
