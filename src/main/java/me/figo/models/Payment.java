@@ -321,7 +321,7 @@ public class Payment {
     /***
      * Helper type to represent the actual answer from the figo API
      */
-    public class PaymentsResponse {
+    public static class PaymentsResponse {
         /***
          * List of transactions asked for
          */

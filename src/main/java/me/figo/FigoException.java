@@ -22,8 +22,6 @@
 
 package me.figo;
 
-import me.figo.internal.ErrorResponse;
-
 /***
  * Base Class for all figo Exceptions. It extends the normal Java exceptions with an error_code field, which carries the computer readable error reason.
  * 
@@ -53,5 +51,21 @@ public class FigoException extends Exception {
 
     public String getErrorCode() {
         return error_code;
+    }
+
+    public static class ErrorResponse {
+        private String error;
+        private String error_description;
+
+        public ErrorResponse() {
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public String getErrorDescription() {
+            return error_description;
+        }
     }
 }

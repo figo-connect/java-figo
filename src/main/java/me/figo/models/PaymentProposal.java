@@ -43,7 +43,7 @@ public class PaymentProposal {
 		this.name = name;
 	}
 	
-	public class PaymentProposalResponse	{
+	public static class PaymentProposalResponse	{
 		@Expose
 		private List<PaymentProposal> paymentProposals;
 		

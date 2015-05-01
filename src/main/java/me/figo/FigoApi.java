@@ -36,7 +36,6 @@ import java.util.Scanner;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import me.figo.internal.ErrorResponse;
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
@@ -129,7 +128,7 @@ public class FigoApi {
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
         } else if (code == 400) {
-            throw new FigoException((ErrorResponse) handleResponse(connection.getErrorStream(), ErrorResponse.class));
+            throw new FigoException((FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
         } else if (code == 401) {
             throw new FigoException("access_denied", "Access Denied");
         } else {

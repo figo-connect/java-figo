@@ -55,7 +55,7 @@ public class Service {
 		this.additional_icons = additionalIcons;
 	}
 	
-	public class ServiceResponse	{
+	public static class ServiceResponse	{
 		
 		@Expose
 		private List<Service> services;

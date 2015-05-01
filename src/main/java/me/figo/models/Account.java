@@ -259,7 +259,7 @@ public class Account {
     /**
      * Helper type to match actual response from figo API
      */
-    public class AccountsResponse {
+    public static class AccountsResponse {
         /**
          * List of accounts asked for
          */

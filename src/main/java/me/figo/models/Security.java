@@ -195,7 +195,7 @@ public class Security {
 		this.modification_timestamp = modificationTimestamp;
 	}
 	
-	public class SecurityResponse	{
+	public static class SecurityResponse	{
 		private List<Security> securities;
 		
 		public SecurityResponse()	{
