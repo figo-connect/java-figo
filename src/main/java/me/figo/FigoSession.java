@@ -205,7 +205,7 @@ public class FigoSession extends FigoApi {
     }
 
     /**
-     * All accounts the user has granted your App access to
+     * All accounts the user has granted your app access to
      * 
      * @return List of Accounts
      */
@@ -271,7 +271,7 @@ public class FigoSession extends FigoApi {
      * Returns the balance details of the supplied account
      * 
      * @param account
-     *            account whos balance should be retrieved
+     *            account whose balance should be retrieved
      * @return AccountBalance or Null
      */
     public AccountBalance getAccountBalance(Account account) throws FigoException, IOException {
@@ -743,7 +743,7 @@ public class FigoSession extends FigoApi {
     }
     
     /**
-     * Returns a list of PaymentProposals
+     * Returns a list of PaymentProposals.
      */
     public List<PaymentProposal> getPaymentProposals() throws FigoException, IOException	{
     	PaymentProposalResponse response = this.queryApi("/rest/adress_book", null, "GET", PaymentProposalResponse.class);
