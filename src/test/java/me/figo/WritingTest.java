@@ -87,35 +87,6 @@ public class WritingTest {
 		assertTrue(fs.getAccounts().size() == 1);
 	}
 	
-	public void test_050_addBankAccountAndSyncWithWrongPin() throws IOException, FigoException, FigoPinException, InterruptedException	{
-		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
-		FigoSession fs = new FigoSession(accessToken.access_token);
-		fs.setupAndSyncAccount(BANKCODE, "de", ACCOUNT, "123456");
-		Thread.sleep(5000);
-		assertTrue(fs.getAccounts().size() == 0);
-	}
-	
-	public void test_051_addBankAccountAndSyncWithWrongAndCorrectPin() throws IOException, FigoException, FigoPinException, InterruptedException	{
-		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
-		FigoSession fs = new FigoSession(accessToken.access_token);
-		try	{
-			fs.setupAndSyncAccount(BANKCODE, "de", ACCOUNT, "123456");
-		} catch (FigoPinException e)	{
-			fs.setupAndSyncAccount(e, PIN);
-		}
-		Thread.sleep(5000);
-		assertTrue(fs.getAccounts().size() == 1);
-	}
-	
-	
-	public void test_052_addBankAccountAndSync() throws IOException, FigoException, FigoPinException, InterruptedException	{
-		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
-		FigoSession fs = new FigoSession(accessToken.access_token);
-		fs.setupAndSyncAccount(BANKCODE, "de", ACCOUNT, PIN);
-		Thread.sleep(5000);
-		assertTrue(fs.getAccounts().size() == 1);
-	}
-	
 	public void test_06_modifyTransaction() throws IOException, FigoException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
