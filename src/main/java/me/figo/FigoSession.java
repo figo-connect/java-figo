@@ -42,6 +42,7 @@ import me.figo.internal.GsonAdapter;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.SubmitPaymentRequest;
 import me.figo.internal.SyncTokenRequest;
+import me.figo.internal.TaskResponseType;
 import me.figo.internal.TaskStatusRequest;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
@@ -954,6 +955,7 @@ public class FigoSession {
     	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId), "POST", TaskStatusResponse.class);
     }
     
+    @Deprecated
     /**
      * Retrieves the current status of a Task and provide a PIN
      * @param tokenId
@@ -964,6 +966,51 @@ public class FigoSession {
      */
     public TaskStatusResponse getTaskState(String tokenId, String pin) throws FigoException, IOException	{
     	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId, pin), "POST", TaskStatusResponse.class);
+    }
+    
+    public TaskStatusResponse submitResponseToTask(String tokenId, String response, TaskResponseType type) throws FigoException, IOException	{
+	/**
+	 * This method is used to provide a response to a running Task.
+	 * @param tokenId
+	 * 			ID of the TaskToken which will receive the response
+	 * @param response
+	 * 			Your provided response as a String. For Boolean fields (SAVE_PIN and CONTINUE) the String values 0, 1 are used
+	 * @param type
+	 * 			Type of the response you want to submit. Available types are: PIN, SAVE_PIN, CHALLENGE and CONTINUE
+	 *  
+	 */
+    	TaskStatusRequest request = new TaskStatusRequest(tokenId);
+    	switch (type) {
+    	case PIN:
+			request.setPin(response);
+			break;
+		case SAVE_PIN:
+			request.setSavePin(response);
+			break;
+		case CHALLENGE:
+			request.setResponse(response);
+			break;
+		case CONTINUE:
+			request.setContinue(response);
+			break;
+		default:
+			break;
+		}
+    	return this.queryApi("/task/progress?id=" + tokenId, request, "POST", TaskStatusResponse.class);
+    }
+    
+    public TaskStatusResponse submitResponseToTask(TaskTokenResponse tokenResponse, String response, TaskResponseType type) throws FigoException, IOException	{
+    	/**
+    	 * This method is used to provide a response to a running Task.
+    	 * @param tokenResponse
+    	 * 			Response object of a task creating method
+    	 * @param response
+    	 * 			Your provided response as a String. For Boolean fields (SAVE_PIN and CONTINUE) the String values 0, 1 are used
+    	 * @param type
+    	 * 			Type of the response you want to submit. Available types are: PIN, SAVE_PIN, CHALLENGE and CONTINUE
+    	 *  
+    	 */
+    	return this.submitResponseToTask(tokenResponse.getTaskToken(), response, type);
     }
 
     /**
