@@ -35,6 +35,7 @@ import me.figo.models.Account;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentProposal;
+import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
 
@@ -75,6 +76,13 @@ public class SessionTest {
     	Account a = sut.getAccount("A1.2");
         List<Payment> ps = sut.getPayments(a);
         assertTrue(ps.size() >= 0);
+    }
+    
+    @Test
+    public void testGetSupportedTanSchemes() throws FigoException, IOException	{
+    	Account a = sut.getAccount("A1.1");
+    	List<TanScheme> schemes = a.getSupportedTanSchemes();
+    	assertTrue(schemes.size() == 3);
     }
 
     @Test

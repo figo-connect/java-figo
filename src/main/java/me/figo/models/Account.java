@@ -122,7 +122,10 @@ public class Account {
      * Account icon in other resolutions
      */
     @Expose(serialize = false)
-    private HashMap<String, String> addtional_icons;
+    private HashMap<String, String> additional_icons;
+    
+    @Expose
+    private List<TanScheme> supported_tan_schemes;
 
     public Account() {
     }
@@ -253,10 +256,21 @@ public class Account {
      * @return the account icon in other resolutions
      */
     public HashMap<String, String> getAddtionalIcons() {
-        return addtional_icons;
+        return additional_icons;
     }
-
+    
+    
     /**
+     * 
+     * @return the supported tan schemes
+     */
+    public List<TanScheme> getSupportedTanSchemes() {
+		return supported_tan_schemes;
+	}
+
+
+
+	/**
      * Helper type to match actual response from figo API
      */
     public class AccountsResponse {
