@@ -2,6 +2,7 @@ package me.figo;
 
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.TaskStatusResponse;
+import me.figo.internal.TaskTokenResponse;
 
 public class FigoPinException extends Exception {
 
@@ -13,6 +14,7 @@ public class FigoPinException extends Exception {
 	private String countryCode;
 	private String loginName;
 	private String pin;
+	private String taskToken;
 	
 	public FigoPinException(SetupAccountRequest request)	{
 		this.bankCode = request.getBankCode();
@@ -21,11 +23,12 @@ public class FigoPinException extends Exception {
 		this.pin = request.getCredentials().get(1);
 	}
 	
-	public FigoPinException(String bankCode, String countryCode, String loginName, String pin)	{
+	public FigoPinException(String bankCode, String countryCode, String loginName, String pin, TaskTokenResponse taskToken)	{
 		this.bankCode = bankCode;
 		this.countryCode = countryCode;
 		this.loginName = loginName;
 		this.pin = pin;
+		this.taskToken = taskToken.getTaskToken();
 	}
 	
 	public String getBankCode() {
@@ -39,6 +42,9 @@ public class FigoPinException extends Exception {
 	}
 	public String getPin() {
 		return pin;
+	}
+	public String getTaskToken()	{
+		return this.taskToken;
 	}
 	
 	

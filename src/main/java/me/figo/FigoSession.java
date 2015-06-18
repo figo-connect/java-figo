@@ -283,15 +283,14 @@ public class FigoSession {
     public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
     	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
     	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
-    	while(taskStatus.getMessage().equals("Connecting to server..."))	{
+    	while(!taskStatus.isEnded() && !taskStatus.isErroneous() && !taskStatus.isWaitingForPin() && !taskStatus.isWaitingForResponse())	{
     		taskStatus = this.getTaskState(tokenResponse);
 			Thread.sleep(1000);
     	}
-    	if(taskStatus.isErroneous() &&
-    			taskStatus.getMessage().equals("Die Anmeldung zum Online-Zugang Ihrer Bank ist fehlgeschlagen. Bitte überprüfen Sie Ihre Zugangsdaten."))	{
-    		throw new FigoPinException(bankCode, countryCode, loginName, pin);
+    	if(taskStatus.isErroneous() && taskStatus.isWaitingForPin() && !taskStatus.isEnded())	{
+    		throw new FigoPinException(bankCode, countryCode, loginName, pin, tokenResponse);
     	}
-    	else if(taskStatus.isErroneous() && taskStatus.getMessage().equals("Ihr Online-Zugang wurde von Ihrer Bank gesperrt. Bitte lassen Sie die Sperre von Ihrer Bank aufheben.")){
+    	else if(taskStatus.isErroneous() && taskStatus.isEnded()){
     		throw new FigoException("", taskStatus.getMessage());
     	}
     	return taskStatus;
@@ -306,7 +305,7 @@ public class FigoSession {
      * @return
      */
     public TaskStatusResponse setupAndSyncAccount(FigoPinException exception, String newPin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	return setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), exception.getLoginName(), newPin);
+    	return this.setupAndSyncAccount(exception.getBankCode(), exception.getCountryCode(), exception.getLoginName(), newPin);
     }
 
     /**
