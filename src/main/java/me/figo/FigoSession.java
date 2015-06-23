@@ -287,7 +287,7 @@ public class FigoSession {
     		taskStatus = this.getTaskState(tokenResponse);
 			Thread.sleep(1000);
     	}
-    	if(taskStatus.isErroneous() && taskStatus.isWaitingForPin() && !taskStatus.isEnded())	{
+    	if(taskStatus.isWaitingForPin() && !taskStatus.isEnded())	{
     		throw new FigoPinException(bankCode, countryCode, loginName, pin, tokenResponse);
     	}
     	else if(taskStatus.isErroneous() && taskStatus.isEnded()){
