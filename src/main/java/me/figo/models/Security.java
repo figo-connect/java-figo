@@ -196,7 +196,12 @@ public class Security {
 	}
 	
 	public class SecurityResponse	{
+		
+		@Expose
 		private List<Security> securities;
+		
+		@Expose
+		private SynchronizationStatus status;
 		
 		public SecurityResponse()	{
 			
@@ -204,6 +209,10 @@ public class Security {
 		
 		public List<Security> getSecurities()	{
 			return this.securities;
+		}
+		
+		public SynchronizationStatus getStatus()	{
+			return this.status;
 		}
 	}
 }

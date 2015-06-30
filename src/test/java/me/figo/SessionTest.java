@@ -29,12 +29,16 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
+import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentProposal;
+import me.figo.models.PaymentType;
+import me.figo.models.Security;
 import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
@@ -170,4 +174,11 @@ public class SessionTest {
     	List<PaymentProposal> proposals = sut.getPaymentProposals();
     	assertEquals(2, proposals.size());
     }
+    
+    @Test
+    public void testGetSupportedPaymentTypes() throws FigoException, IOException	{
+    	HashMap<String, PaymentType> types = sut.getAccounts().get(0).getSupportedPaymentTypes();
+    	assertEquals(2, types.size());
+    }
+
 }

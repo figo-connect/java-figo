@@ -124,8 +124,17 @@ public class Account {
     @Expose(serialize = false)
     private HashMap<String, String> additional_icons;
     
-    @Expose
+    /**
+     * Supported Tan Schemes
+     */
+    @Expose(serialize = false)
     private List<TanScheme> supported_tan_schemes;
+    
+    /**
+     * Supported Payment Types
+     */
+    @Expose(serialize = false)
+    private HashMap<String, PaymentType> supported_payments;
 
     public Account() {
     }
@@ -267,7 +276,15 @@ public class Account {
     public List<TanScheme> getSupportedTanSchemes() {
 		return supported_tan_schemes;
 	}
-
+    
+    /**
+     * 
+     * @return the supported payment types
+     */
+    public HashMap<String, PaymentType> getSupportedPaymentTypes()	{
+    	return supported_payments;
+    }
+    
 
 
 	/**
