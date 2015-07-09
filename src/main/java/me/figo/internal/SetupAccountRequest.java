@@ -23,6 +23,12 @@ public class SetupAccountRequest {
 		this.credentials.add(loginName);
 		this.credentials.add(pin);
 	}
+	
+	public SetupAccountRequest(String bankCode, String countryCode, List<String> credentials)	{
+		this.bank_code = bankCode;
+		this.country = countryCode;
+		this.credentials = credentials;
+	}
 
 	public String getBankCode() {
 		return bank_code;

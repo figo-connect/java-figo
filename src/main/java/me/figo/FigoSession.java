@@ -273,6 +273,18 @@ public class FigoSession {
     }
     
     /**
+     * Returns a TaskToken for a new account creation task
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
+     * @return
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials), "POST", TaskTokenResponse.class);
+    }
+    
+    /**
      * Setups an account an starts the initial syncronization directly
      * @param bankCode
      * @param countryCode
