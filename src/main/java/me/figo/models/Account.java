@@ -38,85 +38,85 @@ public class Account {
      * Internal figo Connect account ID
      */
     @Expose(serialize = false)
-    private String                  account_id;
+    private String account_id;
 
     /**
      * Internal figo Connect bank ID
      */
     @Expose(serialize = false)
-    private String                  bank_id;
+    private String bank_id;
 
     /**
      * Account name
      */
     @Expose
-    private String                  name;
+    private String name;
 
     /**
      * Account owner
      */
     @Expose
-    private String                  owner;
+    private String owner;
 
     /**
      * This flag indicates whether the account will be automatically synchronized
      */
     @Expose
-    private boolean                 auto_sync;
+    private boolean auto_sync;
 
     /**
      * Account number
      */
     @Expose(serialize = false)
-    private String                  account_number;
+    private String account_number;
 
     /**
      * Bank code
      */
     @Expose(serialize = false)
-    private String                  bank_code;
+    private String bank_code;
 
     /**
      * Bank name
      */
     @Expose(serialize = false)
-    private String                  bank_name;
+    private String bank_name;
 
     /**
      * Three-character currency code
      */
     @Expose(serialize = false)
-    private String                  currency;
+    private String currency;
 
     /**
      * IBAN
      */
     @Expose(serialize = false)
-    private String                  iban;
+    private String iban;
 
     /**
      * BIC
      */
     @Expose(serialize = false)
-    private String                  bic;
+    private String bic;
 
     /**
      * Account type: Giro account, Savings account, Credit card, Loan account, PayPal, Cash book or Unknown
      */
     @Expose(serialize = false)
-    private String                  type;
+    private String type;
 
     /**
      * Account icon URL
      */
     @Expose(serialize = false)
-    private String                  icon;
+    private String icon;
 
     /**
      * Account balance details
      */
     @Expose(serialize = false)
-    private AccountBalance          balance;
+    private AccountBalance balance;
 
     /**
      * Account icon in other resolutions
@@ -290,7 +290,7 @@ public class Account {
 	/**
      * Helper type to match actual response from figo API
      */
-    public class AccountsResponse {
+    public static class AccountsResponse {
         /**
          * List of accounts asked for
          */

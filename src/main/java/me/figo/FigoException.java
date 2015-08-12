@@ -31,7 +31,7 @@ public class FigoException extends Exception {
 
     private static final long serialVersionUID = -3645017096212930985L;
 
-    private String            error_code;
+    private final String error_code;
 
     public FigoException(String error_code, String error_message) {
         super(error_message);
@@ -53,7 +53,7 @@ public class FigoException extends Exception {
         return error_code;
     }
 
-    public class ErrorResponse {
+    public static class ErrorResponse {
         private String error;
         private String error_description;
 

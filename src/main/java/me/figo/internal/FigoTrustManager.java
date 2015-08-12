@@ -32,13 +32,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.net.ssl.X509TrustManager;
+import org.apache.commons.codec.binary.Hex;
 
 public class FigoTrustManager implements X509TrustManager {
 
-    private static final char[]       hexDigits          = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-
-    private static List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList("3A:62:54:4D:86:B4:34:38:EA:34:64:4E:95:10:A9:FF:37:27:69:C0",
-                                                                 "CF:C1:BC:7F:6A:16:09:2B:10:83:8A:B0:22:4F:3A:65:D2:70:D7:3E"));
+    private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
+            "3A62544D86B43438EA34644E9510A9FF372769C0",                                                     
+            "CFC1BC7F6A16092B10838AB0224F3A65D270D73E"));
 
     /**
      * @return the list of trusted certificate fingerprints using SHA1
@@ -56,13 +56,16 @@ public class FigoTrustManager implements X509TrustManager {
         VALID_FINGERPRINTS.add(fingerprint);
     }
     
+    @Override
     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
         return null;
     }
 
+    @Override
     public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
     }
 
+    @Override
     public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
         if (certs.length == 0) {
             throw new CertificateException("No certificate found");
@@ -79,24 +82,11 @@ public class FigoTrustManager implements X509TrustManager {
             byte[] der = cert.getEncoded();
             md.update(der);
             byte[] digest = md.digest();
-            return hexify(digest);
+            return new String(Hex.encodeHex(digest, false));
         } catch (NoSuchAlgorithmException e) {
             return "";
         } catch (CertificateEncodingException e) {
             return "";
         }
-    }
-
-    private static String hexify(byte bytes[]) {
-        StringBuffer buf = new StringBuffer(bytes.length * 2);
-
-        for (int i = 0; i < bytes.length; ++i) {
-            buf.append(hexDigits[(bytes[i] & 0xf0) >> 4]);
-            buf.append(hexDigits[bytes[i] & 0x0f]);
-            if (i + 1 < bytes.length)
-                buf.append(":");
-        }
-
-        return buf.toString();
     }
 }

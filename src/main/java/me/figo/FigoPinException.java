@@ -6,9 +6,6 @@ import me.figo.internal.TaskTokenResponse;
 
 public class FigoPinException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3142403349349283593L;
 	private String bankCode;
 	private String countryCode;

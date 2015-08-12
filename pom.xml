@@ -4,11 +4,11 @@
 
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.3</version>
 	<packaging>jar</packaging>
 
 	<name>Figo Java SDK</name>
-	<description>This SDK eases the development of Java applications and web services consuming the figo connect API. Figo connect allows developers simple access to users bank data on a trustworthy basis. Users can grant your application access to certain parts of their bank accounts and you can access them without worrying about the innerworkings of online banking.</description>
+	<description>This SDK eases the development of Java applications and web services consuming the figo connect API. Figo connect allows developers simple access to users bank data on a trustworthy basis. Users can grant your application access to certain parts of their bank accounts and you can access them without worrying about the inner workings of online banking.</description>
 	<url>http://figo.io</url>
 
 	<organization>

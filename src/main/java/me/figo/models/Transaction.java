@@ -233,7 +233,7 @@ public class Transaction {
     /**
      * Helper type to represent the actual answer from the figo API
      */
-    public class TransactionsResponse {
+    public static class TransactionsResponse {
         /**
          * List of transactions asked for
          */

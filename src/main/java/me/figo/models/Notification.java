@@ -121,7 +121,7 @@ public class Notification {
     /**
      * Helper type to match actual response from figo API
      */
-    public class NotificationsResponse {
+    public static class NotificationsResponse {
         /**
          * List of notifications asked for
          */

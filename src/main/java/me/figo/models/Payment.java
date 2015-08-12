@@ -17,49 +17,49 @@ public class Payment {
      * Internal figo Connect payment ID
      */
     @Expose(serialize = false)
-    private String                  payment_id;
+    private String payment_id;
 
     /**
      * Internal figo Connect account ID
      */
     @Expose(serialize = false)
-    private String                  account_id;
+    private String account_id;
 
     /**
      * Payment type
      */
     @Expose
-    private String                  type;
+    private String type;
 
     /**
      * Name of creditor or debtor
      */
     @Expose
-    private String                  name;
+    private String name;
 
     /**
      * Account number of creditor or debtor
      */
     @Expose
-    private String                  account_number;
+    private String account_number;
 
     /**
      * Bank code of creditor or debtor
      */
     @Expose
-    private String                  bank_code;
+    private String bank_code;
 
     /**
      * Bank name of creditor or debtor
      */
     @Expose(serialize = false)
-    private String                  bank_name;
+    private String bank_name;
 
     /**
      * Icon of creditor or debtor bank
      */
     @Expose(serialize = false)
-    private String                  bank_icon;
+    private String bank_icon;
 
     /**
      * Icon of the creditor or debtor bank in other resolutions
@@ -71,43 +71,43 @@ public class Payment {
      * Order amount
      */
     @Expose
-    private BigDecimal              amount;
+    private BigDecimal amount;
 
     /**
      * Three-character currency code
      */
     @Expose
-    private String                  currency;
+    private String currency;
 
     /**
      * Purpose text
      */
     @Expose
-    private String                  purpose;
+    private String purpose;
 
     /**
      * Timestamp of submission to the bank server
      */
     @Expose(serialize = false)
-    private Date                    submission_timestamp;
+    private Date submission_timestamp;
 
     /**
      * Internal creation timestamp on the figo Connect server
      */
     @Expose(serialize = false)
-    private Date                    creation_timestamp;
+    private Date creation_timestamp;
 
     /**
      * Internal modification timestamp on the figo Connect server
      */
     @Expose(serialize = false)
-    private Date                    modification_timestamp;
+    private Date modification_timestamp;
 
     /**
      * Transaction ID. This field is only set if the payment has been matched to a transaction.
      */
     @Expose
-    private String                  transaction_id;
+    private String transaction_id;
 
     public Payment() {
     }
@@ -321,7 +321,7 @@ public class Payment {
     /***
      * Helper type to represent the actual answer from the figo API
      */
-    public class PaymentsResponse {
+    public static class PaymentsResponse {
         /***
          * List of transactions asked for
          */

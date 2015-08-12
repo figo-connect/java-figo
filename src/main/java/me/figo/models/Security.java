@@ -195,8 +195,8 @@ public class Security {
 		this.modification_timestamp = modificationTimestamp;
 	}
 	
-	public class SecurityResponse	{
-		
+	public static class SecurityResponse	{
+
 		@Expose
 		private List<Security> securities;
 		
