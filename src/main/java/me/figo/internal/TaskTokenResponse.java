@@ -8,4 +8,8 @@ import com.google.gson.annotations.Expose;
 public class TaskTokenResponse {
     @Expose
     public String task_token;
+    
+    public String getTaskToken() {
+		return task_token;
+	}
 }
