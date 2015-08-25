@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.List;
 
 import me.figo.internal.TaskStatusResponse;
@@ -12,12 +13,14 @@ import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
 import me.figo.models.LoginSettings;
 import me.figo.models.Service;
+import me.figo.models.StandingOrder;
 import me.figo.models.Transaction;
 import me.figo.internal.TaskTokenResponse;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -75,11 +78,11 @@ public class WritingTest {
 	public void test_05_addBankAccount() throws FigoException, IOException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
-		TaskTokenResponse response= fs.setupNewAccount(BANKCODE, "de", ACCOUNT, PIN);
+		TaskTokenResponse response= fs.setupNewAccount(BANKCODE, "de", ACCOUNT, PIN, Arrays.asList("standingOrders"));
 		TaskStatusResponse taskStatus = fs.getTaskState(response);
 		assertTrue(taskStatus instanceof TaskStatusResponse);
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(25000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

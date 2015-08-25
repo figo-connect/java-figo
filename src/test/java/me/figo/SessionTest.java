@@ -39,6 +39,7 @@ import me.figo.models.Payment;
 import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentType;
 import me.figo.models.Security;
+import me.figo.models.StandingOrder;
 import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
@@ -180,5 +181,11 @@ public class SessionTest {
     	HashMap<String, PaymentType> types = sut.getAccounts().get(0).getSupportedPaymentTypes();
     	assertEquals(2, types.size());
     }
+    
+    @Test
+	public void testGetStandingOrders() throws IOException, FigoException {
+        List<StandingOrder> so = sut.getStandingOrders();
+        assertTrue(so.size() > 0);
+	}
 
 }

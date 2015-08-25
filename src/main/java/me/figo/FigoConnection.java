@@ -35,7 +35,7 @@ import org.apache.commons.codec.binary.Base64;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API.
- * 
+ *
  * @author Stefan Richter
  */
 public class FigoConnection extends FigoApi {
@@ -46,7 +46,7 @@ public class FigoConnection extends FigoApi {
 
     /**
      * Creates a FigoConnection instance
-     * 
+     *
      * @param clientId
      *            the OAuth Client ID as provided by your figo developer contact
      * @param clientSecret
@@ -55,12 +55,12 @@ public class FigoConnection extends FigoApi {
      *            the URI the users gets redirected to after the login is finished or if he presses cancels
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri) {
-        this(clientId, clientSecret, redirectUri, 5000);
+        this(clientId, clientSecret, redirectUri, 10000);
     }
 
     /**
      * Creates a FigoConnection instance
-     * 
+     *
      * @param clientId
      *            the OAuth Client ID as provided by your figo developer contact
      * @param clientSecret
@@ -76,7 +76,7 @@ public class FigoConnection extends FigoApi {
 
     /**
      * Creates a FigoConnection instance
-     * 
+     *
      * @param clientId
      *            the OAuth Client ID as provided by your figo developer contact
      * @param clientSecret
@@ -101,7 +101,7 @@ public class FigoConnection extends FigoApi {
     /**
      * The URL a user should open in his/her web browser to start the login process. When the process is completed, the user is redirected to the URL provided
      * to the constructor and passes on an authentication code. This code can be converted into an access token for data access.
-     * 
+     *
      * @param scope
      *            Scope of data access to ask the user for, e.g. `accounts=ro`
      * @param state
@@ -112,9 +112,9 @@ public class FigoConnection extends FigoApi {
     public String getLoginUrl(String scope, String state) {
         try {
             return getApiEndpoint()
-                    + "/auth/code?response_type=code&client_id=" + URLEncoder.encode(this.clientId, "ISO-8859-1") 
+                    + "/auth/code?response_type=code&client_id=" + URLEncoder.encode(this.clientId, "ISO-8859-1")
                     + "&redirect_uri=" + URLEncoder.encode(this.redirectUri, "ISO-8859-1")
-                    + "&scope=" + URLEncoder.encode(scope, "ISO-8859-1") 
+                    + "&scope=" + URLEncoder.encode(scope, "ISO-8859-1")
                     + "&state=" + URLEncoder.encode(state, "ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             // Every implementation of the Java platform has to support the ISO-8859-1 charsets.
@@ -124,12 +124,12 @@ public class FigoConnection extends FigoApi {
 
     /**
      * Convert the authentication code received as result of the login process into an access token usable for data access.
-     * 
+     *
      * @param authenticationCode
      *            the code received as part of the call to the redirect URL at the end of the long process
      * @return HashMap with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to get a
      *         FigoSession and access the users data - `refresh_token` - if the scope contained the `offline` flag, also a refresh token is generated. It can be
-     *         used to generate new access tokens, when the first one has expired. - `expires` - absolute time the access token expires
+     *         used to generate new access tokens, when the first one has expired. - `expires_in` - absolute time the access token expires
      */
     public TokenResponse convertAuthenticationCode(String authenticationCode) throws FigoException, IOException {
         if (!authenticationCode.startsWith("O")) {
@@ -141,11 +141,11 @@ public class FigoConnection extends FigoApi {
 
     /**
      * Convert a refresh token (granted for offline access and returned by `convert_authentication_code`) into an access token usable for data access.
-     * 
+     *
      * @param refreshToken
      *            refresh token returned by `convert_authentication_code`
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
-     *         get a FigoSession and access the users data - `expires` - absolute time the access token expires
+     *         get a FigoSession and access the users data - `expires_in` - absolute time the access token expires
      */
     public TokenResponse convertRefreshToken(String refreshToken) throws IOException, FigoException {
         if (!refreshToken.startsWith("R")) {
@@ -154,7 +154,7 @@ public class FigoConnection extends FigoApi {
 
         return this.queryApi("/auth/token", new TokenRequest(refreshToken, null, this.redirectUri, "refresh_token"), "POST", TokenResponse.class);
     }
-    
+
     /**
      * Login an user with his figo username and password credentials
      * @param username
@@ -162,7 +162,7 @@ public class FigoConnection extends FigoApi {
      * @param password
      * 			the user's figo password
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
-     *         get a FigoSession and access the users data - `expires` - absolute time the access token expires
+     *         get a FigoSession and access the users data - `expires_in` - absolute time the access token expires
      */
     public TokenResponse credentialLogin(String username, String password) throws IOException, FigoException	{
     	return this.queryApi("/auth/token", new CredentialLoginRequest(username, password), "POST", TokenResponse.class);
@@ -171,7 +171,7 @@ public class FigoConnection extends FigoApi {
     /**
      * Revoke a granted access or refresh token and thereby invalidate it. Note: this action has immediate effect, i.e. you will not be able use that token
      * anymore after this call.
-     * 
+     *
      * @param token
      *            access or refresh token to be revoked
      */
@@ -181,7 +181,7 @@ public class FigoConnection extends FigoApi {
 
     /**
      * Create a new figo Account
-     * 
+     *
      * @param name
      *            First and last name
      * @param email
@@ -190,15 +190,15 @@ public class FigoConnection extends FigoApi {
      *            New figo Account password; It must obey the figo username and password policy
      * @param language
      *            Two-letter code of preferred language
-     *            
+     *
      * @return Auto-generated recovery password
      */
     public String addUser(String name, String email, String password, String language) throws IOException, FigoException {
         CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST", CreateUserResponse.class);
         return response.recovery_password;
     }
-    
-    
+
+
     /**
      * Creates a new figo User and returns a login token
      * @param name

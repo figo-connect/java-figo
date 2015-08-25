@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.List;
+
 import me.figo.internal.AccountOrderRequest;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.SubmitPaymentRequest;
@@ -49,6 +50,7 @@ import me.figo.models.Security;
 import me.figo.models.Service;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
+import me.figo.models.StandingOrder;
 import me.figo.models.Transaction;
 import me.figo.models.User;
 
@@ -79,7 +81,7 @@ public class FigoSession extends FigoApi {
      *            the access token to bind this session to a user
      */
     public FigoSession(String accessToken) {
-        this(accessToken, 5000);
+        this(accessToken, 10000);
     }
 
     /**
@@ -155,6 +157,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
     }    
     
+    @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
      * @param bankCode
@@ -173,10 +176,49 @@ public class FigoSession extends FigoApi {
      * @param countryCode
      * @param loginName
      * @param pin
+     * @param 
+     * @return
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin, List<String> syncTasks) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin, syncTasks), "POST", TaskTokenResponse.class);
+    }
+    
+    @Deprecated
+    /**
+     * Returns a TaskToken for a new account creation task
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
      * @return
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials), "POST", TaskTokenResponse.class);
+    }
+    
+    /**
+     * Returns a TaskToken for a new account creation task
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
+     * @return
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks), "POST", TaskTokenResponse.class);
+    }
+    
+    @Deprecated
+    /**
+     * Setups an account an starts the initial syncronization directly
+     * @param bankCode
+     * @param countryCode
+     * @param loginName
+     * @param pin
+     * @return TaskStatusResponse
+     */
+    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
+    	return this.setupAndSyncAccount(bankCode, countryCode, loginName, pin, null);
     }
     
     /**
@@ -187,8 +229,8 @@ public class FigoSession extends FigoApi {
      * @param pin
      * @return TaskStatusResponse
      */
-    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
-    	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin);
+    public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin, List<String>syncTasks) throws FigoException, IOException, FigoPinException, InterruptedException	{
+    	TaskTokenResponse tokenResponse = this.setupNewAccount(bankCode, countryCode, loginName, pin, syncTasks);
     	TaskStatusResponse taskStatus =  this.getTaskState(tokenResponse);
     	while(!taskStatus.isEnded() && !taskStatus.isErroneous() && !taskStatus.isWaitingForPin() && !taskStatus.isWaitingForResponse())	{
     		taskStatus = this.getTaskState(tokenResponse);
@@ -477,6 +519,46 @@ public class FigoSession extends FigoApi {
      */
     public void removeTransaction(Transaction transaction) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), null, "DELETE", null);
+    }
+    
+    /**
+     * Get an array of standing orders objects, one for each standing order of the user matching the criteria. Provide null values to not use the option.
+     * 
+     * @param accountId
+     *            ID of the account for which to list the standing orders
+     * @return an array of Standing Order objects
+     */
+    public List<StandingOrder> getStandingOrders(String accountId) throws FigoException, IOException {
+        String path = "";
+        if (accountId == null) {
+            path += "/rest/standing_orders";
+        } else {
+            path += "/rest/accounts/" + accountId + "/standing_orders";
+        }
+        StandingOrder.StandingOrdersResponse response = this.queryApi(path, null, "GET", StandingOrder.StandingOrdersResponse.class);
+        return response == null ? Collections.<StandingOrder>emptyList() : response.getStandingOrders();
+    }
+    
+    /**
+     * All standing orders on all accounts of the user
+     * 
+     * @return List of Standing Order objects
+     */
+    public List<StandingOrder> getStandingOrders() throws FigoException, IOException {
+        return getStandingOrders((String) null);
+    }
+    
+    /**
+     * Retrieve a specific standing order by ID
+     * 
+     * @param accountId
+     *            ID of the account on which the transaction occurred
+     * @param standingOrderId
+     *            the figo ID of the specific standingOrder
+     * @return Standing Order or null
+     */
+    public StandingOrder getStandingOrder(String accountId, String standingOrderId) throws FigoException, IOException {
+        return this.queryApi("/rest/accounts/" + accountId + "/standing_orders/" + standingOrderId, null, "GET", StandingOrder.class);
     }
     
     /**
@@ -829,6 +911,24 @@ public class FigoSession extends FigoApi {
      */
     public String getSyncURL(String state, String redirect_url) throws FigoException, IOException {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url), "POST", TaskTokenResponse.class);
+        return getApiEndpoint() + "/task/start?id=" + response.task_token;
+    }
+    
+    /**
+     * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
+     * the process is finished, the user is redirected to the provided URL.
+     * 
+     * @param state
+     *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
+     *            authenticity of the call to the redirect URL
+     * @param redirect_url
+     *            URI the user is redirected to after the process completes
+     * @param syncTasks
+     * 			  Tasks to sync while talking to the bank. Transactions are activated by default
+     * @return the URL to be opened by the user
+     */
+    public String getSyncURL(String state, String redirect_url, List<String>syncTasks) throws FigoException, IOException {
+        TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks), "POST", TaskTokenResponse.class);
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
     

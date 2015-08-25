@@ -4,7 +4,7 @@
 
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.2.3</version>
+	<version>1.2.5</version>
 	<packaging>jar</packaging>
 
 	<name>Figo Java SDK</name>
@@ -18,8 +18,12 @@
 
 	<developers>
 		<developer>
-			<email>stefan.richter@figo.me</email>
+			<email>support@figo.me</email>
 			<name>Stefan Richter</name>
+		</developer>
+		<developer>
+			<email>jve@figo.me</email>
+			<name>Jan van Esdonk</name>
 		</developer>
 	</developers>
 
