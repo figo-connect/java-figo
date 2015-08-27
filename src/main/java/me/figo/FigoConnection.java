@@ -26,11 +26,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
 import me.figo.internal.CredentialLoginRequest;
 import me.figo.internal.TokenRequest;
 import me.figo.internal.TokenResponse;
+
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -41,7 +43,6 @@ import org.apache.commons.codec.binary.Base64;
 public class FigoConnection extends FigoApi {
 
     protected String clientId;
-    protected String clientSecret;
     protected String redirectUri;
 
     /**
@@ -91,6 +92,7 @@ public class FigoConnection extends FigoApi {
     public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout, String apiEndpoint) {
         super(apiEndpoint, buildAuthorizationString(clientId, clientSecret), timeout);
         this.redirectUri = redirectUri;
+        this.clientId = clientId;
     }
 
     private static String buildAuthorizationString(String clientId1, String clientSecret1) {
