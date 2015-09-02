@@ -22,9 +22,11 @@
 
 package me.figo;
 
+import com.google.gson.annotations.Expose;
+
 /***
  * Base Class for all figo Exceptions. It extends the normal Java exceptions with an error_code field, which carries the computer readable error reason.
- * 
+ *
  * @author Stefan Richter
  */
 public class FigoException extends Exception {
@@ -50,22 +52,24 @@ public class FigoException extends Exception {
     }
 
     public String getErrorCode() {
-        return error_code;
+        return this.error_code;
     }
 
     public static class ErrorResponse {
+    	@Expose
         private String error;
+    	@Expose
         private String error_description;
 
         public ErrorResponse() {
         }
 
         public String getError() {
-            return error;
+            return this.error;
         }
 
         public String getErrorDescription() {
-            return error_description;
+            return this.error_description;
         }
     }
 }
