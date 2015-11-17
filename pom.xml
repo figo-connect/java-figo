@@ -4,7 +4,7 @@
 
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.2.5</version>
+	<version>1.2.6</version>
 	<packaging>jar</packaging>
 
 	<name>Figo Java SDK</name>
@@ -26,6 +26,10 @@
 			<name>Jan van Esdonk</name>
 		</developer>
 	</developers>
+		
+	<properties>
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+    </properties>
 
 	<scm>
 		<url>git://github.com/figo-connect/java-figo.git</url>
@@ -91,7 +95,7 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
+					</execution> 
 				</executions>
 			</plugin>
 			<plugin>

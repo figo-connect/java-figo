@@ -11,7 +11,11 @@ import java.util.List;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
+import me.figo.models.BusinessProcess;
 import me.figo.models.LoginSettings;
+import me.figo.models.ProcessOption;
+import me.figo.models.ProcessStep;
+import me.figo.models.ProcessToken;
 import me.figo.models.Service;
 import me.figo.models.StandingOrder;
 import me.figo.models.Transaction;
@@ -126,7 +130,24 @@ public class WritingTest {
 		assertTrue(testTransaction.isVisited());
 	}
 	
-	public void test_09_deleteTransaction() throws IOException, FigoException	{
+	public void test_09_createProcess() throws IOException, FigoException	{
+		BusinessProcess bp = new BusinessProcess();
+		bp.setEmail(USER);
+		bp.setPassword(PASSWORD);
+		bp.setState(rand);
+		
+		ProcessStep ps = new ProcessStep();
+		ps.setType("figo.steps.account.create");
+		
+		ProcessOption po = new ProcessOption();
+		ps.setOptions(po);
+		bp.setSteps(Arrays.asList(ps));
+		
+		ProcessToken processToken = this.fc.createProcess(bp);
+		assertTrue(processToken != null);
+	}
+	
+	public void test_10_deleteTransaction() throws IOException, FigoException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		List<Transaction> transactions = fs.getTransactions();
