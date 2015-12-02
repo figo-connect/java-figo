@@ -151,9 +151,9 @@ public class FigoConnection extends FigoApi {
      *            refresh token returned by `convert_authentication_code`
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
      *         get a FigoSession and access the users data - `expires_in` - absolute time the access token expires
-     *
+     *         
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
+     * @exception IOException IOException        
      */
     public TokenResponse convertRefreshToken(String refreshToken) throws IOException, FigoException {
         if (!refreshToken.startsWith("R")) {
@@ -171,9 +171,9 @@ public class FigoConnection extends FigoApi {
      * 			the user's figo password
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
      *         get a FigoSession and access the users data - `expires_in` - absolute time the access token expires
-     *
+     *         
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
+     * @exception IOException IOException        
      */
     public TokenResponse credentialLogin(String username, String password) throws IOException, FigoException	{
     	return this.queryApi("/auth/token", new CredentialLoginRequest(username, password), "POST", TokenResponse.class);
@@ -185,9 +185,9 @@ public class FigoConnection extends FigoApi {
      *
      * @param token
      *            access or refresh token to be revoked
-     *
+     *            
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
+     * @exception IOException IOException          
      */
     public void revokeToken(String token) throws IOException, FigoException {
         this.queryApi("/auth/revoke?token=" + URLEncoder.encode(token, "ISO-8859-1"), null, "GET", null);
@@ -206,7 +206,7 @@ public class FigoConnection extends FigoApi {
      *            Two-letter code of preferred language
      *
      * @return Auto-generated recovery password
-     *
+     * 
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -227,7 +227,7 @@ public class FigoConnection extends FigoApi {
      * @param language
      *            Two-letter code of preferred language
      * @return TokenResponse for further API requests
-     *
+     * 
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -236,10 +236,10 @@ public class FigoConnection extends FigoApi {
                 CreateUserResponse.class);
         return this.credentialLogin(email, password);
     }
-
+    
     /**
-     * Start a new business process
-     * @param processToken
+     * Start a new business process 
+     * @param processToken 
      * 				The unique token that was created by createProcess
      * @throws FigoException
      * 				Base class for all figoExceptions
@@ -248,14 +248,14 @@ public class FigoConnection extends FigoApi {
     public void startProcess(ProcessToken processToken) throws FigoException, IOException	{
     	this.queryApi("/process/start?id=" + processToken.getProcessToken(), null, "GET", null);
     }
-
+    
     /**
      * Create a new business process
      * @param process
      * 				BusinessProcess object which contains the figo user credentials and the processes to execute
-     * @return Unique
+     * @return Unique 
      * 				process token to use when starting the process
-     * @throws FigoException
+     * @throws FigoException 
      * 				Base class for all figoExceptions
      * @throws IOException IOException
      */
