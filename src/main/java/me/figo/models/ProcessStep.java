@@ -1,26 +1,24 @@
 package me.figo.models;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 
 public class ProcessStep {
 	
 	@Expose
-	private List<ProcessOption> options;
+	private ProcessOption options;
 	
 	@Expose
 	private String type;
 	
-	public void addOption(ProcessOption option)	{
-		this.options.add(option);
+	public void addOption(ProcessOption options)	{
+		this.options = options;
 	}
 
-	public List<ProcessOption> getOptions() {
+	public ProcessOption getOptions() {
 		return options;
 	}
 
-	public void setOptions(List<ProcessOption> options) {
+	public void setOptions(ProcessOption options) {
 		this.options = options;
 	}
 

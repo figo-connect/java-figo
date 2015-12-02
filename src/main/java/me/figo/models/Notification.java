@@ -133,6 +133,7 @@ public class Notification {
 
         /**
          * List of notifications asked for
+         * @return List of notifications
          */
         public List<Notification> getNotifications() {
             return notifications;

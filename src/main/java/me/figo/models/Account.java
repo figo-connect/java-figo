@@ -302,6 +302,7 @@ public class Account {
 
         /**
          * List of accounts asked for
+         * @return List of accounts
          */
         public List<Account> getAccounts() {
             return accounts;

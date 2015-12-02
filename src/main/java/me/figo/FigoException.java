@@ -56,9 +56,11 @@ public class FigoException extends Exception {
     }
 
     public static class ErrorResponse {
-    	@Expose
+
+        @Expose
         private String error;
-    	@Expose
+
+        @Expose
         private String error_description;
 
         public ErrorResponse() {

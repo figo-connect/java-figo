@@ -24,6 +24,7 @@
 package me.figo;
 
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -33,9 +34,11 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
@@ -69,6 +72,9 @@ public class FigoApi {
      * @param <T>
      *            Type of expected response
      * @return the parsed result of the request
+     * 
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
      */
     public <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
         URL url = new URL(apiEndpoint + path);
@@ -99,6 +105,8 @@ public class FigoApi {
     /**
      * Method to configure TrustManager.
      * @param connection
+     * 
+     * @exception IOException IOException
      */
     protected void setupTrustManager(HttpURLConnection connection) throws IOException {
         if (connection instanceof HttpsURLConnection) {
@@ -121,6 +129,9 @@ public class FigoApi {
      * @param connection
      * @param typeOfT
      * @return
+     * 
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
      */
     protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
