@@ -87,7 +87,7 @@ public class SessionTest {
     public void testGetSupportedTanSchemes() throws FigoException, IOException	{
     	Account a = sut.getAccount("A1.1");
     	List<TanScheme> schemes = a.getSupportedTanSchemes();
-    	assertTrue(schemes.size() == 3);
+    	assertTrue(schemes.size() == 4);
     }
 
     @Test
