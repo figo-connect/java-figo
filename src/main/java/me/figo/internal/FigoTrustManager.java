@@ -37,7 +37,7 @@ import org.apache.commons.codec.binary.Hex;
 public class FigoTrustManager implements X509TrustManager {
 
     private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
-            "3A62544D86B43438EA34644E9510A9FF372769C0",                                                     
+            "38AE4A326F16EA1581338BB0D8E4A635E727F107",                                                     
             "CFC1BC7F6A16092B10838AB0224F3A65D270D73E"));
 
     /**
