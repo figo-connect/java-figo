@@ -24,6 +24,11 @@ public class SyncTokenRequest {
      * Tasks to sync
      */
     public List<String> sync_tasks;
+    
+    /**
+     * Accounts to sync
+     */
+    public List<String> account_ids;
 
     public SyncTokenRequest(String state, String redirect_uri) {
         this.state = state;
@@ -34,5 +39,18 @@ public class SyncTokenRequest {
         this.state = state;
         this.redirect_uri = redirect_uri;
         this.sync_tasks = sync_tasks;
+    }
+    
+    public SyncTokenRequest(String state, String redirect_uri, List<String> sync_tasks) {
+        this.state = state;
+        this.redirect_uri = redirect_uri;
+        this.sync_tasks = sync_tasks;
+    }
+    
+    public SyncTokenRequest(String state, String redirect_uri, List<String> sync_tasks, List<String> account_ids) {
+        this.state = state;
+        this.redirect_uri = redirect_uri;
+        this.sync_tasks = sync_tasks;
+        this.account_ids = account_ids;
     }
 }

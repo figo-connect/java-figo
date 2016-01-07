@@ -1138,6 +1138,29 @@ public class FigoSession extends FigoApi {
     }
     
     /**
+     * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
+     * the process is finished, the user is redirected to the provided URL.
+     * 
+     * @param state
+     *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
+     *            authenticity of the call to the redirect URL
+     * @param redirect_url
+     *            URI the user is redirected to after the process completes
+     * @param syncTasks
+     *            Tasks to sync while talking to the bank. Transactions are activated by default
+     * @Param accountIDs
+     *            Accounts to sync
+     * @return the URL to be opened by the user
+     * 
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+    public String getSyncURL(String state, String redirect_url, List<String>syncTasks, List<String>accountIds) throws FigoException, IOException {
+        TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks, accountIds), "POST", TaskTokenResponse.class);
+        return getApiEndpoint() + "/task/start?id=" + response.task_token;
+    }
+    
+    /**
      * Get the current status of a Task
      * @param tokenResponse
      * 			A TaskTokenResponse Object for the task which will be checked
