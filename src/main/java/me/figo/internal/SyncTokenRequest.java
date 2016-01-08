@@ -41,12 +41,6 @@ public class SyncTokenRequest {
         this.sync_tasks = sync_tasks;
     }
     
-    public SyncTokenRequest(String state, String redirect_uri, List<String> sync_tasks) {
-        this.state = state;
-        this.redirect_uri = redirect_uri;
-        this.sync_tasks = sync_tasks;
-    }
-    
     public SyncTokenRequest(String state, String redirect_uri, List<String> sync_tasks, List<String> account_ids) {
         this.state = state;
         this.redirect_uri = redirect_uri;
