@@ -60,7 +60,7 @@ import java.util.Collections;
  * Main entry point to the data access-part of the figo connect java library. 
  * Here you can retrieve all the data the user granted your app access to.
  * 
- * @author Stefan Richter
+ * 
  */
 public class FigoSession extends FigoApi {
     
