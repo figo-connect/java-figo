@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
@@ -53,20 +54,7 @@ public class FigoApi {
     private final String authorization;
     private int timeout;
     private X509TrustManager trustManager;
-    
-    /**
-     * 
-     * @param apiEndpoint
-     * @param authorization
-     * @param timeout
-     * @param trustManager
-     */
-    public FigoApi(String apiEndpoint, String authorization, int timeout, X509TrustManager trustManager) {
-        this.apiEndpoint = apiEndpoint;
-        this.authorization = authorization;
-        this.timeout = timeout;
-        this.trustManager = trustManager;
-    }
+    private Proxy proxy;
     
     /**
      * 
@@ -80,6 +68,15 @@ public class FigoApi {
         this.timeout = timeout;
         this.trustManager = new FigoTrustManager();
     }
+    
+    public void setTrustManager(X509TrustManager trustManager)	{
+    	this.trustManager = trustManager;
+    }
+    
+    public void setProxy(Proxy proxy)	{
+    	this.proxy = proxy;
+    }
+    
     
     /**
      * Helper method for making a OAuth2-compliant API call
@@ -101,9 +98,16 @@ public class FigoApi {
      */
     public <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
         URL url = new URL(apiEndpoint + path);
+        HttpURLConnection connection;
 
         // configure URL connection, i.e. the HTTP request
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        if(this.proxy != null)	{
+        	connection = (HttpURLConnection) url.openConnection(this.proxy);
+        }
+        else	{
+        	connection = (HttpURLConnection) url.openConnection();
+        }
+        
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
         
