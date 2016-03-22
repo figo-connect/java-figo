@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.2.7</version>
+        <version>1.3.0</version>
 </dependency>
 ```
 
@@ -41,6 +41,31 @@ public class FigoExample {
 	}
 
 }
+```
+
+To add a proxy server to a FigoSession or FigoConnection do this:
+
+```java
+// first create the FigoSession object
+FigoSession session = new FigoSession("ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ");
+
+// create a Proxy and add it to the session
+Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.0.0.1", 8080));
+session.setProxy(proxy);
+
+// now do your API calls
+```
+
+To disable the SSL certificate pinning (not recommended) do the following:
+```java
+// first create the FigoSession object
+FigoSession session = new FigoSession("ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ");
+
+// create FakeTrustManager and add it to your FigoConnection or FigoSession
+X509TrustManager trustManager = FakeTrustManager();
+session.setTrustManager(trustManager);
+
+// now do your API calls
 ```
 
 A more detailed documentation of the figo connect API can be found at http://docs.figo.io.
