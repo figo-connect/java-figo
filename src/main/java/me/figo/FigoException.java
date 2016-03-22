@@ -26,52 +26,72 @@ import com.google.gson.annotations.Expose;
 
 /***
  * Base Class for all figo Exceptions. It extends the normal Java exceptions with an error_code field, which carries the computer readable error reason.
- * 
+ *
  * @author Stefan Richter
  */
 public class FigoException extends Exception {
 
     private static final long serialVersionUID = -3645017096212930985L;
 
-    private final String error_code;
+    private final String error_message;
+    private final String error_description;
 
-    public FigoException(String error_code, String error_message) {
+    public FigoException(String error_message, String error_description) {
         super(error_message);
 
-        this.error_code = error_code;
+        this.error_message = error_message;
+        this.error_description = error_description;
     }
 
-    public FigoException(String error_code, String error_message, Throwable exc) {
+    public FigoException(String error_message, String error_description, Throwable exc) {
         super(error_message, exc);
 
-        this.error_code = error_code;
+        this.error_message = error_message;
+        this.error_description = error_description;
     }
 
     public FigoException(ErrorResponse response) {
-        this(response.getError(), response.getErrorDescription());
+        this(response.getError().getMessage(), response.getError().getDescription());
     }
 
-    public String getErrorCode() {
-        return error_code;
+    public String getErrorMessage() {
+        return error_message;
+    }
+
+    public String getErrorDescription() {
+        return error_description;
     }
 
     public static class ErrorResponse {
 
         @Expose
-        private String error;
-
-        @Expose
-        private String error_description;
+        private ErrorObject error;
 
         public ErrorResponse() {
         }
 
-        public String getError() {
+        public ErrorObject getError() {
             return error;
         }
+    }
 
-        public String getErrorDescription() {
-            return error_description;
-        }
+    public static class ErrorObject	{
+
+    	@Expose
+    	private String message;
+
+    	@Expose
+    	private String description;
+
+    	public ErrorObject()	{
+    	}
+
+    	public String getMessage() {
+    		return message;
+    	}
+
+    	public String getDescription()	{
+    		return description;
+    	}
     }
 }
