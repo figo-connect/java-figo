@@ -22,11 +22,6 @@
 
 package me.figo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -46,6 +41,8 @@ import me.figo.models.User;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class SessionTest {
 
@@ -102,7 +99,7 @@ public class SessionTest {
         assertTrue(notifications.size() > 0);
     }
 
-    
+    @Test
     public void testGetPayments() throws FigoException, IOException {
         List<Payment> payments = sut.getPayments();
         assertTrue(payments.size() >= 0);
@@ -186,5 +183,17 @@ public class SessionTest {
         List<StandingOrder> so = sut.getStandingOrders();
         assertTrue(so.size() >= 0);
 	}
+
+    @Test
+    public void testGetErrorMessage() throws IOException ,FigoException {
+        try {
+            sut.removeAccount("666");
+            fail();
+        }
+        catch(FigoException e)  {
+            assertEquals("access_denied", e.getErrorMessage());
+            assertEquals("Access Denied", e.getErrorDescription());
+        }
+    }
 
 }
