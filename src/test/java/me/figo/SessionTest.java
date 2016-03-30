@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
+import me.figo.internal.FakeTrustManager;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
 import me.figo.models.Notification;
@@ -105,11 +106,6 @@ public class SessionTest {
         assertTrue(payments.size() >= 0);
     }
 
-    @Test
-    public void testMissingHandling() throws IOException, FigoException {
-        assertNull(sut.getAccount("A1.5"));
-    }
-
     @Test(expected=FigoException.class)
     public void testExceptionHandling() throws IOException, FigoException {
         sut.getSyncURL("", "http://localhost:3003/");
@@ -124,52 +120,6 @@ public class SessionTest {
     public void testUser() throws FigoException, IOException {
         User user = sut.getUser();
         assertEquals("demo@figo.me", user.getEmail());
-    }
-
-
-    public void testCreateUpdateDeleteNotification() throws FigoException, IOException {
-        Notification addedNotificaton = sut.addNotification(new Notification("/rest/transactions", "http://figo.me/test", "qwe"));
-        assertNotNull(addedNotificaton.getNotificationId());
-        assertEquals(addedNotificaton.getObserveKey(), "/rest/transactions");
-        assertEquals(addedNotificaton.getNotifyURI(), "http://figo.me/test");
-        assertEquals(addedNotificaton.getState(), "qwe");
-
-        addedNotificaton.setState("asd");
-        Notification updatedNotification = sut.updateNotification(addedNotificaton);
-        assertEquals(updatedNotification.getNotificationId(), addedNotificaton.getNotificationId());
-        assertEquals(updatedNotification.getObserveKey(), "/rest/transactions");
-        assertEquals(updatedNotification.getNotifyURI(), "http://figo.me/test");
-        assertEquals(updatedNotification.getState(), "asd");
-
-        sut.removeNotification(updatedNotification);
-
-        Notification reretrievedNotification = sut.getNotification(addedNotificaton.getNotificationId());
-        assertNull(reretrievedNotification);
-    }
-
-    public void testCreateUpdateDeletePayment() throws FigoException, IOException {
-        Payment addedPayment = sut.addPayment(new Payment("Transfer", "A1.1", "4711951501", "90090042", "figo", "Thanks for all the fish.", new BigDecimal(0.89)));
-        assertNotNull(addedPayment.getPaymentId());
-        assertEquals("A1.1", addedPayment.getAccountId());
-        assertEquals("Demobank", addedPayment.getBankName());
-        assertEquals(0.89f, addedPayment.getAmount().floatValue(), 0.0001);
-
-        addedPayment.setAmount(new BigDecimal(2.39));
-        Payment updatedPayment = sut.updatePayment(addedPayment);
-        assertEquals(addedPayment.getPaymentId(), updatedPayment.getPaymentId());
-        assertEquals("A1.1", updatedPayment.getAccountId());
-        assertEquals("Demobank", updatedPayment.getBankName());
-        assertEquals(2.39f, updatedPayment.getAmount().floatValue(), 0.0001);
-
-        sut.removePayment(updatedPayment);
-
-        Payment reretrievedPayment = sut.getPayment(addedPayment.getAccountId(), addedPayment.getPaymentId());
-        assertNull(reretrievedPayment);
-    }
-
-    public void testGetPaymentProposals() throws FigoException, IOException	{
-    	List<PaymentProposal> proposals = sut.getPaymentProposals();
-    	assertEquals(2, proposals.size());
     }
     
     @Test
@@ -187,13 +137,21 @@ public class SessionTest {
     @Test
     public void testGetErrorMessage() throws IOException {
         try {
-            sut.removeAccount("666");
-            fail();
+            Account acc = sut.getAccount("666");
+            fail(acc.getName());
         }
         catch(FigoException e)  {
-            assertEquals("access_denied", e.getErrorMessage());
-            assertEquals("Access Denied", e.getErrorDescription());
+            assertEquals("Entry not found.", e.getErrorMessage());
+            assertEquals(null, e.getErrorDescription());
         }
+    }
+
+    @Test
+    public void testFakeTrustManager() throws IOException, FigoException {
+        FakeTrustManager fakeTrustManager = new FakeTrustManager();
+        sut.setTrustManager(fakeTrustManager);
+        User user = sut.getUser();
+        assertEquals("demo@figo.me", user.getEmail());
     }
 
 }

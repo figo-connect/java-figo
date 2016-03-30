@@ -165,7 +165,7 @@ public class FigoApi {
         int code = connection.getResponseCode();
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
-        } else if (code == 400) {
+        } else if (code == 400 || code == 404) {
             throw new FigoException((FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
         } else if (code == 401) {
             throw new FigoException("access_denied", "Access Denied");
