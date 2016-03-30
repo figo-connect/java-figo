@@ -185,7 +185,7 @@ public class SessionTest {
 	}
 
     @Test
-    public void testGetErrorMessage() throws IOException ,FigoException {
+    public void testGetErrorMessage() throws IOException {
         try {
             sut.removeAccount("666");
             fail();
