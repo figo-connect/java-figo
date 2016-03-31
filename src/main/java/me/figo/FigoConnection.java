@@ -40,7 +40,7 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API and/or create business processes.
  *
- * @author Stefan Richter
+ * 
  */
 public class FigoConnection extends FigoApi {
 

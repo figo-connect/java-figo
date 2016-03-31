@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
@@ -38,25 +39,44 @@ import java.util.Scanner;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
 /**
  *
- * @author halber
+ * 
  */
 public class FigoApi {
     
     private final String apiEndpoint;
     private final String authorization;
     private int timeout;
+    private X509TrustManager trustManager;
+    private Proxy proxy;
     
+    /**
+     * 
+     * @param apiEndpoint
+     * @param authorization
+     * @param timeout
+     */
     public FigoApi(String apiEndpoint, String authorization, int timeout) {
         this.apiEndpoint = apiEndpoint;
         this.authorization = authorization;
         this.timeout = timeout;
+        this.trustManager = new FigoTrustManager();
     }
+    
+    public void setTrustManager(X509TrustManager trustManager)	{
+    	this.trustManager = trustManager;
+    }
+    
+    public void setProxy(Proxy proxy)	{
+    	this.proxy = proxy;
+    }
+    
     
     /**
      * Helper method for making a OAuth2-compliant API call
@@ -78,13 +98,20 @@ public class FigoApi {
      */
     public <T> T queryApi(String path, Object data, String method, Type typeOfT) throws IOException, FigoException {
         URL url = new URL(apiEndpoint + path);
+        HttpURLConnection connection;
 
         // configure URL connection, i.e. the HTTP request
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        if(this.proxy != null)	{
+        	connection = (HttpURLConnection) url.openConnection(this.proxy);
+        }
+        else	{
+        	connection = (HttpURLConnection) url.openConnection();
+        }
+        
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
         
-        setupTrustManager(connection);
+        setupTrustManager(connection, trustManager);
 
         connection.setRequestMethod(method);
         connection.setRequestProperty("Authorization", authorization);
@@ -108,12 +135,12 @@ public class FigoApi {
      * 
      * @exception IOException IOException
      */
-    protected void setupTrustManager(HttpURLConnection connection) throws IOException {
+    protected void setupTrustManager(HttpURLConnection connection, X509TrustManager trustManager) throws IOException {
         if (connection instanceof HttpsURLConnection) {
             // Setup and install the trust manager
             try {
                 final SSLContext sc = SSLContext.getInstance("SSL");
-                sc.init(null, new TrustManager[] { new FigoTrustManager() }, new java.security.SecureRandom());
+                sc.init(null, new TrustManager[] { trustManager }, new java.security.SecureRandom());
                 ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
             } catch (NoSuchAlgorithmException e) {
                 throw new IOException("Connection setup failed", e);
@@ -138,7 +165,7 @@ public class FigoApi {
         int code = connection.getResponseCode();
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
-        } else if (code == 400) {
+        } else if (code == 400 || code == 404) {
             throw new FigoException((FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
         } else if (code == 401) {
             throw new FigoException("access_denied", "Access Denied");

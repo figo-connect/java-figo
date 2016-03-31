@@ -60,7 +60,7 @@ import java.util.Collections;
  * Main entry point to the data access-part of the figo connect java library. 
  * Here you can retrieve all the data the user granted your app access to.
  * 
- * @author Stefan Richter
+ * 
  */
 public class FigoSession extends FigoApi {
     
@@ -224,8 +224,7 @@ public class FigoSession extends FigoApi {
      * Returns a TaskToken for a new account creation task
      * @param bankCode
      * @param countryCode
-     * @param loginName
-     * @param pin
+     * @param credentials
      * @return
      * 
      * @exception FigoException Base class for all figoExceptions
@@ -1301,9 +1300,6 @@ public class FigoSession extends FigoApi {
     protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
         int code = connection.getResponseCode();
-        if (code == 404) {
-            return null;
-        }
         return super.processResponse(connection, typeOfT);
     }
 }
