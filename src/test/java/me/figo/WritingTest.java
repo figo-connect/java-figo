@@ -82,7 +82,7 @@ public class WritingTest {
 	public void test_05_addBankAccount() throws FigoException, IOException	{
 		TokenResponse accessToken = this.fc.credentialLogin(USER, PASSWORD);
 		FigoSession fs = new FigoSession(accessToken.access_token);
-		TaskTokenResponse response= fs.setupNewAccount(BANKCODE, "de", ACCOUNT, PIN, Arrays.asList("standingOrders"));
+		TaskTokenResponse response= fs.setupNewAccount(BANKCODE, "de", ACCOUNT, PIN, Arrays.asList("standingOrders"), true, false);
 		TaskStatusResponse taskStatus = fs.getTaskState(response);
 		assertTrue(taskStatus instanceof TaskStatusResponse);
 		try {

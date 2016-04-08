@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.figo.internal.AccountOrderRequest;
@@ -204,6 +206,23 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin, syncTasks), "POST", TaskTokenResponse.class);
     }
     
+    /**
+     * 
+     * @param bankCode
+     * @param countryCode
+     * @param credentials
+     * @param syncTasks
+     * @param savePin
+     * @param disable_first_sync
+     * @return
+     * @throws FigoException
+     * @throws IOException
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
+    	List<String> credentials = Arrays.asList(loginName, pin);
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
+    }
+    
     @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
@@ -232,6 +251,22 @@ public class FigoSession extends FigoApi {
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks), "POST", TaskTokenResponse.class);
+    }
+    
+    /**
+     * 
+     * @param bankCode
+     * @param countryCode
+     * @param credentials
+     * @param syncTasks
+     * @param savePin
+     * @param disable_first_sync
+     * @return
+     * @throws FigoException
+     * @throws IOException
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
     
     @Deprecated

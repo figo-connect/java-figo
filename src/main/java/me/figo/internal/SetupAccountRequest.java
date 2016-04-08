@@ -41,13 +41,13 @@ public class SetupAccountRequest {
 	 * save the pin after setup
 	 */
 	@Expose
-	private String save_pin;
+	private boolean save_pin;
 	
 	/**
 	 * Disable the first sync - register the account only
 	 */
 	@Expose 
-	private String disable_first_sync;
+	private boolean disable_first_sync;
 	
 	/**
 	 * the uri the user should be redirected
@@ -97,7 +97,7 @@ public class SetupAccountRequest {
 	 */
 	public SetupAccountRequest(String bank_code, String country,
 			List<String> credentials, List<String> sync_tasks,
-			String save_pin, String disable_first_sync) {
+			boolean save_pin, boolean disable_first_sync) {
 		super();
 		this.bank_code = bank_code;
 		this.country = country;
@@ -119,7 +119,7 @@ public class SetupAccountRequest {
 	 */
 	public SetupAccountRequest(String bank_code, String country,
 			List<String> credentials, List<String> sync_tasks,
-			String save_pin, String disable_first_sync, String redirect_uri) {
+			boolean save_pin, boolean disable_first_sync, String redirect_uri) {
 		super();
 		this.bank_code = bank_code;
 		this.country = country;
@@ -187,19 +187,19 @@ public class SetupAccountRequest {
 		this.iban = iban;
 	}
 
-	public String getSavePin() {
+	public boolean getSavePin() {
 		return save_pin;
 	}
 
-	public void setSavePin(String save_pin) {
+	public void setSavePin(boolean save_pin) {
 		this.save_pin = save_pin;
 	}
 
-	public String getDisableFirstSync() {
+	public boolean getDisableFirstSync() {
 		return disable_first_sync;
 	}
 
-	public void setDisableFirstSync(String disable_first_sync) {
+	public void setDisableFirstSync(boolean disable_first_sync) {
 		this.disable_first_sync = disable_first_sync;
 	}
 
