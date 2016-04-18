@@ -122,6 +122,9 @@ public class Transaction {
     @Expose(serialize = false)
     private boolean visited;
 
+    @Expose(serialize = false)
+    private int transaction_code;
+
     public Transaction() {
     }
 
@@ -228,6 +231,10 @@ public class Transaction {
      */
     public boolean isVisited()	{
     	return visited;
+    }
+
+    public int getTransaction_code() {
+        return transaction_code;
     }
 
     /**
