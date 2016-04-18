@@ -85,6 +85,18 @@ public class Payment {
     @Expose
     private String purpose;
 
+    @Expose
+    private String interval;
+
+    @Expose
+    private int execution_day;
+
+    @Expose
+    private Date first_execution_date;
+
+    @Expose
+    private Date last_execution_date;
+
     /**
      * Timestamp of submission to the bank server
      */
@@ -132,6 +144,24 @@ public class Payment {
         this.purpose = purpose;
         this.currency = currency;
         this.amount = amount;
+    }
+
+    /**
+     * Constructor for standing order payments
+     */
+    public Payment(String type, String account_id, String account_number, String bank_code, String name, String purpose, String currency, BigDecimal amount, String interval, int execution_day, Date first_execution_date, Date last_execution_date) {
+        this.type = type;
+        this.account_id = account_id;
+        this.account_number = account_number;
+        this.bank_code = bank_code;
+        this.name = name;
+        this.purpose = purpose;
+        this.currency = currency;
+        this.amount = amount;
+        this.interval = interval;
+        this.execution_day = execution_day;
+        this.first_execution_date = first_execution_date;
+        this.last_execution_date = last_execution_date;
     }
 
     /**
@@ -280,6 +310,38 @@ public class Payment {
      */
     public void setPurpose(String purpose) {
         this.purpose = purpose;
+    }
+
+    public String getInterval() {
+        return interval;
+    }
+
+    public void setInterval(String interval) {
+        this.interval = interval;
+    }
+
+    public int getExecution_day() {
+        return execution_day;
+    }
+
+    public void setExecution_day(int execution_day) {
+        this.execution_day = execution_day;
+    }
+
+    public Date getFirst_execution_date() {
+        return first_execution_date;
+    }
+
+    public void setFirst_execution_date(Date first_execution_date) {
+        this.first_execution_date = first_execution_date;
+    }
+
+    public Date getLast_execution_date() {
+        return last_execution_date;
+    }
+
+    public void setLast_execution_date(Date last_execution_date) {
+        this.last_execution_date = last_execution_date;
     }
 
     /**
