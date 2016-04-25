@@ -39,16 +39,16 @@ public class SyncTokenRequest {
     @Expose
     public boolean auto_continue;
     
-    
-    
     /**
      * Tasks to sync
      */
+    @Expose
     public List<String> sync_tasks;
     
     /**
      * Accounts to sync
      */
+    @Expose
     public List<String> account_ids;
     
     
