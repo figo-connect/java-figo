@@ -1262,9 +1262,11 @@ public class FigoSession extends FigoApi {
     	switch (type) {
     	case PIN:
 			request.setPin(response);
+            request.setSavePin("0");
 			break;
 		case SAVE_PIN:
-			request.setSavePin(response);
+            request.setPin(response);
+			request.setSavePin("1");
 			break;
 		case CHALLENGE:
 			request.setResponse(response);
