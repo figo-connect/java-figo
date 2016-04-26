@@ -94,6 +94,8 @@ public class FigoConnection extends FigoApi {
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout, String apiEndpoint) {
         super(apiEndpoint, buildAuthorizationString(clientId, clientSecret), timeout);
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
     }
 
