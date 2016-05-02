@@ -125,6 +125,9 @@ public class Transaction {
     @Expose(serialize = false)
     private int transaction_code;
 
+    @Expose(serialize = false)
+    private AdditionalTransactionInfo additional_info;
+
     public Transaction() {
     }
 
@@ -235,6 +238,10 @@ public class Transaction {
 
     public int getTransaction_code() {
         return transaction_code;
+    }
+
+    public AdditionalTransactionInfo getAdditional_info() {
+        return additional_info;
     }
 
     /**
