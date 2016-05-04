@@ -165,10 +165,12 @@ public class FigoApi {
         int code = connection.getResponseCode();
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
-        } else if (code == 400 || code == 404) {
+        } else if (code == 400) {
             throw new FigoException((FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
         } else if (code == 401) {
             throw new FigoException("access_denied", "Access Denied");
+        } else if (code == 404) {
+            throw new FigoException("Entry not found.", null);
         } else {
             // return decode(connection.getErrorStream(), resultType);
             throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
