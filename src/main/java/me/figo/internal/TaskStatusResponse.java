@@ -1,5 +1,6 @@
 package me.figo.internal;
 
+import me.figo.models.ApiError;
 import me.figo.models.Challenge;
 
 import com.google.gson.annotations.Expose;
@@ -26,6 +27,9 @@ public class TaskStatusResponse {
 	
 	@Expose
 	private Challenge challenge;
+
+	@Expose
+	private ApiError error;
 
 	public String getAccountId() {
 		return account_id;
