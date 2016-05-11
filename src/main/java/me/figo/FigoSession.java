@@ -236,7 +236,7 @@ public class FigoSession extends FigoApi {
      * @exception IOException IOException
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException	{
-    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials), "POST", TaskTokenResponse.class);
+    	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, null), "POST", TaskTokenResponse.class);
     }
     
     /**
