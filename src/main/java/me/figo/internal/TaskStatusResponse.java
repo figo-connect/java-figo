@@ -58,6 +58,10 @@ public class TaskStatusResponse {
 	public Challenge getChallenge() {
 		return challenge;
 	}
+
+	public ApiError getError()  {
+        return error;
+    }
 	
 	
 	
