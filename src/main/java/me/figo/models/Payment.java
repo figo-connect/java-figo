@@ -49,6 +49,9 @@ public class Payment {
     @Expose
     private String bank_code;
 
+    @Expose
+    private String iban;
+
     /**
      * Bank name of creditor or debtor
      */
@@ -245,6 +248,10 @@ public class Payment {
     public void setBankCode(String bank_code) {
         this.bank_code = bank_code;
     }
+
+    public String getIban() { return this.iban; }
+
+    public void setIban(String iban)    { this.iban = iban; }
 
     /**
      * @return the bank name of creditor or debtor
