@@ -690,9 +690,7 @@ public class FigoSession extends FigoApi {
     
     /**
      * Retrieve a specific standing order by ID
-     * 
-     * @param accountId
-     *            ID of the account on which the transaction occurred
+     *
      * @param standingOrderId
      *            the figo ID of the specific standingOrder
      * @return Standing Order or null
@@ -700,8 +698,39 @@ public class FigoSession extends FigoApi {
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public StandingOrder getStandingOrder(String accountId, String standingOrderId) throws FigoException, IOException {
-        return this.queryApi("/rest/accounts/" + accountId + "/standing_orders/" + standingOrderId, null, "GET", StandingOrder.class);
+    public StandingOrder getStandingOrder(String standingOrderId) throws FigoException, IOException {
+        return this.queryApi("/rest/standing_orders/" + standingOrderId, null, "GET", StandingOrder.class);
+    }
+
+    /**
+     * Update a standing order, this creates a new payment which has to be submitted to update the existing
+     * standing order
+     * @param standingOrder existing standing order
+     * @param updatedStandingOrder standing order where values which should be updated are set
+     * @return a payment object which has to be submitted
+     * @throws IOException
+     * @throws FigoException
+     */
+    public Payment modifyStandingOrder(StandingOrder standingOrder, StandingOrder updatedStandingOrder) throws IOException, FigoException {
+        String accountId = standingOrder.getAccountId();
+        updatedStandingOrder.setStandingOrderId(standingOrder.getStandingOrderId());
+        return this.queryApi("/rest/accounts/" + accountId + "/payments", updatedStandingOrder, "PUT", Payment.class);
+    }
+
+    /**
+     * Update a standing order, this creates a new payment which has to be submitted to update the existing
+     * standing order
+     * @param standingOrderId existing standing order id
+     * @param updatedStandingOrder standing order where values which should be updated are set
+     * @return a payment object which has to be submitted
+     * @throws IOException
+     * @throws FigoException
+     */
+    public Payment modifyStandingOrder(String standingOrderId, StandingOrder updatedStandingOrder) throws IOException, FigoException {
+        StandingOrder oldStandingOrder = this.getStandingOrder(standingOrderId);
+        String accountId = oldStandingOrder.getStandingOrderId();
+        updatedStandingOrder.setStandingOrderId(standingOrderId);
+        return this.queryApi("/rest/accounts/" + accountId + "/payments", updatedStandingOrder, "PUT", Payment.class);
     }
 
     /**
