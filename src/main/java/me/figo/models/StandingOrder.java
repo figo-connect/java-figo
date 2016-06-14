@@ -211,9 +211,59 @@ public class StandingOrder {
 		return interval;
 	}
 
+    public void setStandingOrderId(String standing_order_id) {
+        this.standing_order_id = standing_order_id;
+    }
 
+    public void setAccountId(String account_id) {
+        this.account_id = account_id;
+    }
 
-	/**
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAccountNumber(String account_number) {
+        this.account_number = account_number;
+    }
+
+    public void setBankCode(String bank_code) {
+        this.bank_code = bank_code;
+    }
+
+    public void setBankName(String bank_name) {
+        this.bank_name = bank_name;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public void setCreationTimestamp(Date creation_timestamp) {
+        this.creation_timestamp = creation_timestamp;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public void setExecutionDay(Integer execution_day) {
+        this.execution_day = execution_day;
+    }
+
+    public void setNextExecutionDate(Date next_execution_date) {
+        this.next_execution_date = next_execution_date;
+    }
+
+    public void setInterval(StandingOrderIntervalType interval) {
+        this.interval = interval;
+    }
+
+    /**
      * Helper type to represent the actual answer from the figo API
      */
     public static class StandingOrdersResponse {
