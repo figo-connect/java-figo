@@ -703,6 +703,28 @@ public class FigoSession extends FigoApi {
     public StandingOrder getStandingOrder(String accountId, String standingOrderId) throws FigoException, IOException {
         return this.queryApi("/rest/accounts/" + accountId + "/standing_orders/" + standingOrderId, null, "GET", StandingOrder.class);
     }
+
+    /**
+     * Create a deletion task for a standing order
+     * @param standingOrder the standing order to delete
+     * @return a TaskToken for further processing
+     * @throws IOException
+     * @throws FigoException
+     */
+    public TaskTokenResponse deleteStandingOrder(StandingOrder standingOrder) throws IOException, FigoException {
+        return this.queryApi("/rest/standing_orders/" + standingOrder.getStandingOrderId(), null, "DELETE", TaskTokenResponse.class);
+    }
+
+    /**
+     * Create a deletion task for a standing order
+     * @param standingOrderId the standing order id to delete
+     * @return a TaskToken for further processing
+     * @throws IOException
+     * @throws FigoException
+     */
+    public TaskTokenResponse deleteStandingOrder(String standingOrderId) throws IOException, FigoException {
+        return this.queryApi("/rest/standing_orders/" + standingOrderId, null, "DELETE", TaskTokenResponse.class);
+    }
     
     /**
      * Retrieves a specific security
