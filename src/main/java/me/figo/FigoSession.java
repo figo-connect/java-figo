@@ -30,15 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.internal.AccountOrderRequest;
-import me.figo.internal.SetupAccountRequest;
-import me.figo.internal.SubmitPaymentRequest;
-import me.figo.internal.SyncTokenRequest;
-import me.figo.internal.TaskResponseType;
-import me.figo.internal.TaskStatusRequest;
-import me.figo.internal.TaskStatusResponse;
-import me.figo.internal.TaskTokenResponse;
-import me.figo.internal.VisitedRequest;
+import me.figo.internal.*;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
@@ -219,7 +211,6 @@ public class FigoSession extends FigoApi {
      * 
      * @param bankCode
      * @param countryCode
-     * @param credentials
      * @param syncTasks
      * @param savePin
      * @param disable_first_sync
@@ -723,7 +714,8 @@ public class FigoSession extends FigoApi {
     public Payment modifyStandingOrder(StandingOrder standingOrder, StandingOrder updatedStandingOrder) throws IOException, FigoException {
         String accountId = standingOrder.getAccountId();
         updatedStandingOrder.setStandingOrderId(standingOrder.getStandingOrderId());
-        return this.queryApi("/rest/accounts/" + accountId + "/payments", updatedStandingOrder, "PUT", Payment.class);
+        ModifyStandingOrderRequest request = new ModifyStandingOrderRequest(updatedStandingOrder);
+        return this.queryApi("/rest/accounts/" + accountId + "/payments", request, "PUT", Payment.class);
     }
 
     /**
@@ -737,7 +729,7 @@ public class FigoSession extends FigoApi {
      */
     public Payment modifyStandingOrder(String standingOrderId, StandingOrder updatedStandingOrder) throws IOException, FigoException {
         StandingOrder oldStandingOrder = this.getStandingOrder(standingOrderId);
-        String accountId = oldStandingOrder.getStandingOrderId();
+        String accountId = oldStandingOrder.getAccountId();
         updatedStandingOrder.setStandingOrderId(standingOrderId);
         return this.queryApi("/rest/accounts/" + accountId + "/payments", updatedStandingOrder, "PUT", Payment.class);
     }
@@ -1252,6 +1244,10 @@ public class FigoSession extends FigoApi {
     public String getSyncURL(String state, String redirect_url, List<String>syncTasks, List<String>accountIds) throws FigoException, IOException {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks, accountIds), "POST", TaskTokenResponse.class);
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
+    }
+
+    public TaskTokenResponse createSyncTask(String state, String redirect_url, List<String>syncTasks, List<String>accountIds) throws IOException, FigoException {
+        return this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks, accountIds), "POST", TaskTokenResponse.class);
     }
     
     /**
