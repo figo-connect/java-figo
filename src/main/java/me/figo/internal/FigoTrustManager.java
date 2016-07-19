@@ -38,7 +38,7 @@ public class FigoTrustManager implements X509TrustManager {
 
     private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
             "38AE4A326F16EA1581338BB0D8E4A635E727F107",                                                     
-            "CFC1BC7F6A16092B10838AB0224F3A65D270D73E"));
+            "DBE2E9158FC9903084FE36CAA61138D85A205D93"));
 
     /**
      * @return the list of trusted certificate fingerprints using SHA1
