@@ -68,6 +68,19 @@ public class FigoApi {
         this.timeout = timeout;
         this.trustManager = new FigoTrustManager();
     }
+
+    public FigoApi(String authorization, int timeout)   {
+        this.authorization = authorization;
+        this.timeout = timeout;
+        this.trustManager = new FigoTrustManager();
+        String endpointEnv = System.getenv("FIGO_API_ENDPOINT");
+        if (endpointEnv != null)  {
+            this.apiEndpoint = endpointEnv;
+        }
+        else    {
+            this.apiEndpoint = "https://api.figo.me";
+        }
+    }
     
     public void setTrustManager(X509TrustManager trustManager)	{
     	this.trustManager = trustManager;
