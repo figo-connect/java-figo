@@ -83,7 +83,7 @@ public class FigoSession extends FigoApi {
      *            the timeout used for queries
      */
     public FigoSession(String accessToken, int timeout) {
-		this(accessToken, timeout, API_FIGO_LIVE);
+        super("Bearer " + accessToken, timeout);
     }
 
     /**

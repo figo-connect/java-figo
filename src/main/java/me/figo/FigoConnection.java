@@ -75,7 +75,10 @@ public class FigoConnection extends FigoApi {
      *            the timeout used for queries
      */
     public FigoConnection(String clientId, String clientSecret, String redirectUri, int timeout) {
-        this(clientId, clientSecret, redirectUri, timeout, API_FIGO_LIVE);
+        super(buildAuthorizationString(clientId, clientSecret), timeout);
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.redirectUri = redirectUri;
     }
 
     /**
