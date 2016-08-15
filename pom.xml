@@ -108,9 +108,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<configuration>
-					<skip>false</skip>
-				</configuration>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
