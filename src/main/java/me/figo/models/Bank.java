@@ -24,7 +24,7 @@ public class Bank {
      * Bank code
      */
     @Expose
-    private String bank_number;
+    private String bank_code;
 
     /**
      * This flag indicates whether the user has chosen to save the PIN on the figo Connect server
@@ -65,6 +65,6 @@ public class Bank {
     }
 
     public String getBankNumber()   {
-        return this.bank_number;
+        return this.bank_code;
     }
 }
