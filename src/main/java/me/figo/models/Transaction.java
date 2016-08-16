@@ -123,7 +123,7 @@ public class Transaction {
     private boolean visited;
 
     @Expose(serialize = false)
-    private int transaction_code;
+    private String transaction_code;
 
     @Expose(serialize = false)
     private AdditionalTransactionInfo additional_info;
@@ -236,11 +236,11 @@ public class Transaction {
     	return visited;
     }
 
-    public int getTransaction_code() {
+    public String getTransactionCode() {
         return transaction_code;
     }
 
-    public AdditionalTransactionInfo getAdditional_info() {
+    public AdditionalTransactionInfo getAdditionalInfo() {
         return additional_info;
     }
 
