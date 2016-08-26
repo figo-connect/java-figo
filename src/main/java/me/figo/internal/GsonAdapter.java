@@ -46,7 +46,7 @@ public class GsonAdapter {
                     return null;
 
                 String formatted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(src);
-                return new JsonPrimitive(formatted.substring(0, 22) + ":" + formatted.substring(22));
+                return new JsonPrimitive(formatted);
             }
         };
 
