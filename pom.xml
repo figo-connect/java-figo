@@ -22,7 +22,7 @@
 			<name>Jan van Esdonk</name>
 		</developer>
 	</developers>
-		
+
 	<properties>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
@@ -91,7 +91,7 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution> 
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
