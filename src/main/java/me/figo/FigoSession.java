@@ -47,18 +47,18 @@ import me.figo.models.Transaction;
 import me.figo.models.User;
 
 /**
- * Main entry point to the data access-part of the figo connect java library. 
+ * Main entry point to the data access-part of the figo connect java library.
  * Here you can retrieve all the data the user granted your app access to.
- * 
- * 
+ *
+ *
  */
 public class FigoSession extends FigoApi {
-    
+
     public enum PendingTransactions {
         INCLUDED,
         EXCLUDED
     }
-    
+
     public enum FieldVisited {
         VISITED,
         NOT_VISITED
@@ -66,7 +66,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Creates a FigoSession instance
-     * 
+     *
      * @param accessToken
      *            the access token to bind this session to a user
      */
@@ -76,7 +76,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Creates a FigoSession instance
-     * 
+     *
      * @param accessToken
      *            the access token to bind this session to a user
      * @param timeout
@@ -88,7 +88,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Creates a FigoSession instance
-     * 
+     *
      * @param accessToken
      *            the access token to bind this session to a user
      * @param timeout
@@ -102,9 +102,9 @@ public class FigoSession extends FigoApi {
 
     /**
      * Get the current figo Account
-     * 
+     *
      * @return User for the current figo Account
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -114,11 +114,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Modify figo Account
-     * 
+     *
      * @param user
      *            modified user object to be saved
      * @return User object for the updated figo Account
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -128,19 +128,19 @@ public class FigoSession extends FigoApi {
 
     /**
      * Delete figo Account
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void removeUser() throws FigoException, IOException {
         this.queryApi("/rest/user", null, "DELETE", null);
     }
-    
+
     /**
      * Returns a list of all supported credit cards and payment services for a country
      * @param countryCode
      * @return List of Services
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -148,7 +148,7 @@ public class FigoSession extends FigoApi {
     	Service.ServiceResponse response = this.queryApi("/rest/catalog/services/" + countryCode, null, "GET", Service.ServiceResponse.class);
     	return response == null ? null : response.getServices();
     }
-    
+
     /**
      * Returns a list of all supported credit cards and payment services for all countries
      * @return List of Services
@@ -167,14 +167,14 @@ public class FigoSession extends FigoApi {
      * @param countryCode
      * @param bankCode
      * @return LoginSettings
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public LoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
     	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
-    }    
-    
+    }
+
     @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
@@ -183,32 +183,32 @@ public class FigoSession extends FigoApi {
      * @param loginName
      * @param pin
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
     }
-    
+
     /**
      * Returns a TaskToken for a new account creation task
      * @param bankCode
      * @param countryCode
      * @param loginName
      * @param pin
-     * @param 
+     * @param
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String loginName, String pin, List<String> syncTasks) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin, syncTasks), "POST", TaskTokenResponse.class);
     }
-    
+
     /**
-     * 
+     *
      * @param bankCode
      * @param countryCode
      * @param syncTasks
@@ -222,7 +222,7 @@ public class FigoSession extends FigoApi {
     	List<String> credentials = Arrays.asList(loginName, pin);
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
-    
+
     @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
@@ -231,30 +231,30 @@ public class FigoSession extends FigoApi {
      * @param loginName
      * @param pin
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, null), "POST", TaskTokenResponse.class);
     }
-    
+
     /**
      * Returns a TaskToken for a new account creation task
      * @param bankCode
      * @param countryCode
      * @param credentials
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks), "POST", TaskTokenResponse.class);
     }
-    
+
     /**
-     * 
+     *
      * @param bankCode
      * @param countryCode
      * @param credentials
@@ -268,7 +268,7 @@ public class FigoSession extends FigoApi {
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
-    
+
     @Deprecated
     /**
      * Setups an account an starts the initial syncronization directly
@@ -277,15 +277,15 @@ public class FigoSession extends FigoApi {
      * @param loginName
      * @param pin
      * @return TaskStatusResponse
-     * 
-     * 
+     *
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException, InterruptedException
      */
     public TaskStatusResponse setupAndSyncAccount(String bankCode, String countryCode, String loginName, String pin) throws FigoException, IOException, FigoPinException, InterruptedException	{
     	return this.setupAndSyncAccount(bankCode, countryCode, loginName, pin, null);
     }
-    
+
     /**
      * Setups an account an starts the initial syncronization directly
      * @param bankCode
@@ -293,7 +293,7 @@ public class FigoSession extends FigoApi {
      * @param loginName
      * @param pin
      * @return TaskStatusResponse
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException, FigoPinException, InterruptedException
      */
@@ -312,7 +312,7 @@ public class FigoSession extends FigoApi {
     	}
     	return taskStatus;
     }
-    
+
     /**
      * Exception handler for a wrong pin. Starts a new task for account creation with a new pin
      * @param exception
@@ -320,7 +320,7 @@ public class FigoSession extends FigoApi {
      * @param newPin
      * 				new PIN
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException, FigoPinException, InterruptedException
      */
@@ -330,9 +330,9 @@ public class FigoSession extends FigoApi {
 
     /**
      * All accounts the user has granted your app access to
-     * 
+     *
      * @return List of Accounts
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -343,11 +343,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Returns the account with the specified ID
-     * 
+     *
      * @param accountId
      *            figo ID of the account to be retrieved
      * @return Account or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -357,11 +357,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Modify an account
-     * 
+     *
      * @param account
      *            the modified account to be saved
      * @return Account object for the updated account returned by server
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -371,12 +371,12 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove an account
-     * 
+     *
      * @param accountId
      *            ID of the account to be removed
-     *            
+     *
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException           
+     * @exception IOException IOException
      */
     public void removeAccount(String accountId) throws FigoException, IOException {
         this.queryApi("/rest/accounts/" + accountId, null, "DELETE", null);
@@ -384,10 +384,10 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove an account
-     * 
+     *
      * @param account
      *            Account to be removed
-     *            
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -397,11 +397,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Returns the balance details of the account with he specified ID
-     * 
+     *
      * @param accountId
      *            figo ID of the account to be retrieved
      * @return AccountBalance or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -411,11 +411,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Returns the balance details of the supplied account
-     * 
+     *
      * @param account
      *            account whose balance should be retrieved
      * @return AccountBalance or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -425,13 +425,13 @@ public class FigoSession extends FigoApi {
 
     /**
      * Modify balance or account limits
-     * 
+     *
      * @param accountId
      *            ID of the account to be modified
      * @param accountBalance
      *            modified AccountBalance object to be saved
      * @return AccountBalance object for the updated account as returned by the server
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -441,25 +441,25 @@ public class FigoSession extends FigoApi {
 
     /**
      * Modify balance or account limits
-     * 
+     *
      * @param account
      *            account to be modified
      * @param accountBalance
      *            modified AccountBalance object to be saved
      * @return AccountBalance object for the updated account as returned by the server
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public AccountBalance updateAccountBalance(Account account, AccountBalance accountBalance) throws FigoException, IOException {
         return updateAccountBalance(account.getAccountId(), accountBalance);
     }
-    
+
     /**
      * Set new bank account sorting order
      * @param orderedList
      * 			List of accounts in the new order
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -469,9 +469,9 @@ public class FigoSession extends FigoApi {
 
     /**
      * All transactions on all account of the user
-     * 
+     *
      * @return List of Transaction objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -481,11 +481,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve all transactions on a specific account of the user
-     * 
+     *
      * @param accountId
      *            the ID of the account for which to retrieve the transactions
      * @return List of Transactions
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -495,11 +495,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve all transactions on a specific account of the user
-     * 
+     *
      * @param account
      *            the account for which to retrieve the transactions
      * @return List of Transactions
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -509,7 +509,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Get an array of Transaction objects, one for each transaction of the user matching the criteria. Provide null values to not use the option.
-     * 
+     *
      * @param account
      *            account for which to list the transactions
      * @param since
@@ -522,17 +522,17 @@ public class FigoSession extends FigoApi {
      *            this flag indicates whether pending transactions should be included in the response; pending transactions are always included as a complete
      *            set, regardless of the `since` parameter
      * @return an array of Transaction objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public List<Transaction> getTransactions(Account account, String since, Integer count, Integer offset, PendingTransactions include_pending) throws FigoException, IOException {
         return getTransactions(account == null ? null : account.getAccountId(), since, count, offset, include_pending);
     }
-    
+
     /**
      * Get an array of Transaction objects, one for each transaction of the user matching the criteria. Provide null values to not use the option.
-     * 
+     *
      * @param accountId
      *            ID of the account for which to list the transactions
      * @param since
@@ -545,7 +545,7 @@ public class FigoSession extends FigoApi {
      *            this flag indicates whether pending transactions should be included in the response; pending transactions are always included as a complete
      *            set, regardless of the `since` parameter
      * @return an array of Transaction objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -574,68 +574,68 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve a specific transaction by ID
-     * 
+     *
      * @param accountId
      *            ID of the account on which the transaction occurred
      * @param transactionId
      *            the figo ID of the specific transaction
      * @return Transaction or null
-     * 
-     * @exception FigoException Base class for all figoExceptions 
+     *
+     * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public Transaction getTransaction(String accountId, String transactionId) throws FigoException, IOException {
         return this.queryApi("/rest/accounts/" + accountId + "/transactions/" + transactionId, null, "GET", Transaction.class);
     }
-    
+
     /**
      * Modifies the visited field of a specific transaction
      * @param transaction
      * 				transaction which will be modified
      * @param visited
      * 				new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifyTransaction(Transaction transaction, FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
-    
-    
+
+
     /**
      * Modifies the visited field of all transactions of the current user
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifyTransactions(FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/transactions", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
-    
+
     /**
      * Modifies the visited field of all transactions of a specific account
      * @param account
      * 			account which owns the transactions
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifyTransactions(Account account, FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + account.getAccountId() + "/transactions", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
-    }    
-    
+    }
+
     /**
      * Modifies the visited field of all transactions of a specific account
      * @param accountId
      * 			Id of the account which owns the transactions
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -647,21 +647,21 @@ public class FigoSession extends FigoApi {
      * Removes a Transaction
      * @param transaction
      * 				transaction which will be removed
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void removeTransaction(Transaction transaction) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + transaction.getAccountId() + "/transactions/" + transaction.getTransactionId(), null, "DELETE", null);
     }
-    
+
     /**
      * Get an array of standing orders objects, one for each standing order of the user matching the criteria. Provide null values to not use the option.
-     * 
+     *
      * @param accountId
      *            ID of the account for which to list the standing orders
      * @return an array of Standing Order objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -675,26 +675,26 @@ public class FigoSession extends FigoApi {
         StandingOrder.StandingOrdersResponse response = this.queryApi(path, null, "GET", StandingOrder.StandingOrdersResponse.class);
         return response == null ? Collections.<StandingOrder>emptyList() : response.getStandingOrders();
     }
-    
+
     /**
      * All standing orders on all accounts of the user
-     * 
+     *
      * @return List of Standing Order objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public List<StandingOrder> getStandingOrders() throws FigoException, IOException {
         return getStandingOrders((String) null);
     }
-    
+
     /**
      * Retrieve a specific standing order by ID
      *
      * @param standingOrderId
      *            the figo ID of the specific standingOrder
      * @return Standing Order or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -715,7 +715,7 @@ public class FigoSession extends FigoApi {
         ModifyStandingOrderRequest request = new ModifyStandingOrderRequest(updatedStandingOrder);
         return this.queryApi("/rest/accounts/" + accountId + "/payments", request, "PUT", Payment.class);
     }
-    
+
     /**
      * Create a deletion task for a standing order
      * @param standingOrder the standing order to delete
@@ -737,7 +737,7 @@ public class FigoSession extends FigoApi {
     public TaskTokenResponse deleteStandingOrder(String standingOrderId) throws IOException, FigoException {
         return this.queryApi("/rest/standing_orders/" + standingOrderId, null, "DELETE", TaskTokenResponse.class);
     }
-    
+
     /**
      * Retrieves a specific security
      * @param accountId
@@ -745,14 +745,14 @@ public class FigoSession extends FigoApi {
      * @param securityId
      * 			id of the security which will be retrieved
      * @return	Security or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public Security getSecurity(String accountId, String securityId) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts/" + accountId + "/securities/" + securityId, null, "GET", Security.class);
     }
-    
+
     /**
      * Retrieves a specific security
      * @param account
@@ -760,18 +760,18 @@ public class FigoSession extends FigoApi {
      * @param securityId
      * 			id of the security which will be retrieved
      * @return	Security or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public Security getSecurity(Account account, String securityId) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities/" + securityId, null, "GET", Security.class);
     }
-    
+
     /**
      * Retrieves all securities of the current user
      * @return List of Securities or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -779,12 +779,12 @@ public class FigoSession extends FigoApi {
     	Security.SecurityResponse response = this.queryApi("/rest/securities", null, "GET", Security.SecurityResponse.class);
     	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
-    
+
     /**
      * Retrieves all securities of a specific account
      * @param account Security owning account
      * @return List of Securities or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -792,12 +792,12 @@ public class FigoSession extends FigoApi {
     	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", null, "GET", Security.SecurityResponse.class);
     	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
-    
+
     /**
      * Retrieves all securities of a specific account
      * @param accountId Security owning account id
      * @return List of Securities or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -805,54 +805,54 @@ public class FigoSession extends FigoApi {
     	Security.SecurityResponse response = this.queryApi("/rest/accounts/" + accountId + "/securities", null, "GET", Security.SecurityResponse.class);
     	return response == null ? Collections.<Security>emptyList() : response.getSecurities();
     }
-    
+
     /**
      * Modifies the visited field of a specific security
      * @param security
      * 			security which will be modified
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifySecurity(Security security, FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + security.getAccountId() + "/securities/" + security.getSecurityId(), new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
-    
+
     /**
      * Modifies the visited field of all securities of the current user
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifySecurities(FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
-    
+
     /**
      * Modifies the visited field of all securities of a specific account
      * @param account
      * 			account which owns the securities
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void modifySecurities(Account account, FieldVisited visited) throws FigoException, IOException	{
     	this.queryApi("/rest/accounts/" + account.getAccountId() + "/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
-    
+
     /**
      * Modifies the visited field of all securities of a specific account
      * @param accountId
      * 			Id of the account which owns the securities
      * @param visited
      * 			new value for the visited field
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -862,11 +862,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Get bank
-     * 
+     *
      * @param bankId
      *            ID of the bank to be retrieved
      * @return Bank or null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -876,11 +876,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Get Bank for account
-     * 
+     *
      * @param account
      *            Account for which to return the Bank
      * @return Bank or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -890,11 +890,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Modify a bank
-     * 
+     *
      * @param bank
      *            modified bank object to be saved
      * @return Bank object for the updated bank
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -904,12 +904,12 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove the stored PIN for a bank (if there was one)
-     * 
+     *
      * @param bankId
      *            ID of the bank whose pin should be removed
-     *            
+     *
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException           
+     * @exception IOException IOException
      */
     public void removeBankPin(String bankId) throws FigoException, IOException {
         this.queryApi("/rest/banks/" + bankId + "/remove_pin", null, "POST", null);
@@ -917,10 +917,10 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove the stored PIN for a bank (if there was one)
-     * 
+     *
      * @param bank
      *            bank whose pin should be removed
-     *            
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -930,9 +930,9 @@ public class FigoSession extends FigoApi {
 
     /**
      * All notifications registered by this client for the user
-     * 
+     *
      * @return List of Notification objects
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -943,11 +943,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve a specific notification by ID
-     * 
+     *
      * @param notificationId
      *            figo ID for the notification to be retrieved
      * @return Notification or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -957,11 +957,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Register a new notification on the server for the user
-     * 
+     *
      * @param notification
      *            Notification which should be registered
      * @return the newly registered Notification
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -971,10 +971,10 @@ public class FigoSession extends FigoApi {
 
     /**
      * Update a stored notification
-     * 
+     *
      * @param notification
      *            Notification with updated values
-     *            
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -984,10 +984,10 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove a stored notification from the server
-     * 
+     *
      * @param notification
      *            Notification to be removed
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -997,9 +997,9 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve all payments
-     * 
+     *
      * @return List of Payments
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1010,11 +1010,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve all payments on a certain account
-     * 
+     *
      * @param accountId
      *            the ID of the account for which to retrieve the payments
      * @return List of Payments
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1025,11 +1025,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * all payments on a certain account
-     * 
+     *
      * @param account
      *            the account for which to retrieve the payments
      * @return List of Payments
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1039,13 +1039,13 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve a specific payment by ID
-     * 
+     *
      * @param accountId
      *            ID of the account on which the payment can be found
      * @param paymentId
      *            ID of the payment to be retrieved
      * @return Payment or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1055,13 +1055,13 @@ public class FigoSession extends FigoApi {
 
     /**
      * Retrieve a specific payment by ID
-     * 
+     *
      * @param account
      *            the account on which the payment can be found
      * @param paymentId
      *            ID of the payment to be retrieved
      * @return Payment or Null
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1071,25 +1071,25 @@ public class FigoSession extends FigoApi {
 
     /**
      * Create a new payment
-     * 
+     *
      * @param payment
      *            Payment which should be created
      * @return the newly created payment
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public Payment addPayment(Payment payment) throws FigoException, IOException {
         return this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments", payment, "POST", Payment.class);
     }
-    
+
     public Payment addContainerPayment(PaymentContainer container) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts/" + container.getAccountId() + "/payments", container, "POST", PaymentContainer.class);
     }
-    
+
     /**
      * Returns a list of PaymentProposals.
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1100,11 +1100,11 @@ public class FigoSession extends FigoApi {
 
     /**
      * Update a stored payment
-     * 
+     *
      * @param payment
      *            Payment with updated values
      * @return updated Payment as returned by the server
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1114,12 +1114,12 @@ public class FigoSession extends FigoApi {
 
     /**
      * Remove a stored payment from the server
-     * 
+     *
      * @param payment
      *            payment to be removed
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException           
+     * @exception IOException IOException
      */
     public void removePayment(Payment payment) throws FigoException, IOException {
         this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments/" + payment.getPaymentId(), null, "DELETE", null);
@@ -1127,7 +1127,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Submit payment to bank server
-     * 
+     *
      * @param payment
      *            payment to be submitted
      * @param tanSchemeId
@@ -1135,7 +1135,7 @@ public class FigoSession extends FigoApi {
      * @param state
      *            Any kind of string that will be forwarded in the callback response message
      * @return the URL to be opened by the user for the TAN process
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1145,7 +1145,7 @@ public class FigoSession extends FigoApi {
 
     /**
      * Submit payment to bank server
-     * 
+     *
      * @param payment
      *            payment to be submitted
      * @param tanSchemeId
@@ -1155,7 +1155,7 @@ public class FigoSession extends FigoApi {
      * @param redirectUri
      *            At the end of the submission process a response will be sent to this callback URL
      * @return the URL to be opened by the user for the TAN process
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1168,14 +1168,14 @@ public class FigoSession extends FigoApi {
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
      * the process is finished, the user is redirected to the provided URL.
-     * 
+     *
      * @param state
      *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
      *            authenticity of the call to the redirect URL
      * @param redirect_url
      *            URI the user is redirected to after the process completes
      * @return the URL to be opened by the user
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1183,11 +1183,11 @@ public class FigoSession extends FigoApi {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url), "POST", TaskTokenResponse.class);
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
-    
+
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
      * the process is finished, the user is redirected to the provided URL.
-     * 
+     *
      * @param state
      *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
      *            authenticity of the call to the redirect URL
@@ -1196,7 +1196,7 @@ public class FigoSession extends FigoApi {
      * @param syncTasks
      * 			  Tasks to sync while talking to the bank. Transactions are activated by default
      * @return the URL to be opened by the user
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1204,11 +1204,11 @@ public class FigoSession extends FigoApi {
         TaskTokenResponse response = this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks), "POST", TaskTokenResponse.class);
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
-    
+
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
      * the process is finished, the user is redirected to the provided URL.
-     * 
+     *
      * @param state
      *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
      *            authenticity of the call to the redirect URL
@@ -1219,7 +1219,7 @@ public class FigoSession extends FigoApi {
      * @Param accountIDs
      *            Accounts to sync
      * @return the URL to be opened by the user
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -1228,36 +1228,67 @@ public class FigoSession extends FigoApi {
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
 
+    /**
+     * Create a sync task
+     *
+     * @param state
+     *            String passed on through the complete synchronization process and to the redirect target at the end. It should be used to validated the
+     *            authenticity of the call to the redirect URL
+     * @param redirect_url
+     *            URI the user is redirected to after the process completes
+     * @param syncTasks
+     *            Tasks to sync while talking to the bank. Transactions are activated by default
+     * @Param accountIDs
+     *            Accounts to sync
+     * @return TaskTokenResponse
+     *
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+    */
     public TaskTokenResponse createSyncTask(String state, String redirect_url, List<String>syncTasks, List<String>accountIds) throws IOException, FigoException {
         return this.queryApi("/rest/sync", new SyncTokenRequest(state, redirect_url, syncTasks, accountIds), "POST", TaskTokenResponse.class);
     }
-    
+
+    /**
+     * Create a sync task
+     * @param syncTokenRequest
+     *        A SyncTokenRequest object
+     *
+     * @return TaskTokenResponse
+     *
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+    public TaskTokenResponse createSyncTask(SyncTokenRequest syncTokenRequest) throws IOException, FigoException {
+        return this.queryApi("/rest/sync", syncTokenRequest, "POST", TaskTokenResponse.class);
+    }
+
     /**
      * Get the current status of a Task
      * @param tokenResponse
      * 			A TaskTokenResponse Object for the task which will be checked
      * @return	A TaskStatusResponse Object with information about the task
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskStatusResponse getTaskState(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
     	return this.queryApi("/task/progress?id=" + tokenResponse.task_token, new TaskStatusRequest(tokenResponse), "POST", TaskStatusResponse.class);
     }
-    
+
     /**
      * Get the current status of a Task by id
      * @param tokenId
      * 			ID of the TaskToken which will be checked
      * @return	A TaskStatusResponse Object with information about the task.
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskStatusResponse getTaskState(String tokenId) throws FigoException, IOException	{
     	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId), "POST", TaskStatusResponse.class);
     }
-    
+
     @Deprecated
     /**
      * Retrieves the current status of a Task and provide a PIN
@@ -1266,14 +1297,14 @@ public class FigoSession extends FigoApi {
      * @param pin
      * 			PIN which will be submitted
      * @return A TaskStatusResponse Object with information about the task.
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public TaskStatusResponse getTaskState(String tokenId, String pin) throws FigoException, IOException	{
     	return this.queryApi("/task/progress?id=" + tokenId, new TaskStatusRequest(tokenId, pin), "POST", TaskStatusResponse.class);
     }
-    
+
     public TaskStatusResponse submitResponseToTask(String tokenId, String response, TaskResponseType type) throws FigoException, IOException	{
 	/**
 	 * This method is used to provide a response to a running Task.
@@ -1283,7 +1314,7 @@ public class FigoSession extends FigoApi {
 	 * 			Your provided response as a String. For Boolean fields (SAVE_PIN and CONTINUE) the String values 0, 1 are used
 	 * @param type
 	 * 			Type of the response you want to submit. Available types are: PIN, SAVE_PIN, CHALLENGE and CONTINUE
-	 *  
+	 *
 	 * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
 	 */
@@ -1308,7 +1339,7 @@ public class FigoSession extends FigoApi {
 		}
     	return this.queryApi("/task/progress?id=" + tokenId, request, "POST", TaskStatusResponse.class);
     }
-    
+
     public TaskStatusResponse submitResponseToTask(TaskTokenResponse tokenResponse, String response, TaskResponseType type) throws FigoException, IOException	{
     	/**
     	 * This method is used to provide a response to a running Task.
@@ -1318,7 +1349,7 @@ public class FigoSession extends FigoApi {
     	 * 			Your provided response as a String. For Boolean fields (SAVE_PIN and CONTINUE) the String values 0, 1 are used
     	 * @param type
     	 * 			Type of the response you want to submit. Available types are: PIN, SAVE_PIN, CHALLENGE and CONTINUE
-    	 *  
+    	 *
     	 */
     	return this.submitResponseToTask(tokenResponse.getTaskToken(), response, type);
     }
@@ -1327,50 +1358,50 @@ public class FigoSession extends FigoApi {
      * Start communication with bank server.
      * @param tokenResponse
      * 				TokenResponse Object
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void startTask(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
     	this.queryApi("/task/start?id=" + tokenResponse.task_token, null, "GET", null);
     }
-    
+
     /**
      * Start communication with bank server.
      * @param taskToken
      * 				Token ID
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void startTask(String taskToken) throws FigoException, IOException	{
     	this.queryApi("/task/start?id=" + taskToken, null, "GET", null);
     }
-    
+
     /**
      * Cancels a given task if possible
      * @param tokenResponse
      * 				Token Response Object
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void cancelTask(TaskTokenResponse tokenResponse) throws FigoException, IOException	{
     	this.queryApi("/task/cancel?id=" + tokenResponse.task_token, null, "POST", null);
     }
-    
+
     /**
      * Cancels a given task if possible
      * @param taskToken
      * 				Token ID
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
     public void cancelTask(String taskToken) throws FigoException, IOException	{
     	this.queryApi("/task/cancel?id=" + taskToken, null, "POST", null);
     }
-    
+
     @Override
     protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
