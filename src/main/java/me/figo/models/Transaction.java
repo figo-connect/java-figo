@@ -128,6 +128,9 @@ public class Transaction {
     @Expose(serialize = false)
     private AdditionalTransactionInfo additional_info;
 
+    @Expose
+    private List<Category> categories;
+
     public Transaction() {
     }
 
@@ -242,6 +245,10 @@ public class Transaction {
 
     public AdditionalTransactionInfo getAdditionalInfo() {
         return additional_info;
+    }
+
+    public List<Category> getCategories()   {
+        return categories;
     }
 
     /**
