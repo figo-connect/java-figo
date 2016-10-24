@@ -4,7 +4,7 @@
 
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
-	<version>1.4.2</version>
+	<version>1.4.3</version>
 
 	<packaging>jar</packaging>
 
