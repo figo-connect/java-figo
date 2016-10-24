@@ -27,7 +27,7 @@ public class Security {
 	private String currency;
 	
 	@Expose
-	private int quantity;
+	private BigDecimal quantity;
 	
 	@Expose
 	private BigDecimal amount;
@@ -107,11 +107,11 @@ public class Security {
 		this.currency = currency;
 	}
 
-	public int getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 
