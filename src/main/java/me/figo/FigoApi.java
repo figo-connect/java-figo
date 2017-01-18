@@ -23,8 +23,6 @@
  */
 package me.figo;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -41,6 +39,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.google.gson.Gson;
+
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
@@ -50,7 +50,9 @@ import me.figo.internal.GsonAdapter;
  */
 public class FigoApi {
     
-    private final String apiEndpoint;
+    protected static final String API_FIGO_LIVE = "https://api.figo.me";
+	protected static final String API_FIGO_STAGE = "https://staging.figo.me";
+	private final String apiEndpoint;
     private final String authorization;
     private int timeout;
     private X509TrustManager trustManager;

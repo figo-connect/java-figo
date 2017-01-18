@@ -22,28 +22,27 @@
 
 package me.figo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
-
-import me.figo.internal.FakeTrustManager;
-import me.figo.internal.TokenResponse;
-import me.figo.models.Account;
-import me.figo.models.Notification;
-import me.figo.models.Payment;
-import me.figo.models.PaymentProposal;
-import me.figo.models.PaymentType;
-import me.figo.models.Security;
-import me.figo.models.StandingOrder;
-import me.figo.models.TanScheme;
-import me.figo.models.Transaction;
-import me.figo.models.User;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import me.figo.internal.FakeTrustManager;
+import me.figo.models.Account;
+import me.figo.models.Notification;
+import me.figo.models.Payment;
+import me.figo.models.PaymentType;
+import me.figo.models.StandingOrder;
+import me.figo.models.TanScheme;
+import me.figo.models.Transaction;
+import me.figo.models.User;
 
 public class SessionTest {
 
