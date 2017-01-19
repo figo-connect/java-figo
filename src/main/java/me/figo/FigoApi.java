@@ -80,7 +80,7 @@ public class FigoApi {
             this.apiEndpoint = endpointEnv;
         }
         else    {
-            this.apiEndpoint = "https://api.figo.me";
+            this.apiEndpoint = API_FIGO_LIVE;
         }
     }
     
