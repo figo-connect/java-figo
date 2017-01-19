@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.4.4</version>
+        <version>1.4.5</version>
 </dependency>
 ```
 
