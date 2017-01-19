@@ -26,29 +26,25 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import me.figo.internal.*;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
-import me.figo.models.BusinessProcess;
 import me.figo.models.LoginSettings;
+import me.figo.models.Notification;
+import me.figo.models.Payment;
 import me.figo.models.PaymentContainer;
 import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
-import me.figo.models.ProcessToken;
 import me.figo.models.Security;
 import me.figo.models.Service;
-import me.figo.models.Notification;
-import me.figo.models.Payment;
 import me.figo.models.StandingOrder;
 import me.figo.models.Transaction;
 import me.figo.models.User;
-
-import java.util.Collections;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -152,6 +148,19 @@ public class FigoSession extends FigoApi {
     	Service.ServiceResponse response = this.queryApi("/rest/catalog/services/" + countryCode, null, "GET", Service.ServiceResponse.class);
     	return response == null ? null : response.getServices();
     }
+
+    /**
+     * Returns a list of all supported credit cards and payment services for all countries
+     * @return List of Services
+     * 
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+	public List<Service> getSupportedServices() throws FigoException, IOException {
+		Service.ServiceResponse response = this.queryApi("/rest/catalog/services", null, "GET",
+				Service.ServiceResponse.class);
+		return response == null ? null : response.getServices();
+	}
 
     /**
      * Returns the login settings for a specified banking or payment service
@@ -728,7 +737,7 @@ public class FigoSession extends FigoApi {
     public TaskTokenResponse deleteStandingOrder(String standingOrderId) throws IOException, FigoException {
         return this.queryApi("/rest/standing_orders/" + standingOrderId, null, "DELETE", TaskTokenResponse.class);
     }
-
+    
     /**
      * Retrieves a specific security
      * @param accountId
@@ -1425,7 +1434,14 @@ public class FigoSession extends FigoApi {
     @Override
     protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
-        int code = connection.getResponseCode();
+    	
+        try {
+			@SuppressWarnings("unused")
+			int code = connection.getResponseCode();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return super.processResponse(connection, typeOfT);
     }
 }

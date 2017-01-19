@@ -236,7 +236,7 @@ public class FigoConnection extends FigoApi {
      * @exception IOException IOException
      */
     public TokenResponse addUserAndLogin(String name, String email, String password, String language) throws IOException, FigoException {
-        CreateUserResponse response = this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
+        this.queryApi("/auth/user", new CreateUserRequest(name, email, password, language), "POST",
                 CreateUserResponse.class);
         return this.credentialLogin(email, password);
     }

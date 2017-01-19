@@ -22,9 +22,17 @@
 
 package me.figo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import me.figo.internal.FakeTrustManager;
 import me.figo.models.Account;
@@ -35,11 +43,6 @@ import me.figo.models.StandingOrder;
 import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class SessionTest {
 

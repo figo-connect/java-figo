@@ -5,7 +5,6 @@
 	<groupId>me.figo</groupId>
 	<artifactId>sdk</artifactId>
 	<version>1.4.3</version>
-
 	<packaging>jar</packaging>
 
 	<name>Figo Java SDK</name>

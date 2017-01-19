@@ -1,6 +1,7 @@
 package me.figo;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -8,7 +9,13 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+
 import me.figo.internal.TaskStatusResponse;
+import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
 import me.figo.models.BusinessProcess;
@@ -17,15 +24,7 @@ import me.figo.models.ProcessOption;
 import me.figo.models.ProcessStep;
 import me.figo.models.ProcessToken;
 import me.figo.models.Service;
-import me.figo.models.StandingOrder;
 import me.figo.models.Transaction;
-import me.figo.internal.TaskTokenResponse;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WritingTest {
