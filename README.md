@@ -56,6 +56,11 @@ session.setProxy(proxy);
 // now do your API calls
 ```
 
+You can add valid SSL fingerprints by adding them to the `FIGO_API_FINGERPRINTS` environment variable. Fingerprints
+need to be added in HEX format without column delimiters. A column delimiter is used to indicate the next element in
+the list of fingerprints.
+
+
 To disable the SSL certificate pinning (not recommended) do the following:
 ```java
 // first create the FigoSession object
