@@ -40,7 +40,9 @@ public class FigoTrustManager implements X509TrustManager {
             // api.figo.me
             "DBE2E9158FC9903084FE36CAA61138D85A205D93",
             // staging.figo.me
-            "832CBAFF874F90C884EAF03B2DE9AD5D8ED34801"
+            "832CBAFF874F90C884EAF03B2DE9AD5D8ED34801",
+            // sandbox.figo.me
+            "137AE242722970D5793F94192F1694083AAAED7B"
     ));
 
     /**
