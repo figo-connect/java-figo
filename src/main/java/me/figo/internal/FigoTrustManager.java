@@ -96,7 +96,7 @@ public class FigoTrustManager implements X509TrustManager {
         if (fingerprintList == null) {
             return new ArrayList<>();
         } else {
-            return Arrays.asList(fingerprintList.split(":"));
+            return Arrays.asList(fingerprintList.toUpperCase().split(":"));
         }
     }
 }
