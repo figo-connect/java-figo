@@ -71,7 +71,7 @@ public class FigoTrustManager implements X509TrustManager {
             throw new CertificateException("No certificate found");
         } else {
             String thumbprint = getThumbPrint(certs[0]);
-            if (!VALID_FINGERPRINTS.contains(thumbprint) && !this.getFingerprintsFromEnv().contains(thumbprint)){
+            if (!VALID_FINGERPRINTS.contains(thumbprint) && !getFingerprintsFromEnv().contains(thumbprint)){
                 throw new CertificateException();
             }
         }
