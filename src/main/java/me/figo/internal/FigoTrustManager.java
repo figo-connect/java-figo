@@ -38,7 +38,9 @@ public class FigoTrustManager implements X509TrustManager {
 
     private static final List<String> VALID_FINGERPRINTS = new ArrayList<>(Arrays.asList(
             // api.figo.me
-            "DBE2E9158FC9903084FE36CAA61138D85A205D93"
+            "DBE2E9158FC9903084FE36CAA61138D85A205D93",
+            // staging.figo.me
+            "832CBAFF874F90C884EAF03B2DE9AD5D8ED34801"
     ));
 
     /**
