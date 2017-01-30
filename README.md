@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.4.1</version>
+        <version>1.4.5</version>
 </dependency>
 ```
 
@@ -55,6 +55,11 @@ session.setProxy(proxy);
 
 // now do your API calls
 ```
+
+You can add valid SSL fingerprints by adding them to the `FIGO_API_FINGERPRINTS` environment variable. Fingerprints
+need to be added in HEX format without column delimiters. A column delimiter is used to indicate the next element in
+the list of fingerprints.
+
 
 To disable the SSL certificate pinning (not recommended) do the following:
 ```java
