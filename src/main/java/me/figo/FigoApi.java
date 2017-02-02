@@ -41,6 +41,7 @@ import javax.net.ssl.X509TrustManager;
 
 import com.google.gson.Gson;
 
+import me.figo.internal.FigoSocketFactory;
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
@@ -157,7 +158,8 @@ public class FigoApi {
             try {
                 final SSLContext sc = SSLContext.getInstance("SSL");
                 sc.init(null, new TrustManager[] { trustManager }, new java.security.SecureRandom());
-                ((HttpsURLConnection) connection).setSSLSocketFactory(sc.getSocketFactory());
+                FigoSocketFactory figoSocketFactory = new FigoSocketFactory(sc.getSocketFactory());
+                ((HttpsURLConnection) connection).setSSLSocketFactory(figoSocketFactory);
             } catch (NoSuchAlgorithmException e) {
                 throw new IOException("Connection setup failed", e);
             } catch (KeyManagementException e) {
