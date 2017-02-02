@@ -36,9 +36,14 @@ import org.apache.commons.codec.binary.Hex;
 
 public class FigoTrustManager implements X509TrustManager {
 
-    private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
-            "38AE4A326F16EA1581338BB0D8E4A635E727F107",                                                     
-            "DBE2E9158FC9903084FE36CAA61138D85A205D93"));
+    private static final List<String> VALID_FINGERPRINTS = new ArrayList<>(Arrays.asList(
+            // api.figo.me
+            "DBE2E9158FC9903084FE36CAA61138D85A205D93",
+            // staging.figo.me
+            "832CBAFF874F90C884EAF03B2DE9AD5D8ED34801",
+            // sandbox.figo.me
+            "137AE242722970D5793F94192F1694083AAAED7B"
+    ));
 
     /**
      * @return the list of trusted certificate fingerprints using SHA1
@@ -71,8 +76,8 @@ public class FigoTrustManager implements X509TrustManager {
             throw new CertificateException("No certificate found");
         } else {
             String thumbprint = getThumbPrint(certs[0]);
-            if (!VALID_FINGERPRINTS.contains(thumbprint) && !this.getFingerprintsFromEnv().contains(thumbprint)){
-                throw new CertificateException();
+            if (!VALID_FINGERPRINTS.contains(thumbprint) && !getFingerprintsFromEnv().contains(thumbprint)){
+                throw new CertificateException("Untrusted certificate fingerprint");
             }
         }
     }
@@ -93,6 +98,10 @@ public class FigoTrustManager implements X509TrustManager {
 
     private static List<String> getFingerprintsFromEnv()    {
         String fingerprintList = System.getenv("FIGO_API_FINGERPRINTS");
-        return Arrays.asList(fingerprintList.split(":"));
+        if (fingerprintList == null) {
+            return new ArrayList<>();
+        } else {
+            return Arrays.asList(fingerprintList.toUpperCase().split(":"));
+        }
     }
 }
