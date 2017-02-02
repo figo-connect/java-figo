@@ -6,10 +6,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 
 public class LoginSettings {
-	
-	@Expose
-	private String bank_name;
-	
+
 	@Expose
 	private boolean supported;
 	
@@ -28,16 +25,7 @@ public class LoginSettings {
 	@Expose
 	private String advice;
 	
-	public LoginSettings()	{
-		
-	}
-
-	public String getBankName() {
-		return bank_name;
-	}
-
-	public void setBankName(String bankName) {
-		this.bank_name = bankName;
+	public LoginSettings() {
 	}
 
 	public boolean isSupported() {

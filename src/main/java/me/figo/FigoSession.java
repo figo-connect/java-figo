@@ -31,20 +31,8 @@ import java.util.Collections;
 import java.util.List;
 
 import me.figo.internal.*;
-import me.figo.models.Account;
-import me.figo.models.AccountBalance;
-import me.figo.models.Bank;
-import me.figo.models.LoginSettings;
-import me.figo.models.Notification;
-import me.figo.models.Payment;
-import me.figo.models.PaymentContainer;
-import me.figo.models.PaymentProposal;
+import me.figo.models.*;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
-import me.figo.models.Security;
-import me.figo.models.Service;
-import me.figo.models.StandingOrder;
-import me.figo.models.Transaction;
-import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -171,8 +159,12 @@ public class FigoSession extends FigoApi {
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public LoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
-    	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
+    public BankLoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
+    	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", BankLoginSettings.class);
+    }
+
+    public ServiceLoginSettings getLoginSettingsForService(String countryCode, String serviceName) throws IOException, FigoException {
+        return this.queryApi("/rest/catalog/services/" + countryCode + "/" + serviceName, null, "GET", ServiceLoginSettings.class);
     }
 
     @Deprecated
