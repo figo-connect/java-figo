@@ -31,11 +31,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import me.figo.internal.FakeTrustManager;
-import me.figo.internal.FigoTrustManager;
 import me.figo.models.Account;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
@@ -44,6 +40,9 @@ import me.figo.models.StandingOrder;
 import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class SessionTest {
 
@@ -54,7 +53,6 @@ public class SessionTest {
 		sut = new FigoSession(
 				"ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ",
 				30000);
-		FigoTrustManager.addTrustedFingerprint("DBE2E9158FC9903084FE36CAA61138D85A205D93");
     }
 
     @Test
