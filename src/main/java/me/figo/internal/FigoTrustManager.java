@@ -32,16 +32,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.net.ssl.X509TrustManager;
+
 import org.apache.commons.codec.binary.Hex;
 
 public class FigoTrustManager implements X509TrustManager {
 
     private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
-            "38AE4A326F16EA1581338BB0D8E4A635E727F107",                                                     
-            "DBE2E9158FC9903084FE36CAA61138D85A205D93"));
+            "070F14AEB94AFB3DF800E82B69A8515CEED2F5B1BA897BEF6432458F61CF9E33"));
 
     /**
-     * @return the list of trusted certificate fingerprints using SHA1
+     * @return the list of trusted certificate fingerprints using SHA256
      */
     public static List<String> getTrustedFingerprints() {
         return VALID_FINGERPRINTS;
@@ -50,7 +50,7 @@ public class FigoTrustManager implements X509TrustManager {
     /**
      * Add a fingerprint to the trusted list, e.g. when using a custom figo deployment.
      * 
-     * @param fingerprint the SHA1 hash of the SSL certificate in upper case
+     * @param fingerprint the SHA256 hash of the SSL certificate in upper case
      */
     public static void addTrustedFingerprint(String fingerprint) {
         VALID_FINGERPRINTS.add(fingerprint);
@@ -71,15 +71,15 @@ public class FigoTrustManager implements X509TrustManager {
             throw new CertificateException("No certificate found");
         } else {
             String thumbprint = getThumbPrint(certs[0]);
-            if (!VALID_FINGERPRINTS.contains(thumbprint) && !this.getFingerprintsFromEnv().contains(thumbprint)){
-                throw new CertificateException();
+			if (!VALID_FINGERPRINTS.contains(thumbprint) && !getFingerprintsFromEnv().contains(thumbprint)) {
+                throw new CertificateException("Fingerprint does not match certificate");
             }
         }
     }
 
     private static String getThumbPrint(X509Certificate cert) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] der = cert.getEncoded();
             md.update(der);
             byte[] digest = md.digest();
@@ -93,6 +93,9 @@ public class FigoTrustManager implements X509TrustManager {
 
     private static List<String> getFingerprintsFromEnv()    {
         String fingerprintList = System.getenv("FIGO_API_FINGERPRINTS");
-        return Arrays.asList(fingerprintList.split(":"));
+        if(fingerprintList!=null)
+        	return Arrays.asList(fingerprintList.split(":"));
+        else
+        	return new ArrayList<>();
     }
 }

@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>1.4.6</version>
+        <version>1.5.0</version>
 </dependency>
 ```
 
@@ -72,6 +72,9 @@ session.setTrustManager(trustManager);
 
 // now do your API calls
 ```
+
+To connect to the staging system of figo, you need to set the `FIGO_API_FINGERPRINTS` environment variable with the staging SHA256 fingerprint (`D0039EF08FBD48678671CE9DA554248163D7D94DEDF16A55F052C70AAB7BB89D`)
+
 
 A more detailed documentation of the figo connect API can be found at http://docs.figo.io.
 

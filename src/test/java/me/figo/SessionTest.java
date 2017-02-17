@@ -31,9 +31,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import me.figo.internal.FakeTrustManager;
 import me.figo.models.Account;
 import me.figo.models.Notification;
@@ -44,13 +41,18 @@ import me.figo.models.TanScheme;
 import me.figo.models.Transaction;
 import me.figo.models.User;
 
+import org.junit.Before;
+import org.junit.Test;
+
 public class SessionTest {
 
     FigoSession sut = null;
 
     @Before
     public void setUp() throws Exception {
-        sut = new FigoSession("ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ");
+		sut = new FigoSession(
+				"ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ",
+				30000);
     }
 
     @Test
@@ -140,7 +142,7 @@ public class SessionTest {
             fail(acc.getName());
         }
         catch(FigoException e)  {
-            assertEquals("Entry not found.", e.getErrorMessage());
+			assertEquals("Entry not found.", e.getErrorMessage());
             assertEquals(null, e.getErrorDescription());
         }
     }
