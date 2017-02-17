@@ -72,7 +72,7 @@ public class FigoTrustManager implements X509TrustManager {
         } else {
             String thumbprint = getThumbPrint(certs[0]);
 			if (!VALID_FINGERPRINTS.contains(thumbprint) && !getFingerprintsFromEnv().contains(thumbprint)) {
-                throw new CertificateException("No valid certificate found");
+                throw new CertificateException("Fingerprint does not match certificate");
             }
         }
     }
