@@ -110,6 +110,18 @@ public class StandingOrder {
     private Date  next_execution_date;
 
     /**
+     * First Execution Date
+     */
+    @Expose(serialize = false)
+    private Date first_execution_date;
+
+    /**
+     * Last execution date of the standing order. This field might be emtpy, if no last execution date is set
+     */
+    @Expose(serialize = false)
+    private Date last_execution_date;
+
+    /**
      * Execution interval
      */
     @Expose(serialize = false)
@@ -203,7 +215,21 @@ public class StandingOrder {
 		return next_execution_date;
 	}
 
-	/**
+    /**
+     * @return first Date the standing order was / will be executed
+     */
+    public Date getFirstExecutionDate() {
+        return first_execution_date;
+    }
+
+    /**
+     * @return last Date the standing order was / will be executed. null if not defined
+     */
+    public Date getLastExecutionDate() {
+        return last_execution_date;
+    }
+
+    /**
 	 * @return the monthly interval the standing order is executed
 	 * 
 	 */
@@ -257,6 +283,14 @@ public class StandingOrder {
 
     public void setNextExecutionDate(Date next_execution_date) {
         this.next_execution_date = next_execution_date;
+    }
+
+    public void setFirstExecutionDate(Date first_execution_date) {
+        this.first_execution_date = first_execution_date;
+    }
+
+    public void setLastExecutionDate(Date last_execution_date) {
+        this.last_execution_date = last_execution_date;
     }
 
     public void setInterval(StandingOrderIntervalType interval) {
