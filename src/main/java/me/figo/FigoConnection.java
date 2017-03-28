@@ -170,7 +170,7 @@ public class FigoConnection extends FigoApi {
     /**
      * Login an user with his figo username and password credentials
      * @param username
-     * 			the user's figo username
+     * 			the user's figo username, this is the `email` from the `CreateUserRequest`
      * @param password
      * 			the user's figo password
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
