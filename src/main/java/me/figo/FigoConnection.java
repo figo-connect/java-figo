@@ -100,6 +100,7 @@ public class FigoConnection extends FigoApi {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.redirectUri = redirectUri;
+        this.clientId = clientId;
     }
 
     private static String buildAuthorizationString(String clientId1, String clientSecret1) {
