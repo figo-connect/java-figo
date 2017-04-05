@@ -42,6 +42,12 @@ public class Transaction {
     private String  transaction_id;
 
     /**
+     * The transaction code
+     */
+    @Expose(serialize = false)
+    private String transaction_code;
+
+    /**
      * Internal figo Connect account ID
      */
     @Expose(serialize = false)
@@ -142,6 +148,13 @@ public class Transaction {
     }
 
     /**
+     * @return the transaction code
+     */
+    public String getTransactionCode() {
+        return transaction_code;
+    }
+
+    /**
      * @return the internal figo Connect account ID
      */
     public String getAccountId() {
@@ -236,7 +249,7 @@ public class Transaction {
      * @return whether the transaction has been visited or not
      */
     public boolean isVisited()	{
-    	return visited;
+        return visited;
     }
 
     public String getTransactionCode() {
