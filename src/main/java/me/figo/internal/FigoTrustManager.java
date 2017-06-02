@@ -38,7 +38,8 @@ import org.apache.commons.codec.binary.Hex;
 public class FigoTrustManager implements X509TrustManager {
 
     private static final List<String> VALID_FINGERPRINTS = new ArrayList<String>(Arrays.asList(
-            "070F14AEB94AFB3DF800E82B69A8515CEED2F5B1BA897BEF6432458F61CF9E33"));
+            "070F14AEB94AFB3DF800E82B69A8515CEED2F5B1BA897BEF6432458F61CF9E33", 
+	    "79B2A29300853B0692B1B5F2247948583AA5220FC5CDE9499AC8451EDBE0DA50"));
 
     /**
      * @return the list of trusted certificate fingerprints using SHA256
