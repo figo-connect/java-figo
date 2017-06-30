@@ -26,13 +26,38 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.internal.*;
-import me.figo.models.*;
+import me.figo.internal.AccountOrderRequest;
+import me.figo.internal.BankListResponse;
+import me.figo.internal.BankResponse;
+import me.figo.internal.ModifyStandingOrderRequest;
+import me.figo.internal.SetupAccountRequest;
+import me.figo.internal.SubmitPaymentRequest;
+import me.figo.internal.SyncTokenRequest;
+import me.figo.internal.TaskResponseType;
+import me.figo.internal.TaskStatusRequest;
+import me.figo.internal.TaskStatusResponse;
+import me.figo.internal.TaskTokenResponse;
+import me.figo.internal.VisitedRequest;
+import me.figo.models.Account;
+import me.figo.models.AccountBalance;
+import me.figo.models.Bank;
+import me.figo.models.BankLoginSettings;
+import me.figo.models.Notification;
+import me.figo.models.Payment;
+import me.figo.models.PaymentContainer;
+import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
+import me.figo.models.Security;
+import me.figo.models.Service;
+import me.figo.models.ServiceLoginSettings;
+import me.figo.models.StandingOrder;
+import me.figo.models.Transaction;
+import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -162,6 +187,33 @@ public class FigoSession extends FigoApi {
     public BankLoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
     	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", BankLoginSettings.class);
     }
+
+	public List<BankLoginSettings> getBanks(String countryCode) throws FigoException, IOException {
+		BankListResponse bankListResponse = this.queryApi("/rest/catalog/banks/" + countryCode, null, "GET",
+				BankListResponse.class);
+		List<BankLoginSettings> result = convertBankResult(bankListResponse);
+		return result;
+	}
+
+	public List<BankLoginSettings> getBanks() throws FigoException, IOException {
+		BankListResponse bankListResponse = this.queryApi("/rest/catalog/banks", null, "GET", BankListResponse.class);
+		List<BankLoginSettings> result = convertBankResult(bankListResponse);
+		return result;
+	}
+
+	private List<BankLoginSettings> convertBankResult(BankListResponse bankListResponse) {
+		List<BankLoginSettings> result = new ArrayList<BankLoginSettings>();
+		List<BankResponse> banks = bankListResponse.getBanks();
+		if (banks != null) {
+			for (BankResponse br : banks) {
+				BankLoginSettings bls = br.getAsBankLoginSetting();
+				result.add(bls);
+			}
+		}
+		return result;
+	}
+
+	// Type typeOfT = new TypeToken<Collection<Foo>>(){}.getType();
 
     public ServiceLoginSettings getLoginSettingsForService(String countryCode, String serviceName) throws IOException, FigoException {
         return this.queryApi("/rest/catalog/services/" + countryCode + "/" + serviceName, null, "GET", ServiceLoginSettings.class);
