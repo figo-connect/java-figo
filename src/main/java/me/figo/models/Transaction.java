@@ -22,9 +22,9 @@
 
 package me.figo.models;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.math.BigDecimal;
 
 import com.google.gson.annotations.Expose;
 
@@ -130,6 +130,39 @@ public class Transaction {
 
     @Expose
     private List<Category> categories;
+
+	@Expose(serialize = false)
+	private String iban;
+
+	@Expose(serialize = false)
+	private String bic;
+
+	@Expose(serialize = false)
+	private String booking_key;
+
+	@Expose(serialize = false)
+	private String creditor_id;
+
+	@Expose(serialize = false)
+	private String mandate_reference;
+
+	@Expose(serialize = false)
+	private String sepa_purpose_code;
+
+	@Expose(serialize = false)
+	private String sepa_remittance_info;
+
+	@Expose(serialize = false)
+	private String text_key_addition;
+
+	@Expose(serialize = false)
+	private String end_to_end_reference;
+
+	@Expose(serialize = false)
+	private String customer_reference;
+
+	@Expose(serialize = false)
+	private String prima_nota_number;
 
     public Transaction() {
     }
@@ -284,4 +317,92 @@ public class Transaction {
             return status;
         }
     }
+
+	public String getIban() {
+		return iban;
+	}
+
+	public void setIban(String iban) {
+		this.iban = iban;
+	}
+
+	public String getBic() {
+		return bic;
+	}
+
+	public void setBic(String bic) {
+		this.bic = bic;
+	}
+
+	public String getBooking_key() {
+		return booking_key;
+	}
+
+	public void setBooking_key(String booking_key) {
+		this.booking_key = booking_key;
+	}
+
+	public String getCreditor_id() {
+		return creditor_id;
+	}
+
+	public void setCreditor_id(String creditor_id) {
+		this.creditor_id = creditor_id;
+	}
+
+	public String getMandate_reference() {
+		return mandate_reference;
+	}
+
+	public void setMandate_reference(String mandate_reference) {
+		this.mandate_reference = mandate_reference;
+	}
+
+	public String getSepa_purpose_code() {
+		return sepa_purpose_code;
+	}
+
+	public void setSepa_purpose_code(String sepa_purpose_code) {
+		this.sepa_purpose_code = sepa_purpose_code;
+	}
+
+	public String getSepa_remittance_info() {
+		return sepa_remittance_info;
+	}
+
+	public void setSepa_remittance_info(String sepa_remittance_info) {
+		this.sepa_remittance_info = sepa_remittance_info;
+	}
+
+	public String getText_key_addition() {
+		return text_key_addition;
+	}
+
+	public void setText_key_addition(String text_key_addition) {
+		this.text_key_addition = text_key_addition;
+	}
+
+	public String getEnd_to_end_reference() {
+		return end_to_end_reference;
+	}
+
+	public void setEnd_to_end_reference(String end_to_end_reference) {
+		this.end_to_end_reference = end_to_end_reference;
+	}
+
+	public String getCustomer_reference() {
+		return customer_reference;
+	}
+
+	public void setCustomer_reference(String customer_reference) {
+		this.customer_reference = customer_reference;
+	}
+
+	public String getPrima_nota_number() {
+		return prima_nota_number;
+	}
+
+	public void setPrima_nota_number(String prima_nota_number) {
+		this.prima_nota_number = prima_nota_number;
+	}
 }
