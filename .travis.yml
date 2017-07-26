@@ -1,7 +1,14 @@
 language: java
-install: mvn install -Dgpg.skip=true -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-script: mvn test
 jdk:
   - oraclejdk7
   - oraclejdk8
   - openjdk7
+script: mvn test
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then mvn deploy -B -DskipTests=true --settings .travis.settings.xml ; fi
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - "$HOME/.m2"
