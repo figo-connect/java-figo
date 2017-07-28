@@ -139,6 +139,9 @@
                         <configuration>
                             <keyname>${env.CI_GPG_KEYNAME}</keyname>
                             <passphrase>${env.CI_GPG_PASSPHRASE}</passphrase>
+                            <defaultKeyring>false</defaultKeyring>
+                            <publicKeyring>pubring.gpg</publicKeyring>
+                            <secretKeyring>secring.gpg</secretKeyring>
                         </configuration>
                     </execution>
                 </executions>
