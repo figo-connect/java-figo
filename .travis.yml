@@ -9,6 +9,7 @@ deploy:
   script: ./publish.sh
   on:
     tags: true
+    jdk: oraclejdk8
 branches:
   only:
     - master
