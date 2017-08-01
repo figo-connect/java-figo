@@ -4,10 +4,10 @@ jdk:
   - oraclejdk8
   - openjdk7
 script: mvn test
-after_success:
-  - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in pubring.gpg.enc -out pubring.gpg -d
-  - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in secring.gpg.enc -out secring.gpg -d
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then mvn deploy -B -DskipTests=true --settings .travis.settings.xml ; fi
+deploy:
+  script: ./publish.sh
+  on:
+    tags: true
 branches:
   only:
     - master
