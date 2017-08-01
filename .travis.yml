@@ -5,6 +5,7 @@ jdk:
 install: mvn install -Dgpg.skip=true -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 script: mvn test
 deploy:
+  provider: script
   script: ./publish.sh
   on:
     jdk: oraclejdk8
