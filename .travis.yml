@@ -13,4 +13,11 @@ branches:
     - master
 cache:
   directories:
-    - "$HOME/.m2"
+  - $HOME/.m2
+env:
+  global:
+  - secure: W2HckgOHtFN6nng1si0szxVOlCTNEZPBsfxoI7uDe4x/C4ZQCTBFO7pLbWj0emNQQVGjlXOvKXwTfhaEN6OdWN7HBybwEj90hQsf4zKvVXfiqb0VA+VtKWM1lWDvWv4EqSh+7FybA5wQmWM2LgA77NyxabRJ8PmR8G+BEMAXhG0=
+  - secure: BR4XpTwfXf7j9r9UgEiK4Ao38dWBf14VbaNqyDMmImPOTrfq7o+wJrlG9aTWw//naBaetmlD1PUtPxrxgk4F/+4/rZu87STcsQApnhO28bQ76IOovgtffOEiWgQMVMxJBdPqJeKwgY9ZYQMKWz+pySn6Oj5r/qHcIttGEmigTOM=
+  - secure: Ya+F562g0HN3gNMCXbC2ClPxzhTfX4dr+hchRm4J1yLuUDktlFDIFp07qa0BvPWdRrd2mV86rsl7UmHYxP3KIyD0NhoCuUjw2gVNfOgxEHw+J/U13regg1Wvx8UbQkbvEnQESKBLHaFdAh/BVjxRqNu4zIPNjU/LnufIs+8HliM=
+  - secure: UYvlMxgW7bwu741x3ptz8KRVUZV9Kl7EgWYBzWEK0Rf5XapTy+SqB1nQAxxtP/GWZAss3EQQetDln7GtDk4W5QIffMnme9JJqwVXrKdiC0b6k3O8R38JLEIYf2RI69E1p/D1xN1zzZv1jQg1EZQ7Mw8gtD7+Rd+oaak84hRTtxY=
+  - secure: PxoX2p4H6pJn5EF9+45u8THV+bgFg1T03dYvANoR73/h+r4C+buDmt1UBjnT2j1+vxaTsSLMHKD2+8k9luB9Mw+8qFiF1pHAH6NF1FZvqS3Q17I/1ZNotDCkg50xm4Kg0UAdLLTVFeVrXKvK3Iyr2kKhxMLSZVa3OlEz2PT+ziM=
