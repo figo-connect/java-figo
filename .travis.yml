@@ -6,7 +6,7 @@ install: mvn install -Dgpg.skip=true -DskipTests=true -Dmaven.javadoc.skip=true 
 script: mvn test
 deploy:
   provider: script
-  script: ./deploy.sh
+  script: "./deploy.sh"
   on:
     jdk: oraclejdk8
 branches:
