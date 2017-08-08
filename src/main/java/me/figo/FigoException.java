@@ -76,21 +76,12 @@ public class FigoException extends Exception {
     }
 
     public static class ErrorObject	{
-    	
-		@Expose
-		private String code;
-		
-		@Expose
-		private String name;
-		
-		@Expose
-		private String message;
 
-		@Expose
-		private String description;
-		
-		@Expose
-		private String group;
+    	@Expose
+    	private String message;
+
+    	@Expose
+    	private String description;
 
     	public ErrorObject()	{
     	}
@@ -102,35 +93,5 @@ public class FigoException extends Exception {
     	public String getDescription()	{
     		return description;
     	}
-
-		public String getCode() {
-			return code;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getGroup() {
-			return group;
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			builder.append("ErrorObject [");
-			if (code != null)
-				builder.append("code=").append(code).append(", ");
-			if (name != null)
-				builder.append("name=").append(name).append(", ");
-			if (message != null)
-				builder.append("message=").append(message).append(", ");
-			if (description != null)
-				builder.append("description=").append(description).append(", ");
-			if (group != null)
-				builder.append("group=").append(group);
-			builder.append("]");
-			return builder.toString();
-		}
     }
 }

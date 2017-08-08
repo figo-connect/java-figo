@@ -33,8 +33,6 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -55,7 +53,6 @@ public class FigoApi {
     
     protected static final String API_FIGO_LIVE = "https://api.figo.me";
 	protected static final String API_FIGO_STAGE = "https://staging.figo.me";
-	private Logger logger = Logger.getLogger(this.getClass().getName());
 	private final String apiEndpoint;
     private final String authorization;
     private int timeout;
@@ -186,16 +183,17 @@ public class FigoApi {
         int code = connection.getResponseCode();
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
+        } else if (code == 400) {
+            throw new FigoException((FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class));
+        } else if (code == 401) {
+            throw new FigoException("access_denied", "Access Denied");
+        } else if (code == 404) {
+            throw new FigoException("Entry not found.", null);
         } else {
-            FigoException.ErrorResponse errorResponse = (FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class);
-			logError(errorResponse);
-			throw new FigoException(errorResponse);
+            // return decode(connection.getErrorStream(), resultType);
+            throw new FigoException("internal_server_error", "We are very sorry, but something went wrong");
         }
     }
-
-	private void logError(FigoException.ErrorResponse errorResponse) {
-		logger.log(Level.SEVERE,errorResponse.getError().toString());
-	}
     
     /**
      * Handle the response of a request by decoding its JSON payload
