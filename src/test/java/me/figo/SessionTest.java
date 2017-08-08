@@ -142,7 +142,7 @@ public class SessionTest {
             fail(acc.getName());
         }
         catch(FigoException e)  {
-			assertEquals("Entry not found.", e.getErrorMessage());
+			assertEquals("Not Found", e.getErrorMessage());
             assertEquals(null, e.getErrorDescription());
         }
     }
