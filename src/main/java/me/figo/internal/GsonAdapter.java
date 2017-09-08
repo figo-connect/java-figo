@@ -23,6 +23,7 @@
 package me.figo.internal;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,6 +66,24 @@ public class GsonAdapter {
             }
         };
 
-        return new GsonBuilder().registerTypeAdapter(Date.class, serializer).registerTypeAdapter(Date.class, deserializer).excludeFieldsWithoutExposeAnnotation().create();
+		JsonDeserializer<BigDecimal> bigDecimalDeserializer = new JsonDeserializer<BigDecimal>() {
+			@Override
+			public BigDecimal deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+					throws JsonParseException {
+				if (json == null)
+					return null;
+
+				try {
+					return new BigDecimal(json.getAsString());
+				} catch (NumberFormatException nfe) {
+					return null;
+				}
+			}
+		};
+
+		return new GsonBuilder().registerTypeAdapter(Date.class, serializer)
+				.registerTypeAdapter(Date.class, deserializer)
+				.registerTypeAdapter(BigDecimal.class, bigDecimalDeserializer).excludeFieldsWithoutExposeAnnotation()
+				.create();
     }
 }
