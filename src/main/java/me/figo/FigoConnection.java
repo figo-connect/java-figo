@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.Base64;
 
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
@@ -35,7 +36,6 @@ import me.figo.internal.TokenResponse;
 import me.figo.models.BusinessProcess;
 import me.figo.models.ProcessToken;
 
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API and/or create business processes.
@@ -104,7 +104,7 @@ public class FigoConnection extends FigoApi {
 
     private static String buildAuthorizationString(String clientId1, String clientSecret1) {
         String authInfo = clientId1 + ":" + clientSecret1;
-        return "Basic " + Base64.encodeBase64String(authInfo.getBytes(Charset.forName("UTF-8")));
+		return "Basic " + Base64.getEncoder().encodeToString(authInfo.getBytes(Charset.forName("UTF-8")));
     }
 
     /**
