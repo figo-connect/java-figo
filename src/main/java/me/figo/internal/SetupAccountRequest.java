@@ -23,7 +23,7 @@ public class SetupAccountRequest {
 	 * List of bank credentials
 	 */
 	@Expose
-	private List<String> credentials;
+	private SetupAccountCredentials credentials;
 	
 	/**
 	 * List of tasks which should be executed while doing a sync
@@ -66,9 +66,10 @@ public class SetupAccountRequest {
 	public SetupAccountRequest(String bankCode, String countryCode, String loginName, String pin, List<String> sync_tasks)	{
 		this.bank_code = bankCode;
 		this.country = countryCode;
-		this.credentials = new ArrayList<String>();
-		this.credentials.add(loginName);
-		this.credentials.add(pin);
+		List<String> credentials = new ArrayList<String>();
+		credentials.add(loginName);
+		credentials.add(pin);
+		this.credentials = new SetupAccountCredentials(credentials);
 		this.sync_tasks = sync_tasks;
 	}
 	
@@ -82,7 +83,7 @@ public class SetupAccountRequest {
 	public SetupAccountRequest(String bankCode, String countryCode, List<String> credentials, List<String> sync_tasks)	{
 		this.bank_code = bankCode;
 		this.country = countryCode;
-		this.credentials = credentials;
+		this.credentials = new SetupAccountCredentials(credentials);
 		this.sync_tasks = sync_tasks;
 	}
 	
@@ -101,7 +102,29 @@ public class SetupAccountRequest {
 		super();
 		this.bank_code = bank_code;
 		this.country = country;
-		this.credentials = credentials;
+		this.credentials = new SetupAccountCredentials(credentials);
+		this.sync_tasks = sync_tasks;
+		this.save_pin = save_pin;
+		this.disable_first_sync = disable_first_sync;
+	}
+
+
+	/**
+	 *
+	 * @param bank_code
+	 * @param country
+	 * @param encryptedCredentials
+	 * @param sync_tasks
+	 * @param save_pin
+	 * @param disable_first_sync
+	 */
+	public SetupAccountRequest(String bank_code, String country,
+							   String encryptedCredentials, List<String> sync_tasks,
+							   boolean save_pin, boolean disable_first_sync) {
+		super();
+		this.bank_code = bank_code;
+		this.country = country;
+		this.credentials = new SetupAccountCredentials(encryptedCredentials);
 		this.sync_tasks = sync_tasks;
 		this.save_pin = save_pin;
 		this.disable_first_sync = disable_first_sync;
@@ -123,7 +146,7 @@ public class SetupAccountRequest {
 		super();
 		this.bank_code = bank_code;
 		this.country = country;
-		this.credentials = credentials;
+		this.credentials = new SetupAccountCredentials(credentials);
 		this.sync_tasks = sync_tasks;
 		this.save_pin = save_pin;
 		this.disable_first_sync = disable_first_sync;
@@ -135,16 +158,17 @@ public class SetupAccountRequest {
 	public SetupAccountRequest(String bankCode, String countryCode, String loginName, String pin)	{
 		this.bank_code = bankCode;
 		this.country = countryCode;
-		this.credentials = new ArrayList<String>();
-		this.credentials.add(loginName);
-		this.credentials.add(pin);
+		List<String> credentials = new ArrayList<String>();
+		credentials.add(loginName);
+		credentials.add(pin);
+		this.credentials = new SetupAccountCredentials(credentials);
 	}
 	
 	@Deprecated
 	public SetupAccountRequest(String bankCode, String countryCode, List<String> credentials)	{
 		this.bank_code = bankCode;
 		this.country = countryCode;
-		this.credentials = credentials;
+		this.credentials = new SetupAccountCredentials(credentials);
 	}
 
 	public String getBankCode() {
@@ -164,11 +188,15 @@ public class SetupAccountRequest {
 	}
 
 	public List<String> getCredentials() {
-		return credentials;
+		return credentials.getCredentials();
 	}
 
 	public void setCredentials(List<String> credentials) {
-		this.credentials = credentials;
+		this.credentials = new SetupAccountCredentials(credentials);
+	}
+
+	public void setEncryptedCredentials(String encryptedCredentials) {
+		this.credentials = new SetupAccountCredentials(encryptedCredentials);
 	}
 
 	public List<String> getSyncTasks() {

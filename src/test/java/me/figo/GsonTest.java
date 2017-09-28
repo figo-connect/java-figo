@@ -1,6 +1,7 @@
 package me.figo;
 
 import com.google.gson.Gson;
+import me.figo.internal.SetupAccountCredentials;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.models.AdditionalTransactionInfo;
 import org.junit.Assert;
@@ -36,5 +37,17 @@ public class GsonTest {
 		testObject = new SetupAccountRequest("bankCode", "de", "login", "pin", Collections.<String>emptyList());
 		expected = "{\"bank_code\":\"bankCode\",\"country\":\"de\",\"credentials\":[\"login\",\"pin\"],\"sync_tasks\":[],\"save_pin\":false,\"disable_first_sync\":false}";
 		Assert.assertEquals(expected, g.toJson(testObject));
+	}
+
+	@Test
+	public void testCredentialSerialization() {
+		FigoApi api = new FigoApi("", 0);
+		Gson g = api.createGson();
+
+		SetupAccountCredentials secureCredentials = new SetupAccountCredentials("ENCRYPTED");
+		Assert.assertEquals("{\"type\":\"encrypted\",\"value\":\"ENCRYPTED\"}", g.toJson(secureCredentials));
+
+		SetupAccountCredentials credentials = new SetupAccountCredentials(Arrays.asList("username", "pin"));
+		Assert.assertEquals("[\"username\",\"pin\"]", g.toJson(credentials));
 	}
 }
