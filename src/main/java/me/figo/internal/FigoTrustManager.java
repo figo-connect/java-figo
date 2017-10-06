@@ -22,6 +22,7 @@
 
 package me.figo.internal;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
@@ -32,8 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.net.ssl.X509TrustManager;
-
-import org.apache.commons.codec.binary.Hex;
 
 public class FigoTrustManager implements X509TrustManager {
 
@@ -71,7 +70,7 @@ public class FigoTrustManager implements X509TrustManager {
         if (certs.length == 0) {
             throw new CertificateException("No certificate found");
         } else {
-            String thumbprint = getThumbPrint(certs[0]);
+			String thumbprint = getThumbPrint(certs[0]);
 			if (!VALID_FINGERPRINTS.contains(thumbprint) && !getFingerprintsFromEnv().contains(thumbprint)) {
                 throw new CertificateException("Fingerprint does not match certificate");
             }
@@ -84,7 +83,7 @@ public class FigoTrustManager implements X509TrustManager {
             byte[] der = cert.getEncoded();
             md.update(der);
             byte[] digest = md.digest();
-            return new String(Hex.encodeHex(digest, false));
+			return new BigInteger(1, digest).toString(16).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
             return "";
         } catch (CertificateEncodingException e) {
