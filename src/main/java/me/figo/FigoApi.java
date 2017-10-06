@@ -188,13 +188,16 @@ public class FigoApi {
             return handleResponse(connection.getInputStream(), typeOfT);
         } else {
             FigoException.ErrorResponse errorResponse = (FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class);
-			logError(errorResponse);
+			logError(errorResponse, connection);
 			throw new FigoException(errorResponse);
         }
     }
 
-	private void logError(FigoException.ErrorResponse errorResponse) {
-		logger.log(Level.SEVERE,errorResponse.getError().toString());
+	private void logError(FigoException.ErrorResponse errorResponse, HttpURLConnection connection) {
+		String errorString = errorResponse.getError().toString();
+		if (connection != null)
+			errorString += " " + connection.getRequestMethod() + " " + connection.getURL().toString();
+		logger.log(Level.SEVERE, errorString);
 	}
     
     /**
