@@ -189,7 +189,7 @@ public class FigoSession extends FigoApi {
      * @param countryCode
      * @param loginName
      * @param pin
-     * @param
+     * @param syncTasks
      * @return
      *
      * @exception FigoException Base class for all figoExceptions
@@ -1208,7 +1208,7 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
      * @return the URL to be opened by the user
      *
@@ -1230,7 +1230,7 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
      * @return TaskTokenResponse
      *
@@ -1253,13 +1253,13 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
-     * @Param disableNotifications
+     * @param disableNotifications
      *            Disable notifications for this sync
-     * @Param autoContinue
+     * @param autoContinue
      *            Continue on error
-     * @Param savePin
+     * @param savePin
      *            Save the pin for further syncs
      * @return TaskTokenResponse
      *
