@@ -53,7 +53,7 @@ import me.figo.internal.GsonAdapter;
  */
 public class FigoApi {
     
-    protected static final String API_FIGO_LIVE = "https://api.figo.me";
+    protected static final String API_FIGO_LIVE = "https://api.figo.me/v3";
 	protected static final String API_FIGO_STAGE = "https://staging.figo.me";
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	private final String apiEndpoint;
@@ -136,7 +136,7 @@ public class FigoApi {
         connection.setRequestProperty("Authorization", authorization);
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("User-Agent", "Figo/Java 1.5.6");
+        connection.setRequestProperty("User-Agent", "Figo/Java 1.6.0");
 
         // add payload
         if (data != null) {
@@ -187,7 +187,7 @@ public class FigoApi {
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
         } else {
-            FigoException.ErrorResponse errorResponse = (FigoException.ErrorResponse) handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class);
+            FigoException.ErrorResponse errorResponse = handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class);
 			logError(errorResponse, connection);
 			throw new FigoException(errorResponse);
         }
