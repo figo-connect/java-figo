@@ -81,7 +81,7 @@ public class SessionTest {
         List<Payment> ps = sut.getPayments(a);
         assertTrue(ps.size() >= 0);
     }
-    
+
     @Test
     public void testGetSupportedTanSchemes() throws FigoException, IOException	{
     	Account a = sut.getAccount("A1.1");
@@ -98,7 +98,7 @@ public class SessionTest {
     @Test
     public void testGetNotifications() throws FigoException, IOException {
         List<Notification> notifications = sut.getNotifications();
-        assertTrue(notifications.size() > 0);
+        assertTrue(notifications.size() >= 0);
     }
 
     @Test
@@ -122,13 +122,13 @@ public class SessionTest {
         User user = sut.getUser();
         assertEquals("demo@figo.me", user.getEmail());
     }
-    
+
     @Test
     public void testGetSupportedPaymentTypes() throws FigoException, IOException	{
     	HashMap<String, PaymentType> types = sut.getAccounts().get(0).getSupportedPaymentTypes();
     	assertEquals(2, types.size());
     }
-    
+
     @Test
 	public void testGetStandingOrders() throws IOException, FigoException {
         List<StandingOrder> so = sut.getStandingOrders();
