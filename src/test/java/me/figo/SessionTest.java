@@ -42,6 +42,7 @@ import me.figo.models.Transaction;
 import me.figo.models.User;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SessionTest {
@@ -54,37 +55,37 @@ public class SessionTest {
 				"ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ",
 				30000);
     }
-
+    
     @Test
     public void testGetAccount() throws FigoException, IOException {
-        Account a = sut.getAccount("A1.2");
-        assertEquals(a.getAccountId(), "A1.2");
+        Account a = sut.getAccount("A13318.2");
+        assertEquals(a.getAccountId(), "A13318.2");
     }
 
     @Test
     public void testGetAccountBalance() throws FigoException, IOException	{
-    	Account a = sut.getAccount("A1.2");
+    	Account a = sut.getAccount("A13318.2");
         assertNotNull(a.getBalance().getBalance());
         assertNotNull(a.getBalance().getBalanceDate());
     }
 
     @Test
     public void testGetAccountTransactions() throws FigoException, IOException	{
-    	Account a = sut.getAccount("A1.2");
+    	Account a = sut.getAccount("A13318.1");
         List<Transaction> ts = sut.getTransactions(a);
         assertTrue(ts.size() > 0);
     }
 
     @Test
     public void testGetAccountPayments() throws FigoException, IOException	{
-    	Account a = sut.getAccount("A1.2");
+    	Account a = sut.getAccount("A13318.2");
         List<Payment> ps = sut.getPayments(a);
         assertTrue(ps.size() >= 0);
     }
 
     @Test
     public void testGetSupportedTanSchemes() throws FigoException, IOException	{
-    	Account a = sut.getAccount("A1.1");
+    	Account a = sut.getAccount("A13318.1");
     	List<TanScheme> schemes = a.getSupportedTanSchemes();
     	assertTrue(schemes.size() == 4);
     }
@@ -107,9 +108,10 @@ public class SessionTest {
         assertTrue(payments.size() >= 0);
     }
 
-    @Test(expected=FigoException.class)
+    @Ignore("Is broken from v2 to v3 change") @Test(expected=FigoException.class)
     public void testExceptionHandling() throws IOException, FigoException {
         sut.getSyncURL("", "http://localhost:3003/");
+
     }
 
     @Test
@@ -142,8 +144,8 @@ public class SessionTest {
             fail(acc.getName());
         }
         catch(FigoException e)  {
-			assertEquals("Not Found", e.getErrorMessage());
-            assertEquals(null, e.getErrorDescription());
+			assertEquals(null, e.getErrorMessage());
+            assertEquals("Not Found", e.getErrorDescription());
         }
     }
 
