@@ -25,8 +25,8 @@ package me.figo;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import me.figo.util.Base64;
+
+import com.google.common.io.BaseEncoding;
 
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
@@ -104,7 +104,11 @@ public class FigoConnection extends FigoApi {
 
     private static String buildAuthorizationString(String clientId1, String clientSecret1) {
         String authInfo = clientId1 + ":" + clientSecret1;
-		return "Basic " + Base64.byteArrayToBase64(authInfo.getBytes(Charset.forName("UTF-8")));
+		try {
+			return "Basic " + BaseEncoding.base64().encode(authInfo.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			return "";
+		}
     }
 
     /**
