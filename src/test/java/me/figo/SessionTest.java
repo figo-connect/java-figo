@@ -33,6 +33,7 @@ import java.util.List;
 
 import me.figo.internal.FakeTrustManager;
 import me.figo.models.Account;
+import me.figo.models.Bank;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentType;
@@ -90,6 +91,14 @@ public class SessionTest {
     	assertTrue(schemes.size() == 4);
     }
 
+    @Test
+    public void testGetBank() throws FigoException, IOException	{
+    	Bank b = sut.getBank("B13318.1");
+    	
+    	assertEquals(b.getBankId(), "B13318.1");
+    	assertEquals(b.getBankNumber(), "90090042");
+    }    
+    
     @Test
     public void testGetTransactions() throws FigoException, IOException {
         List<Transaction> transactions = sut.getTransactions();
