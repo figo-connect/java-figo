@@ -102,8 +102,8 @@ public class FigoConnection extends FigoApi {
         this.redirectUri = redirectUri;
     }
 
-    private static String buildAuthorizationString(String clientId1, String clientSecret1) {
-        String authInfo = clientId1 + ":" + clientSecret1;
+    private static String buildAuthorizationString(String clientId, String clientSecret) {
+        String authInfo = clientId + ":" + clientSecret;
 		try {
 			return "Basic " + BaseEncoding.base64().encode(authInfo.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
