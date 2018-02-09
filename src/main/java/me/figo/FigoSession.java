@@ -348,20 +348,6 @@ public class FigoSession extends FigoApi {
     }
 
     /**
-     * Modify an account
-     *
-     * @param account
-     *            the modified account to be saved
-     * @return Account object for the updated account returned by server
-     *
-     * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
-     */
-    public Account updateAccount(Account account) throws FigoException, IOException {
-        return this.queryApi("/rest/accounts/" + account.getAccountId(), account, "PUT", Account.class);
-    }
-
-    /**
      * Remove an account
      *
      * @param accountId
@@ -445,18 +431,6 @@ public class FigoSession extends FigoApi {
      */
     public AccountBalance updateAccountBalance(Account account, AccountBalance accountBalance) throws FigoException, IOException {
         return updateAccountBalance(account.getAccountId(), accountBalance);
-    }
-
-    /**
-     * Set new bank account sorting order
-     * @param orderedList
-     * 			List of accounts in the new order
-     *
-     * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
-     */
-    public void setAccountOrder(List<Account> orderedList) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts", new AccountOrderRequest(orderedList), "PUT", null);
     }
 
     /**
