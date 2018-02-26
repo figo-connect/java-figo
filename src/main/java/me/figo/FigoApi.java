@@ -53,7 +53,7 @@ import me.figo.internal.GsonAdapter;
  */
 public class FigoApi {
     
-    protected static final String API_FIGO_LIVE = "https://api.figo.me/v3";
+    protected static final String API_FIGO_LIVE = "https://api.figo.me";
 	protected static final String API_FIGO_STAGE = "https://staging.figo.me";
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	private final String apiEndpoint;
