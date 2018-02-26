@@ -137,7 +137,7 @@
                             <goal>sign</goal>
                         </goals>
                         <configuration>
-                            <executable>gpg</executable>
+                            <executable>gpg2</executable>
                             <keyname>${env.CI_GPG_KEYNAME}</keyname>
                             <passphrase>${env.CI_GPG_PASSPHRASE}</passphrase>
                             <defaultKeyring>false</defaultKeyring>
