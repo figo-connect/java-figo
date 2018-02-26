@@ -137,12 +137,13 @@
                             <goal>sign</goal>
                         </goals>
                         <configuration>
-                            <executable>gpg2</executable>
+                            <executable>gpg</executable>
                             <keyname>${env.CI_GPG_KEYNAME}</keyname>
                             <passphrase>${env.CI_GPG_PASSPHRASE}</passphrase>
                             <defaultKeyring>false</defaultKeyring>
                             <publicKeyring>${project.basedir}/pubring.gpg</publicKeyring>
                             <secretKeyring>${project.basedir}/secring.gpg</secretKeyring>
+                            <useAgent>false<useAgent>
                         </configuration>
                     </execution>
                 </executions>
