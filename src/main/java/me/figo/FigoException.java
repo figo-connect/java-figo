@@ -22,8 +22,6 @@
 
 package me.figo;
 
-import com.google.gson.annotations.Expose;
-
 /***
  * Base Class for all figo Exceptions. It extends the normal Java exceptions with an error_code field, which carries the computer readable error reason.
  *
@@ -37,21 +35,10 @@ public class FigoException extends Exception {
     private final String error_description;
 
     public FigoException(String error_message, String error_description) {
-        super(error_message);
+    	super(error_message);
 
-        this.error_message = error_message;
-        this.error_description = error_description;
-    }
-
-    public FigoException(String error_message, String error_description, Throwable exc) {
-        super(error_message, exc);
-
-        this.error_message = error_message;
-        this.error_description = error_description;
-    }
-
-    public FigoException(ErrorResponse response) {
-        this(response.getError().getMessage(), response.getError().getDescription());
+		this.error_message = error_message;
+		this.error_description = error_description;
     }
 
     public String getErrorMessage() {
@@ -62,75 +49,4 @@ public class FigoException extends Exception {
         return error_description;
     }
 
-    public static class ErrorResponse {
-
-        @Expose
-        private ErrorObject error;
-
-        public ErrorResponse() {
-        }
-
-        public ErrorObject getError() {
-            return error;
-        }
-    }
-
-    public static class ErrorObject	{
-    	
-		@Expose
-		private String code;
-		
-		@Expose
-		private String name;
-		
-		@Expose
-		private String message;
-
-		@Expose
-		private String description;
-		
-		@Expose
-		private String group;
-
-    	public ErrorObject()	{
-    	}
-
-    	public String getMessage() {
-    		return message;
-    	}
-
-    	public String getDescription()	{
-    		return description;
-    	}
-
-		public String getCode() {
-			return code;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getGroup() {
-			return group;
-		}
-
-		@Override
-		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			builder.append("ErrorObject [");
-			if (code != null)
-				builder.append("code=").append(code).append(", ");
-			if (name != null)
-				builder.append("name=").append(name).append(", ");
-			if (message != null)
-				builder.append("message=").append(message).append(", ");
-			if (description != null)
-				builder.append("description=").append(description).append(", ");
-			if (group != null)
-				builder.append("group=").append(group);
-			builder.append("]");
-			return builder.toString();
-		}
-    }
 }

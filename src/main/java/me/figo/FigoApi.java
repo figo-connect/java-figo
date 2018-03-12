@@ -46,6 +46,7 @@ import com.google.gson.Gson;
 import me.figo.internal.FigoSocketFactory;
 import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
+import me.figo.models.ErrorResponse;
 
 /**
  *
@@ -187,19 +188,19 @@ public class FigoApi {
         if (code >= 200 && code < 300) {
             return handleResponse(connection.getInputStream(), typeOfT);
         } else {
-            FigoException.ErrorResponse errorResponse = handleResponse(connection.getErrorStream(), FigoException.ErrorResponse.class);
+            ErrorResponse errorResponse = handleResponse(connection.getErrorStream(), ErrorResponse.class);
 			logError(errorResponse, connection);
-			throw new FigoException(errorResponse);
+			throw new FigoApiException(errorResponse);
         }
     }
 
-	private void logError(FigoException.ErrorResponse errorResponse, HttpURLConnection connection) {
+	private void logError(ErrorResponse errorResponse, HttpURLConnection connection) {
 		String errorString = errorResponse.getError().toString();
 		if (connection != null)
 			errorString += " " + connection.getRequestMethod() + " " + connection.getURL().toString();
 		logger.log(Level.SEVERE, errorString);
 	}
-    
+
     /**
      * Handle the response of a request by decoding its JSON payload
      * 

@@ -1,3 +1,6 @@
+.idea
+sdk.iml
+
 *.class
 .settings/
 .classpath
