@@ -65,7 +65,7 @@ public class ErrorObject {
     if (description != null)
       builder.append("description=").append(description).append(", ");
     if (data != null)
-      builder.append("data=").append(data.toString());
+      builder.append("data=").append(data.toString()).append(", ");
     if (group != null)
       builder.append("group=").append(group);
     builder.append("]");

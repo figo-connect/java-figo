@@ -10,8 +10,7 @@ public class FigoApiException extends FigoException {
   private ErrorObject error;
 
   public FigoApiException(ErrorResponse response) {
-    super(response.getError().getMessage() != null ? response.getError().getMessage() : response.getError().getDescription(),
-            response.getError().getDescription());
+    super(response.getError().toString(), response.getError().getDescription());
     this.error = response.getError();
   }
 

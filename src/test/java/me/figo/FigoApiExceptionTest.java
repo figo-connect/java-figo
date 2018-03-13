@@ -20,10 +20,10 @@ public class FigoApiExceptionTest {
       "}";
 
     ErrorResponse resp = g.fromJson(errorResponse, ErrorResponse.class);
-    FigoException ex = new FigoApiException(resp);
+    FigoApiException ex = new FigoApiException(resp);
 
     Assert.assertNotNull(ex.getMessage());
-    Assert.assertEquals(ex.getMessage(), ex.getErrorDescription());
+    Assert.assertEquals(ex.getMessage(), ex.getError().toString());
   }
 
 }

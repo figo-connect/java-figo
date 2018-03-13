@@ -189,17 +189,9 @@ public class FigoApi {
             return handleResponse(connection.getInputStream(), typeOfT);
         } else {
             ErrorResponse errorResponse = handleResponse(connection.getErrorStream(), ErrorResponse.class);
-			logError(errorResponse, connection);
 			throw new FigoApiException(errorResponse);
         }
     }
-
-	private void logError(ErrorResponse errorResponse, HttpURLConnection connection) {
-		String errorString = errorResponse.getError().toString();
-		if (connection != null)
-			errorString += " " + connection.getRequestMethod() + " " + connection.getURL().toString();
-		logger.log(Level.SEVERE, errorString);
-	}
 
     /**
      * Handle the response of a request by decoding its JSON payload
