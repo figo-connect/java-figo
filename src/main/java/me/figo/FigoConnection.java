@@ -22,20 +22,15 @@
 
 package me.figo;
 
+import com.google.common.io.BaseEncoding;
+import me.figo.internal.*;
+import me.figo.models.BusinessProcess;
+import me.figo.models.ProcessToken;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-
-import com.google.common.io.BaseEncoding;
-
-import me.figo.internal.CreateUserRequest;
-import me.figo.internal.CreateUserResponse;
-import me.figo.internal.CredentialLoginRequest;
-import me.figo.internal.TokenRequest;
-import me.figo.internal.TokenResponse;
-import me.figo.models.BusinessProcess;
-import me.figo.models.ProcessToken;
 
 
 /**

@@ -153,7 +153,7 @@ public class SessionTest {
             fail(acc.getName());
         }
         catch(FigoException e)  {
-			assertEquals(null, e.getErrorMessage());
+			assertEquals("ErrorObject [code=1002, description=Not Found, data={}, group=client]", e.getErrorMessage());
             assertEquals("Not Found", e.getErrorDescription());
         }
     }
