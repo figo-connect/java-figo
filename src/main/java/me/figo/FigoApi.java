@@ -135,15 +135,14 @@ public class FigoApi {
         connection.setRequestMethod(method);
         connection.setRequestProperty("Authorization", authorization);
         connection.setRequestProperty("Accept", "application/json");
-        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("User-Agent", "Figo/Java 3.0.0");
 
         // add payload
         if (data != null) {
             String encodedData = createGson().toJson(data);
-
             connection.setDoOutput(true);
             connection.getOutputStream().write(encodedData.getBytes(Charset.forName("UTF-8")));
+            connection.setRequestProperty("Content-Type", "application/json");
         }
 
         return processResponse(connection, typeOfT);
