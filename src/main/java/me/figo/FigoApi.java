@@ -136,7 +136,7 @@ public class FigoApi {
         connection.setRequestProperty("Authorization", authorization);
         connection.setRequestProperty("Accept", "application/json");
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("User-Agent", "Figo/Java 3.0.0");
+        connection.setRequestProperty("User-Agent", "Figo/Java 3.1.0");
 
         // add payload
         if (data != null) {
