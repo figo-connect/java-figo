@@ -1,13 +1,16 @@
 package me.figo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
+
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -19,11 +22,7 @@ import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Account;
-import me.figo.models.BusinessProcess;
 import me.figo.models.LoginSettings;
-import me.figo.models.ProcessOption;
-import me.figo.models.ProcessStep;
-import me.figo.models.ProcessToken;
 import me.figo.models.Service;
 import me.figo.models.Transaction;
 
@@ -33,9 +32,8 @@ public class APITest {
 	private final static String USER = "testuser@example.com";
 	private final static String PASSWORD = "some_words";
 	
-	// Bank account informations needed
-	private final String ACCOUNT = "figo";
 	private final String BANKCODE = "90090042";
+	private final String ACCOUNT = "figo";
 	private final String PIN = "figo";
 	
 	private static String rand = null;
@@ -54,7 +52,6 @@ public class APITest {
 		assertTrue(response.length() == 19);
 		accessToken = APITest.fc.credentialLogin(rand + USER, PASSWORD);
 		assertTrue(accessToken.access_token instanceof String);	
-		
 	}
 
 	@AfterClass
@@ -119,6 +116,32 @@ public class APITest {
 		List<Transaction> transactions = fs.getTransactions();
 		fs.removeTransaction(transactions.get(0));
 		assertTrue(transactions.size() > fs.getTransactions().size());
-		fs.removeUser();
 	}
+	
+	@Test
+	public void testWrongCredentialsErrorMessage() throws FigoException, IOException	{
+		FigoSession fs = new FigoSession(accessToken.access_token);
+		
+		//Credentials must be a list of at least two string, just ["foo"] should fail
+		List<String> wrong_credentials = Arrays.asList("foo");
+		try {
+			TaskTokenResponse response= fs.setupNewAccount(null, "de", wrong_credentials, null);			
+		} catch (FigoException e){
+			assertEquals("Request body doesn't match input schema.", e.getErrorDescription());			
+		}
+	}
+	
+    @Test
+    public void testGetErrorMessage() throws IOException {
+        try {
+    			FigoSession fs = new FigoSession(accessToken.access_token);
+            Account acc = fs.getAccount("666");
+            fail(acc.getName());
+        }
+        catch(FigoException e)  {
+			assertEquals(null, e.getErrorMessage());
+            assertEquals("The requested object does not exist.", e.getErrorDescription());
+        }
+    }
 }
+ //(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks)
