@@ -28,7 +28,7 @@ import me.figo.models.Service;
 import me.figo.models.Transaction;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class WritingTest {
+public class APITest {
 
 	private final static String USER = "testuser@example.com";
 	private final static String PASSWORD = "some_words";
@@ -52,7 +52,7 @@ public class WritingTest {
 				"https://127.0.0.1/");
 		String response = fc.addUser("Test", rand + USER, PASSWORD, "de");
 		assertTrue(response.length() == 19);
-		accessToken = WritingTest.fc.credentialLogin(rand + USER, PASSWORD);
+		accessToken = APITest.fc.credentialLogin(rand + USER, PASSWORD);
 		assertTrue(accessToken.access_token instanceof String);	
 		
 	}
