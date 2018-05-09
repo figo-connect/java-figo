@@ -139,7 +139,6 @@ public class APITest {
             fail(acc.getName());
         }
         catch(FigoException e)  {
-			assertEquals(null, e.getErrorMessage());
             assertEquals("The requested object does not exist.", e.getErrorDescription());
         }
     }
