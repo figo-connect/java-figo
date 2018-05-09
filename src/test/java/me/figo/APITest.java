@@ -144,4 +144,3 @@ public class APITest {
         }
     }
 }
- //(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks)

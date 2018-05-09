@@ -51,7 +51,7 @@ public class FigoException extends Exception {
     }
 
     public FigoException(ErrorResponse response) {
-        this(response.getError().getMessage(), response.getError().getDescription());
+        this(response.getError().getCode(), response.getError().getDescription());
     }
 
     public String getErrorMessage() {
@@ -79,12 +79,6 @@ public class FigoException extends Exception {
     	
 		@Expose
 		private String code;
-		
-		@Expose
-		private String name;
-		
-		@Expose
-		private String message;
 
 		@Expose
 		private String description;
@@ -95,20 +89,12 @@ public class FigoException extends Exception {
     	public ErrorObject()	{
     	}
 
-    	public String getMessage() {
-    		return message;
-    	}
-
     	public String getDescription()	{
     		return description;
     	}
 
 		public String getCode() {
 			return code;
-		}
-
-		public String getName() {
-			return name;
 		}
 
 		public String getGroup() {
@@ -121,10 +107,6 @@ public class FigoException extends Exception {
 			builder.append("ErrorObject [");
 			if (code != null)
 				builder.append("code=").append(code).append(", ");
-			if (name != null)
-				builder.append("name=").append(name).append(", ");
-			if (message != null)
-				builder.append("message=").append(message).append(", ");
 			if (description != null)
 				builder.append("description=").append(description).append(", ");
 			if (group != null)
