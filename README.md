@@ -73,7 +73,7 @@ session.setTrustManager(trustManager);
 // now do your API calls
 ```
 
-To connect to the staging system of figo, you need to set the `FIGO_API_FINGERPRINTS` environment variable with the staging SHA256 fingerprint (`D0039EF08FBD48678671CE9DA554248163D7D94DEDF16A55F052C70AAB7BB89D`)
+To connect to the staging system of figo, you need to set the `FIGO_API_FINGERPRINTS` environment variable with the staging SHA256 fingerprint (`B752322B4BDCC974B165A79E8DF944E5A1622DD34327A7AAF5F7B7FAD9C31B0A`)
 
 
 A more detailed documentation of the figo connect API can be found at http://docs.figo.io/v3/.
