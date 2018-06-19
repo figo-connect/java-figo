@@ -369,6 +369,20 @@ public class FigoSession extends FigoApi {
     }
 
     /**
+     * Modify an account
+     *
+     * @param account 
+     *            the modified account to be saved
+     * @return Account object for the updated account returned by server
+     *
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+    public Account updateAccount(Account account) throws FigoException, IOException {
+        return this.queryApi("/rest/accounts/" + account.getAccountId(), account, "PUT", Account.class);
+    }
+
+    /**
      * Remove an account
      *
      * @param accountId
