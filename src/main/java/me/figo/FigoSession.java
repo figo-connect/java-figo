@@ -30,9 +30,30 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.internal.*;
-import me.figo.models.*;
+import me.figo.internal.ModifyStandingOrderRequest;
+import me.figo.internal.SetupAccountRequest;
+import me.figo.internal.SubmitPaymentRequest;
+import me.figo.internal.SyncTokenRequest;
+import me.figo.internal.TaskResponseType;
+import me.figo.internal.TaskStatusRequest;
+import me.figo.internal.TaskStatusResponse;
+import me.figo.internal.TaskTokenResponse;
+import me.figo.internal.VisitedRequest;
+import me.figo.models.Account;
+import me.figo.models.AccountBalance;
+import me.figo.models.Bank;
+import me.figo.models.BankLoginSettings;
+import me.figo.models.Notification;
+import me.figo.models.Payment;
+import me.figo.models.PaymentContainer;
+import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
+import me.figo.models.Security;
+import me.figo.models.Service;
+import me.figo.models.ServiceLoginSettings;
+import me.figo.models.StandingOrder;
+import me.figo.models.Transaction;
+import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -1414,14 +1435,6 @@ public class FigoSession extends FigoApi {
     @Override
     protected <T> T processResponse(HttpURLConnection connection, Type typeOfT) throws IOException, FigoException {
         // process response
-    	
-        try {
-			@SuppressWarnings("unused")
-			int code = connection.getResponseCode();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         return super.processResponse(connection, typeOfT);
     }
 }

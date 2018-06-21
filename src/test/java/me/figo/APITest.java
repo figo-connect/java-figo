@@ -11,7 +11,6 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -131,15 +130,14 @@ public class APITest {
 		}
 	}
 	
-    @Test
-    public void testGetErrorMessage() throws IOException {
-        try {
-    			FigoSession fs = new FigoSession(accessToken.access_token);
-            Account acc = fs.getAccount("666");
-            fail(acc.getName());
-        }
-        catch(FigoException e)  {
-            assertEquals("The requested object does not exist.", e.getErrorDescription());
-        }
-    }
+	@Test
+	public void testGetErrorMessage() throws IOException {
+		try {
+			FigoSession fs = new FigoSession(accessToken.access_token);
+			Account acc = fs.getAccount("666");
+			fail(acc.getName());
+		} catch (FigoException e) {
+			assertEquals("The requested object does not exist.", e.getErrorDescription());
+		}
+	}
 }
