@@ -28,15 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 
 public class GsonAdapter {
     public static Gson createGson() {
@@ -81,7 +73,30 @@ public class GsonAdapter {
 			}
 		};
 
+        JsonSerializer<SetupAccountCredentials> setupAccountCredentialsSerializer = new JsonSerializer<SetupAccountCredentials>() {
+            @Override
+            public JsonElement serialize(SetupAccountCredentials setupAccountCredentials, Type type, JsonSerializationContext jsonSerializationContext) {
+                if (setupAccountCredentials.getEncryptedCredentials() != null) {
+                    JsonObject root = new JsonObject();
+                    root.add("type", new JsonPrimitive("encrypted"));
+                    root.add("value", new JsonPrimitive(setupAccountCredentials.getEncryptedCredentials()));
+                    return root;
+                }
+
+                if (setupAccountCredentials.getCredentials() != null) {
+                    JsonArray root = new JsonArray();
+                    for(String credential: setupAccountCredentials.getCredentials()) {
+                        root.add(credential);
+                    }
+                    return root;
+                }
+
+                return null;
+            }
+        };
+
 		return new GsonBuilder().registerTypeAdapter(Date.class, serializer)
+				.registerTypeAdapter(SetupAccountCredentials.class, setupAccountCredentialsSerializer)
 				.registerTypeAdapter(Date.class, deserializer)
 				.registerTypeAdapter(BigDecimal.class, bigDecimalDeserializer).excludeFieldsWithoutExposeAnnotation()
 				.create();

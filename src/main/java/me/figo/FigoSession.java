@@ -261,6 +261,22 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
 
+    /**
+     *
+     * @param bankCode
+     * @param countryCode
+     * @param encryptedCredentials
+     * @param syncTasks
+     * @param savePin
+     * @param disable_first_sync
+     * @return
+     * @throws FigoException
+     * @throws IOException
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String encryptedCredentials, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
+        return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, encryptedCredentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
+    }
+
     @Deprecated
     /**
      * Setups an account an starts the initial syncronization directly
