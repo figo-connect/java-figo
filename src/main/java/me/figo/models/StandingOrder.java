@@ -22,13 +22,13 @@
 
 package me.figo.models;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.math.BigDecimal;
-
-import me.figo.internal.StandingOrderIntervalType;
 
 import com.google.gson.annotations.Expose;
+
+import me.figo.internal.StandingOrderIntervalType;
 
 /**
  * Object representing one bank standing order on a certain bank account of the user
@@ -114,6 +114,18 @@ public class StandingOrder {
      */
     @Expose(serialize = false)
     private StandingOrderIntervalType  interval;
+
+	/**
+	 * First execution date
+	 */
+	@Expose(serialize = false)
+	private Date first_execution_date;
+
+	/**
+	 * Last execution date
+	 */
+	@Expose(serialize = false)
+	private Date last_execution_date;
 
     public StandingOrder() {
     }
@@ -296,4 +308,20 @@ public class StandingOrder {
             return status;
         }
     }
+
+	public Date getFirst_execution_date() {
+		return first_execution_date;
+	}
+
+	public void setFirst_execution_date(Date first_execution_date) {
+		this.first_execution_date = first_execution_date;
+	}
+
+	public Date getLast_execution_date() {
+		return last_execution_date;
+	}
+
+	public void setLast_execution_date(Date last_execution_date) {
+		this.last_execution_date = last_execution_date;
+	}
 }
