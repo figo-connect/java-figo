@@ -115,17 +115,17 @@ public class StandingOrder {
     @Expose(serialize = false)
     private StandingOrderIntervalType  interval;
 
-	/**
-	 * First execution date
-	 */
-	@Expose(serialize = false)
-	private Date first_execution_date;
+    /**
+     * First execution date
+     */
+    @Expose(serialize = false)
+    private Date first_execution_date;
 
-	/**
-	 * Last execution date
-	 */
-	@Expose(serialize = false)
-	private Date last_execution_date;
+    /**
+     * Last execution date
+     */
+    @Expose(serialize = false)
+    private Date last_execution_date;
 
     public StandingOrder() {
     }
@@ -196,32 +196,32 @@ public class StandingOrder {
     /**
      * @return the creation date 
      */
-	public Date getCreationTimestamp() {
-		return creation_timestamp;
-	}
+    public Date getCreationTimestamp() {
+        return creation_timestamp;
+    }
 
 
-	/**
-	 * @return day of the month the standing order is executed
-	 */
-	public Integer getExecutionDay() {
-		return execution_day;
-	}
+    /**
+     * @return day of the month the standing order is executed
+     */
+    public Integer getExecutionDay() {
+        return execution_day;
+    }
 
-	/**
-	 * @return next Date the standing order gets executed
-	 */
-	public Date getNextExecutionDate() {
-		return next_execution_date;
-	}
+    /**
+     * @return next Date the standing order gets executed
+     */
+    public Date getNextExecutionDate() {
+        return next_execution_date;
+    }
 
-	/**
-	 * @return the monthly interval the standing order is executed
-	 * 
-	 */
-	public StandingOrderIntervalType getInterval() {
-		return interval;
-	}
+    /**
+     * @return the monthly interval the standing order is executed
+     * 
+     */
+    public StandingOrderIntervalType getInterval() {
+        return interval;
+    }
 
     public void setStandingOrderId(String standing_order_id) {
         this.standing_order_id = standing_order_id;
@@ -309,19 +309,19 @@ public class StandingOrder {
         }
     }
 
-	public Date getFirst_execution_date() {
-		return first_execution_date;
-	}
+    public Date getFirstExecutionDate() {
+        return first_execution_date;
+    }
 
-	public void setFirst_execution_date(Date first_execution_date) {
-		this.first_execution_date = first_execution_date;
-	}
+    public void setFirstExecutionDate(Date first_execution_date) {
+        this.first_execution_date = first_execution_date;
+    }
 
-	public Date getLast_execution_date() {
-		return last_execution_date;
-	}
+    public Date getLastExecutionDate() {
+        return last_execution_date;
+    }
 
-	public void setLast_execution_date(Date last_execution_date) {
-		this.last_execution_date = last_execution_date;
-	}
+    public void setLastExecutionDate(Date last_execution_date) {
+        this.last_execution_date = last_execution_date;
+    }
 }
