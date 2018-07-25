@@ -1,10 +1,12 @@
 package me.figo.internal;
 
 
-import com.google.gson.annotations.Expose;
-import me.figo.models.StandingOrder;
-
 import java.math.BigDecimal;
+import java.util.Date;
+
+import com.google.gson.annotations.Expose;
+
+import me.figo.models.StandingOrder;
 
 public class ModifyStandingOrderRequest {
 
@@ -12,39 +14,35 @@ public class ModifyStandingOrderRequest {
     private String standing_order_id;
 
     @Expose
-    private String name;
-
-    @Expose
-    private String account_number;
-
-    @Expose
-    private String bank_code;
-
-    @Expose
     private BigDecimal amount;
 
     @Expose
-    private String currency;
+    private String name;
 
     @Expose
     private String purpose;
 
     @Expose
+    private StandingOrderIntervalType interval;
+
+    @Expose
     private Integer execution_day;
 
     @Expose
-    private StandingOrderIntervalType interval;
+    private Date first_execution_date;
+
+    @Expose
+    private Date last_execution_date;
 
     public ModifyStandingOrderRequest(StandingOrder modifiedStandingOrder)  {
         this.setStandingOrderId(modifiedStandingOrder.getStandingOrderId());
-        this.setName(modifiedStandingOrder.getName());
-        this.setAccountNumber(modifiedStandingOrder.getAccountNumber());
-        this.setBankCode(modifiedStandingOrder.getBankCode());
         this.setAmount(modifiedStandingOrder.getAmount());
-        this.setCurrency(modifiedStandingOrder.getCurrency());
+        this.setName(modifiedStandingOrder.getName());
         this.setPurpose(modifiedStandingOrder.getPurposeText());
-        this.setExecutionDay(modifiedStandingOrder.getExecutionDay());
         this.setInterval(modifiedStandingOrder.getInterval());
+        this.setExecutionDay(modifiedStandingOrder.getExecutionDay());
+        this.setFirstExecutionDate(modifiedStandingOrder.getFirstExecutionDate());
+        this.setLastExecutionDate(modifiedStandingOrder.getLastExecutionDate());
     }
 
     public String getStandingOrderId() {
@@ -63,36 +61,12 @@ public class ModifyStandingOrderRequest {
         this.name = name;
     }
 
-    public String getAccountNumber() {
-        return account_number;
-    }
-
-    public void setAccountNumber(String account_number) {
-        this.account_number = account_number;
-    }
-
-    public String getBankCode() {
-        return bank_code;
-    }
-
-    public void setBankCode(String bank_code) {
-        this.bank_code = bank_code;
-    }
-
     public BigDecimal getAmount() {
         return amount;
     }
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getPurpose() {
@@ -117,5 +91,21 @@ public class ModifyStandingOrderRequest {
 
     public void setInterval(StandingOrderIntervalType interval) {
         this.interval = interval;
+    }
+
+    public Date getFirstExecutionDate() {
+        return first_execution_date;
+    }
+
+    public void setFirstExecutionDate(Date first_execution_date) {
+        this.first_execution_date = first_execution_date;
+    }
+
+    public Date getLastExecutionDate() {
+        return last_execution_date;
+    }
+
+    public void setLastExecutionDate(Date last_execution_date) {
+        this.last_execution_date = last_execution_date;
     }
 }
