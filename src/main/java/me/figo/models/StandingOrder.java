@@ -104,12 +104,6 @@ public class StandingOrder {
     private Integer  execution_day;
 
     /**
-     * Next Execution Date
-     */
-    @Expose(serialize = false)
-    private Date  next_execution_date;
-
-    /**
      * Execution interval
      */
     @Expose(serialize = false)
@@ -209,13 +203,6 @@ public class StandingOrder {
     }
 
     /**
-     * @return next Date the standing order gets executed
-     */
-    public Date getNextExecutionDate() {
-        return next_execution_date;
-    }
-
-    /**
      * @return the monthly interval the standing order is executed
      * 
      */
@@ -265,10 +252,6 @@ public class StandingOrder {
 
     public void setExecutionDay(Integer execution_day) {
         this.execution_day = execution_day;
-    }
-
-    public void setNextExecutionDate(Date next_execution_date) {
-        this.next_execution_date = next_execution_date;
     }
 
     public void setInterval(StandingOrderIntervalType interval) {
