@@ -918,12 +918,14 @@ public class FigoSession extends FigoApi {
      *
      * @param bankId
      *            ID of the bank whose pin should be removed
+     * @return 
      *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public void removeBankPin(String bankId) throws FigoException, IOException {
-        this.queryApi("/rest/banks/" + bankId + "/remove_pin", null, "POST", null);
+    public Bank removeBankPin(String bankId) throws FigoException, IOException {
+        Bank bankResponse = (Bank) this.queryApi("/rest/banks/" + bankId + "/remove_pin", null, "POST", null);
+        return bankResponse;
     }
 
     /**
@@ -935,8 +937,9 @@ public class FigoSession extends FigoApi {
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public void removeBankPin(Bank bank) throws FigoException, IOException {
-        removeBankPin(bank.getBankId());
+    public Bank removeBankPin(Bank bank) throws FigoException, IOException {
+    	Bank bankResponse = (Bank) removeBankPin(bank.getBankId());
+    	return bankResponse;
     }
 
     /**
