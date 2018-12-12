@@ -22,6 +22,8 @@
 
 package me.figo;
 
+import java.util.Map;
+
 import com.google.gson.annotations.Expose;
 
 /***
@@ -51,7 +53,7 @@ public class FigoException extends Exception {
     }
 
     public FigoException(ErrorResponse response) {
-        this(response.getError().getMessage(), response.getError().getDescription());
+        this(response.getError().getCode(), response.getError().getDescription());
     }
 
     public String getErrorMessage() {
@@ -76,22 +78,44 @@ public class FigoException extends Exception {
     }
 
     public static class ErrorObject	{
+    	
+		@Expose
+		private String code;
 
-    	@Expose
-    	private String message;
+		@Expose
+		private Map<String, String[]> data;
 
-    	@Expose
-    	private String description;
+		@Expose
+		private String description;
+		
+		@Expose
+		private String group;
 
     	public ErrorObject()	{
-    	}
-
-    	public String getMessage() {
-    		return message;
     	}
 
     	public String getDescription()	{
     		return description;
     	}
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getGroup() {
+			return group;
+		}
+
+		public Map<String, String[]> getData() {
+			return data;
+		}
+
+		@Override
+		public String toString() {
+			return "ErrorObject [" + (code != null ? "code=" + code + ", " : "")
+					+ (data != null ? "data=" + data + ", " : "")
+					+ (description != null ? "description=" + description + ", " : "")
+					+ (group != null ? "group=" + group : "") + "]";
+		}
     }
 }

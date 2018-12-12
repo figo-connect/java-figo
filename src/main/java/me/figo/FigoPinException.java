@@ -1,7 +1,6 @@
 package me.figo;
 
 import me.figo.internal.SetupAccountRequest;
-import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
 
 public class FigoPinException extends Exception {

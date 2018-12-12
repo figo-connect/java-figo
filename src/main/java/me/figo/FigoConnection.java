@@ -27,6 +27,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
+import com.google.common.io.BaseEncoding;
+
 import me.figo.internal.CreateUserRequest;
 import me.figo.internal.CreateUserResponse;
 import me.figo.internal.CredentialLoginRequest;
@@ -35,7 +37,6 @@ import me.figo.internal.TokenResponse;
 import me.figo.models.BusinessProcess;
 import me.figo.models.ProcessToken;
 
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Representing a not user-bound connection to the figo connect API. Its main purpose is to let user login via the OAuth2 API and/or create business processes.
@@ -102,9 +103,9 @@ public class FigoConnection extends FigoApi {
         this.redirectUri = redirectUri;
     }
 
-    private static String buildAuthorizationString(String clientId1, String clientSecret1) {
-        String authInfo = clientId1 + ":" + clientSecret1;
-        return "Basic " + Base64.encodeBase64String(authInfo.getBytes(Charset.forName("UTF-8")));
+    private static String buildAuthorizationString(String clientId, String clientSecret) {
+        String authInfo = clientId + ":" + clientSecret;
+		return "Basic " + BaseEncoding.base64().encode(authInfo.getBytes(Charset.forName("UTF-8")));
     }
 
     /**
@@ -170,7 +171,7 @@ public class FigoConnection extends FigoApi {
     /**
      * Login an user with his figo username and password credentials
      * @param username
-     * 			the user's figo username
+     * 			the user's figo username, this is the `email` from the `CreateUserRequest`
      * @param password
      * 			the user's figo password
      * @return Dictionary with the following keys: - `access_token` - the access token for data access. You can pass it into `FigoConnection.open_session` to
