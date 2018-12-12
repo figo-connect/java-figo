@@ -43,6 +43,7 @@ import me.figo.internal.VisitedRequest;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
+import me.figo.models.CatalogBank.CatalogBanksResponse;
 import me.figo.models.LoginSettings;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
@@ -184,6 +185,17 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
     }
 
+    /**
+     * Returns banks catalog by country
+     * @param countryCode ISO 3166-1
+     * @return CatalogBanksResponse containing a list of banks for that country
+     * @throws FigoException
+     * @throws IOException
+     */
+    public CatalogBanksResponse getCatalogBanks(String countryCode) throws FigoException, IOException	{
+    	return this.queryApi("/rest/catalog/banks/" + countryCode, null, "GET", CatalogBanksResponse.class);
+    }
+    
     @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
