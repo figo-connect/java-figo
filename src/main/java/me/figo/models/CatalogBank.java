@@ -54,11 +54,11 @@ public class CatalogBank {
 		return advice;
 	}
 
-	public String getBank_name() {
+	public String getBankName() {
 		return bank_name;
 	}
 
-	public String getBank_code() {
+	public String getBankCode() {
 		return bank_code;
 	}
 
@@ -95,7 +95,7 @@ public class CatalogBank {
 	 * @return the bank icon in other resolutions
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, String> getAddtionalIcons() {
+	public Map<String, String> getAdditionalIcons() {
 		if(icon!=null&&icon.size()>1){
 			return (LinkedTreeMap<String, String>) icon.get(1);
 		}

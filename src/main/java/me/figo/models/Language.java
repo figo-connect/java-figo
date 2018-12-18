@@ -19,10 +19,10 @@ public class Language {
 	@Expose
 	private String current_language;
 	
-	public List<String> getAvailable_languages() {
+	public List<String> getAvailableLanguages() {
 		return available_languages;
 	}
-	public String getCurrent_language() {
+	public String getCurrentLanguage() {
 		return current_language;
 	}
 }
