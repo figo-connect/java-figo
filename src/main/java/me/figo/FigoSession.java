@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.internal.AccountOrderRequest;
+import me.figo.models.*;
 import me.figo.internal.ModifyStandingOrderRequest;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.SubmitPaymentRequest;
@@ -43,17 +43,15 @@ import me.figo.internal.VisitedRequest;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
+
+import me.figo.models.CatalogBank.CatalogBanksResponse;
 import me.figo.models.LoginSettings;
+
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentContainer;
 import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
-import me.figo.models.Security;
-import me.figo.models.Service;
-import me.figo.models.StandingOrder;
-import me.figo.models.Transaction;
-import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -180,10 +178,25 @@ public class FigoSession extends FigoApi {
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public LoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
-    	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", LoginSettings.class);
+    public BankLoginSettings getLoginSettings(String countryCode, String bankCode) throws FigoException, IOException	{
+    	return this.queryApi("/rest/catalog/banks/" + countryCode + "/" + bankCode, null, "GET", BankLoginSettings.class);
     }
 
+    public ServiceLoginSettings getLoginSettingsForService(String countryCode, String serviceName) throws IOException, FigoException {
+        return this.queryApi("/rest/catalog/services/" + countryCode + "/" + serviceName, null, "GET", ServiceLoginSettings.class);
+    }
+
+    /**
+     * Returns banks catalog by country
+     * @param countryCode ISO 3166-1
+     * @return CatalogBanksResponse containing a list of banks for that country
+     * @throws FigoException
+     * @throws IOException
+     */
+    public CatalogBanksResponse getCatalogBanks(String countryCode) throws FigoException, IOException	{
+    	return this.queryApi("/rest/catalog/banks/" + countryCode, null, "GET", CatalogBanksResponse.class);
+    }
+    
     @Deprecated
     /**
      * Returns a TaskToken for a new account creation task
@@ -206,7 +219,7 @@ public class FigoSession extends FigoApi {
      * @param countryCode
      * @param loginName
      * @param pin
-     * @param
+     * @param syncTasks
      * @return
      *
      * @exception FigoException Base class for all figoExceptions
@@ -276,6 +289,22 @@ public class FigoSession extends FigoApi {
      */
     public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, List<String> credentials, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
+    }
+
+    /**
+     *
+     * @param bankCode
+     * @param countryCode
+     * @param encryptedCredentials
+     * @param syncTasks
+     * @param savePin
+     * @param disable_first_sync
+     * @return
+     * @throws FigoException
+     * @throws IOException
+     */
+    public TaskTokenResponse setupNewAccount(String bankCode, String countryCode, String encryptedCredentials, List<String> syncTasks, boolean savePin, boolean disable_first_sync) throws FigoException, IOException	{
+        return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, encryptedCredentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
 
     @Deprecated
@@ -367,7 +396,7 @@ public class FigoSession extends FigoApi {
     /**
      * Modify an account
      *
-     * @param account
+     * @param account 
      *            the modified account to be saved
      * @return Account object for the updated account returned by server
      *
@@ -462,18 +491,6 @@ public class FigoSession extends FigoApi {
      */
     public AccountBalance updateAccountBalance(Account account, AccountBalance accountBalance) throws FigoException, IOException {
         return updateAccountBalance(account.getAccountId(), accountBalance);
-    }
-
-    /**
-     * Set new bank account sorting order
-     * @param orderedList
-     * 			List of accounts in the new order
-     *
-     * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
-     */
-    public void setAccountOrder(List<Account> orderedList) throws FigoException, IOException	{
-    	this.queryApi("/rest/accounts", new AccountOrderRequest(orderedList), "PUT", null);
     }
 
     /**
@@ -746,7 +763,7 @@ public class FigoSession extends FigoApi {
     public TaskTokenResponse deleteStandingOrder(String standingOrderId) throws IOException, FigoException {
         return this.queryApi("/rest/standing_orders/" + standingOrderId, null, "DELETE", TaskTokenResponse.class);
     }
-
+    
     /**
      * Retrieves a specific security
      * @param accountId
@@ -916,12 +933,14 @@ public class FigoSession extends FigoApi {
      *
      * @param bankId
      *            ID of the bank whose pin should be removed
+     * @return 
      *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public void removeBankPin(String bankId) throws FigoException, IOException {
-        this.queryApi("/rest/banks/" + bankId + "/remove_pin", null, "POST", null);
+    public Bank removeBankPin(String bankId) throws FigoException, IOException {
+        Bank bankResponse = (Bank) this.queryApi("/rest/banks/" + bankId + "/remove_pin", null, "POST", null);
+        return bankResponse;
     }
 
     /**
@@ -933,8 +952,9 @@ public class FigoSession extends FigoApi {
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
-    public void removeBankPin(Bank bank) throws FigoException, IOException {
-        removeBankPin(bank.getBankId());
+    public Bank removeBankPin(Bank bank) throws FigoException, IOException {
+    	Bank bankResponse = (Bank) removeBankPin(bank.getBankId());
+    	return bankResponse;
     }
 
     /**
@@ -1225,7 +1245,7 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
      * @return the URL to be opened by the user
      *
@@ -1247,7 +1267,7 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
      * @return TaskTokenResponse
      *
@@ -1270,13 +1290,13 @@ public class FigoSession extends FigoApi {
      *            URI the user is redirected to after the process completes
      * @param syncTasks
      *            Tasks to sync while talking to the bank. Transactions are activated by default
-     * @Param accountIDs
+     * @param accountIds
      *            Accounts to sync
-     * @Param disableNotifications
+     * @param disableNotifications
      *            Disable notifications for this sync
-     * @Param autoContinue
+     * @param autoContinue
      *            Continue on error
-     * @Param savePin
+     * @param savePin
      *            Save the pin for further syncs
      * @return TaskTokenResponse
      *

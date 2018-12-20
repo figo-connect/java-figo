@@ -18,6 +18,9 @@ public class Service {
 	
 	@Expose
 	private HashMap<String, String> additional_icons;
+
+	@Expose
+	private List<Credential> credentials;
 	
 	public Service()	{
 		
@@ -54,7 +57,15 @@ public class Service {
 	public void setAdditional_icons(HashMap<String, String> additionalIcons) {
 		this.additional_icons = additionalIcons;
 	}
-	
+
+	public List<Credential> getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(List<Credential> credentials) {
+		this.credentials = credentials;
+	}
+
 	public static class ServiceResponse	{
 		
 		@Expose
