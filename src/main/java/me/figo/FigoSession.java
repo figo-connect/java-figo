@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.models.*;
 import me.figo.internal.ModifyStandingOrderRequest;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.SubmitPaymentRequest;
@@ -43,15 +42,19 @@ import me.figo.internal.VisitedRequest;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
-
+import me.figo.models.BankLoginSettings;
 import me.figo.models.CatalogBank.CatalogBanksResponse;
-import me.figo.models.LoginSettings;
-
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentContainer;
 import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
+import me.figo.models.Security;
+import me.figo.models.Service;
+import me.figo.models.ServiceLoginSettings;
+import me.figo.models.StandingOrder;
+import me.figo.models.Transaction;
+import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -1181,6 +1184,26 @@ public class FigoSession extends FigoApi {
      *            TAN scheme ID of user-selected TAN scheme
      * @param state
      *            Any kind of string that will be forwarded in the callback response message
+     * @param tokenOnly
+     *            whether a complete URL or only the task token should be returned
+     * @return the URL to be opened by the user for the TAN process or the task token only (depending on param tokenOnly)
+     *
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+    public String submitPayment(Payment payment, String tanSchemeId, String state, boolean tokenOnly) throws FigoException, IOException {
+    	return submitPayment(payment, tanSchemeId, state, null, tokenOnly);
+    }
+    
+    /**
+     * Submit payment to bank server
+     *
+     * @param payment
+     *            payment to be submitted
+     * @param tanSchemeId
+     *            TAN scheme ID of user-selected TAN scheme
+     * @param state
+     *            Any kind of string that will be forwarded in the callback response message
      * @param redirectUri
      *            At the end of the submission process a response will be sent to this callback URL
      * @return the URL to be opened by the user for the TAN process
@@ -1189,10 +1212,42 @@ public class FigoSession extends FigoApi {
      * @exception IOException IOException
      */
     public String submitPayment(Payment payment, String tanSchemeId, String state, String redirectUri) throws FigoException, IOException {
-        TaskTokenResponse response = this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments/" + payment.getPaymentId() + "/submit",
-                new SubmitPaymentRequest(tanSchemeId, state, redirectUri), "POST", TaskTokenResponse.class);
+        TaskTokenResponse response = submitPaymentApiCall(payment, tanSchemeId, state, redirectUri);
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
+
+    /**
+     * Submit payment to bank server
+     *
+     * @param payment
+     *            payment to be submitted
+     * @param tanSchemeId
+     *            TAN scheme ID of user-selected TAN scheme
+     * @param state
+     *            Any kind of string that will be forwarded in the callback response message
+     * @param redirectUri
+     *            At the end of the submission process a response will be sent to this callback URL
+     * @param tokenOnly
+     *            whether a complete URL or only the task token should be returned
+     * @return the URL to be opened by the user for the TAN process or the task token only (depending on param tokenOnly)
+     *
+     * @exception FigoException Base class for all figoExceptions
+     * @exception IOException IOException
+     */
+    public String submitPayment(Payment payment, String tanSchemeId, String state, String redirectUri, boolean tokenOnly) throws FigoException, IOException {
+    	TaskTokenResponse response = submitPaymentApiCall(payment, tanSchemeId, state, redirectUri);
+    	if(tokenOnly)
+    		return response.task_token;
+    	else
+    		return getApiEndpoint() + "/task/start?id=" + response.task_token;
+    }
+    
+	private TaskTokenResponse submitPaymentApiCall(Payment payment, String tanSchemeId, String state,
+			String redirectUri) throws IOException, FigoException {
+		TaskTokenResponse response = this.queryApi("/rest/accounts/" + payment.getAccountId() + "/payments/" + payment.getPaymentId() + "/submit",
+                new SubmitPaymentRequest(tanSchemeId, state, redirectUri), "POST", TaskTokenResponse.class);
+		return response;
+	}
 
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
