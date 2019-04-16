@@ -29,11 +29,9 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * Use this implementation if you don't want to do certificate pinning
- * WARNING: Do not implement this in production code you are ever going to use on a network you do not entirely trust. 
- *
  */
 public class FakeTrustManager implements X509TrustManager {
-    
+
     @Override
     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
         return null;
