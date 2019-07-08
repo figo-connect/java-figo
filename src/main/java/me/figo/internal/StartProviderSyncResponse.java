@@ -4,11 +4,14 @@ import java.util.Date;
 
 import com.google.gson.annotations.Expose;
 
+import me.figo.models.ChallengeV4;
+
 public class StartProviderSyncResponse {
 
 	@Expose
 	public String id;
 
+	// @TODO maybe introduce enum here
 	@Expose
 	public String status;
 
@@ -22,7 +25,7 @@ public class StartProviderSyncResponse {
 	public Date ended_at;
 
 	@Expose
-	public Object challenge;
+	public ChallengeV4 challenge;
 
 	@Expose
 	public Object error;
@@ -71,7 +74,7 @@ public class StartProviderSyncResponse {
 		return challenge;
 	}
 
-	public void setChallenge(Object challenge) {
+	public void setChallenge(ChallengeV4 challenge) {
 		this.challenge = challenge;
 	}
 
