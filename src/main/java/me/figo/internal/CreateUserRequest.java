@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
  */
 public class CreateUserRequest {
     @Expose
-	private String full_name;
+	private String name;
 
     @Expose
     private String  email;
@@ -19,18 +19,18 @@ public class CreateUserRequest {
     private String  language;
 
     public CreateUserRequest(String name, String email, String password, String language) {
-		this.full_name = name;
+		this.name = name;
         this.email = email;
         this.password = password;
         this.language = language;
     }
 
 	public String getName() {
-		return full_name;
+		return name;
 	}
 
 	public void setName(String name) {
-		this.full_name = name;
+		this.name = name;
 	}
 
 	public String getEmail() {
