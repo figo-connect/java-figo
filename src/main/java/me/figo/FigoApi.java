@@ -190,7 +190,7 @@ public class FigoApi {
     }
 
 	private void logError(FigoException.ErrorResponse errorResponse, HttpURLConnection connection) {
-		String errorString = errorResponse.getError().toString();
+		String errorString = (errorResponse!=null&&errorResponse.getError()!=null)?errorResponse.getError().toString():"";
 		if (connection != null)
 			errorString += " " + connection.getRequestMethod() + " " + connection.getURL().toString();
 		logger.log(Level.SEVERE, errorString);

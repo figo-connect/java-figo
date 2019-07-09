@@ -58,6 +58,8 @@ public class APITestV4 {
 		assertTrue(response.length() == 0);
 		accessToken = APITestV4.fc.credentialLogin(rand + USER, PASSWORD);
 		assertTrue(accessToken.access_token instanceof String);
+		Object catalog = fc.getCatalog();
+		assertNotNull(catalog);
 	}
 
 	@AfterClass
