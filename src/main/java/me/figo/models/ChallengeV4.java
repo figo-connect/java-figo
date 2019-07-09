@@ -1,6 +1,7 @@
 package me.figo.models;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
@@ -88,4 +89,14 @@ public class ChallengeV4 {
 		return version;
 	}
 	
+	public static class ChallengesResponse {
+
+		@Expose
+		public List<ChallengeV4> challenges;
+
+		public List<ChallengeV4> getChallenges() {
+			return challenges;
+		}
+
+	}
 }

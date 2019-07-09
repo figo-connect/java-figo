@@ -7,6 +7,14 @@ import com.google.gson.annotations.Expose;
 
 public class Consent {
 
+	public Consent(boolean recurring, int period, List<String> scopes, Date expires_at) {
+		super();
+		this.recurring = recurring;
+		this.period = period;
+		this.scopes = scopes;
+		this.expires_at = expires_at;
+	}
+
 	@Expose
 	boolean recurring;
 

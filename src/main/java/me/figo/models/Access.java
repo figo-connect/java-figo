@@ -30,12 +30,12 @@ public class Access {
 		this.id = id;
 	}
 
-	public String getAccess_method_id() {
+	public String getAccessMethodId() {
 		return access_method_id;
 	}
 
-	public void setAccess_method_id(String access_method_id) {
-		this.access_method_id = access_method_id;
+	public void setAccessMethodId(String accessMethodId) {
+		this.access_method_id = accessMethodId;
 	}
 
 	public boolean isSave_credentials() {
@@ -54,12 +54,12 @@ public class Access {
 		this.consent = consent;
 	}
 
-	public Date getCreated_at() {
+	public Date getCreatedAt() {
 		return created_at;
 	}
 
-	public void setCreated_at(Date created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Date createdAt) {
+		this.created_at = createdAt;
 	}
 
 	public Access() {

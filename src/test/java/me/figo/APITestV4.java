@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -18,12 +19,15 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import me.figo.internal.Credentials;
 import me.figo.internal.StartProviderSyncResponse;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Access;
 import me.figo.models.Account;
+import me.figo.models.ChallengeV4;
+import me.figo.models.Consent;
 import me.figo.models.LoginSettings;
 import me.figo.models.Service;
 import me.figo.models.Transaction;
@@ -53,7 +57,7 @@ public class APITestV4 {
 		String response = fc.addUser("Test", rand + USER, PASSWORD, "de");
 		assertTrue(response.length() == 0);
 		accessToken = APITestV4.fc.credentialLogin(rand + USER, PASSWORD);
-		assertTrue(accessToken.access_token instanceof String);	
+		assertTrue(accessToken.access_token instanceof String);
 	}
 
 	@AfterClass
@@ -63,16 +67,40 @@ public class APITestV4 {
 	}
 	
 	@Test
+	public void test_getVersion() throws FigoException, IOException {
+		FigoSession fs = new FigoSession(accessToken.access_token);
+		Object version = fs.getVersion();
+		assertNotNull(version);
+	}
+
+	@Test
 	public void test_getAccesses() throws FigoException, IOException {
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		List<Access> accesses = fs.getAccesses();
 		assertTrue(accesses.size() >= 2);
-		String id = accesses.get(0).getId();
-		Access access = fs.getAccess(id);
+		String accessId = accesses.get(0).getId();
+		Access access = fs.getAccess(accessId);
 		assertNotNull(access);
-		StartProviderSyncResponse startProviderSync = fs.startProviderSync(id, "4711", "http://localhost", false, false,
+		StartProviderSyncResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
+				false,
 				"foo", "bar");
 		assertNotNull(startProviderSync);
+		String syncId = startProviderSync.getId();
+		List<ChallengeV4> syncChallenges = fs.getSyncChallenges(accessId, syncId);
+		assertTrue(syncChallenges.size() > 0);
+		ChallengeV4 challenge = syncChallenges.get(0);
+		String accessMethodId = access.getAccessMethodId();
+		// ChallengeV4 syncChallenge = fs.getSyncChallenge(accessId, syncId,
+		// challenge.getId().toString());
+		// assertNotNull(syncChallenge);
+		// fs.solveSyncChallenge(accessId, syncId, challenge.getId().toString(),
+		// accessMethodId);
+		Consent consent = new Consent(false, 1, Arrays.asList(new String[] { "ACCOUNTS", "BALANCES" }), new Date());
+		Credentials credentials = new Credentials("foo", "bar");
+		Access access2 = fs.addProviderAccess(accessMethodId, "account1", "EUR", false, credentials, consent);
+		assertNotNull(access2);
+		Object accessWithRemovePin = fs.removeStoredPin(accessId);
+		assertNotNull(accessWithRemovePin);
 	}
 
 	public void test_getSupportedPaymentServices() throws FigoException, IOException	{
