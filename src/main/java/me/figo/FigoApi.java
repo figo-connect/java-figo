@@ -42,6 +42,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import me.figo.internal.FakeTrustManager;
 import me.figo.internal.FigoSocketFactory;
@@ -217,7 +218,16 @@ public class FigoApi {
         s.close();
 
         // decode JSON payload
-        return createGson().fromJson(body, typeOfT);
+        T decodedJson;
+		try {
+			decodedJson = createGson().fromJson(body, typeOfT);
+			return decodedJson;
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.log(Level.SEVERE, body);
+			throw e;
+		}
     }
 
     /**

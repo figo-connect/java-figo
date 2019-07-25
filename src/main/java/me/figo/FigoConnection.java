@@ -210,6 +210,18 @@ public class FigoConnection extends FigoApi {
     	CatalogBanksResponse response = this.queryApi("/catalog", null, "GET", CatalogBanksResponse.class);
 		return response.getBanks();
     }
+    
+    /**
+     * List complete catalog (client_auth)
+     * @param countryCode ISO 3166-1
+     * @return CatalogBanksResponse containing a list of banks for that country
+     * @throws FigoException
+     * @throws IOException
+     */
+    public Object getCatalog(String country, String q) throws FigoException, IOException	{
+    	CatalogBanksResponse response = this.queryApi("/catalog?country="+country+"&q="+q, null, "GET", CatalogBanksResponse.class);
+    	return response.getBanks();
+    }
     /**
      * Create a new figo Account
      *
