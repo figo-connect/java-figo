@@ -1,7 +1,7 @@
 java-figo [![Build Status](https://travis-ci.org/figo-connect/java-figo.png)](https://travis-ci.org/figo-connect/java-figo)
 ===========
 
-Java bindings for the figo connect API. Find more detailed API docss at  http://docs.figo.io/v3
+Java bindings for the figo connect API. Find more detailed docs at [API V4](http://psd2-docs-preview.figo.io/index.html)
 
 Simply add to your pom.xml:
 
@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>3.2.0</version>
+        <version>4.0.0</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ session.setProxy(proxy);
 // now do your API calls
 ```
 
-A more detailed documentation of the figo connect API can be found at http://docs.figo.io/v3/.
+A more detailed documentation of the figo connect API can be found at [API V4](http://psd2-docs-preview.figo.io/index.html)
 
 Demos
 -----

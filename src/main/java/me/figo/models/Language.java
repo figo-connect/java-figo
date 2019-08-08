@@ -14,15 +14,15 @@ import com.google.gson.annotations.Expose;
 public class Language {
 
 	@Expose
-	private List<String> available_languages;
+	private List<String> available;
 
 	@Expose
-	private String current_language;
+	private String current;
 	
-	public List<String> getAvailableLanguages() {
-		return available_languages;
+	public List<String> getAvailable() {
+		return available;
 	}
-	public String getCurrentLanguage() {
-		return current_language;
+	public String getCurrent() {
+		return current;
 	}
 }

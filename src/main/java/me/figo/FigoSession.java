@@ -30,28 +30,42 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import me.figo.models.*;
+import com.google.gson.reflect.TypeToken;
+
+import me.figo.internal.AccountIdentifier;
+import me.figo.internal.AddProviderAccessRequest;
+import me.figo.internal.Credentials;
 import me.figo.internal.ModifyStandingOrderRequest;
 import me.figo.internal.SetupAccountRequest;
+import me.figo.internal.StartProviderSyncRequest;
+import me.figo.internal.StartProviderSyncResponse;
 import me.figo.internal.SubmitPaymentRequest;
+import me.figo.internal.SyncChallengeRequest;
 import me.figo.internal.SyncTokenRequest;
 import me.figo.internal.TaskResponseType;
 import me.figo.internal.TaskStatusRequest;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.VisitedRequest;
+import me.figo.models.Access;
 import me.figo.models.Account;
 import me.figo.models.AccountBalance;
 import me.figo.models.Bank;
-
+import me.figo.models.BankLoginSettings;
 import me.figo.models.CatalogBank.CatalogBanksResponse;
-import me.figo.models.LoginSettings;
-
+import me.figo.models.ChallengeV4;
+import me.figo.models.Consent;
 import me.figo.models.Notification;
 import me.figo.models.Payment;
 import me.figo.models.PaymentContainer;
 import me.figo.models.PaymentProposal;
 import me.figo.models.PaymentProposal.PaymentProposalResponse;
+import me.figo.models.Security;
+import me.figo.models.Service;
+import me.figo.models.ServiceLoginSettings;
+import me.figo.models.StandingOrder;
+import me.figo.models.Transaction;
+import me.figo.models.User;
 
 /**
  * Main entry point to the data access-part of the figo connect java library.
@@ -143,7 +157,191 @@ public class FigoSession extends FigoApi {
         this.queryApi("/rest/user", null, "DELETE", null);
     }
 
-    /**
+	/**
+	 * Shows the current version and the environment of the figo API.
+	 * 
+	 * @return version object containing information about version and environment
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public Object getVersion() throws FigoException, IOException {
+		Object response = this.queryApi("/version", null, "GET", Object.class);
+		return response;
+	}
+
+	/**
+	 * add provider access
+	 * 
+	 * @param access_method_id
+	 * @param account_identifier
+	 * @param save_credentials
+	 * @param credentials
+	 * @param consent
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public Access addProviderAccess(String access_method_id, String account_identifier_id,
+			String account_identifier_currency, boolean save_credentials,
+			Credentials credentials, Consent consent) throws FigoException, IOException {
+		AccountIdentifier account_identifier = new AccountIdentifier(account_identifier_id,
+				account_identifier_currency);
+		AddProviderAccessRequest apar = new AddProviderAccessRequest(access_method_id, account_identifier,
+				save_credentials, credentials, consent);
+		Access response = this.queryApi("/rest/accesses", apar, "POST", Access.class);
+		return response;
+	}
+
+	/**
+	 * Returns a list all connected provider accesses of user country
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public List<Access> getAccesses() throws FigoException, IOException {
+		Access.AccessResponse response = this.queryApi("/rest/accesses", null, "GET", Access.AccessResponse.class);
+		return response.getAccesses();
+	}
+
+	/**
+	 * Retrieve the details of a specific provider access identified by its ID.
+	 * country
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public Access getAccess(String id) throws FigoException, IOException {
+		Access response = this.queryApi("/rest/accesses/" + id, null, "GET", Access.class);
+		return response;
+	}
+
+	/**
+	 * Remove a PIN from the API backend that has been previously stored for
+	 * automatic synchronization or ease of use.
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public Object removeStoredPin(String id) throws FigoException, IOException {
+		Object response = this.queryApi("/rest/accesses/" + id + "/remove_pin", null, "POST", Object.class);
+		return response;
+	}
+
+	/**
+	 * Retrieve the details of a specific provider access identified by its ID.
+	 * country
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public Access getAccessSync(String accessId, String syncId) throws FigoException, IOException {
+		Access response = this.queryApi("/rest/accesses/" + accessId + "/syncs/" + syncId, null, "GET", Access.class);
+		return response;
+	}
+
+	/**
+	 * list sync challenges
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public List<ChallengeV4> getSyncChallenges(String accessId, String syncId) throws FigoException, IOException {
+		Type typeOfT = new TypeToken<List<ChallengeV4>>() {
+		}.getType();
+		List<ChallengeV4> response = this.queryApi("/rest/accesses/" + accessId + "/syncs/" + syncId + "/challenges",
+				null, "GET", typeOfT);
+		return response;
+	}
+
+	/**
+	 * get sync challenge
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public ChallengeV4 getSyncChallenge(String accessId, String syncId, String challengeId)
+			throws FigoException, IOException {
+		ChallengeV4 response = this.queryApi(
+				"/rest/accesses/" + accessId + "/syncs/" + syncId + "/challenges/" + challengeId,
+				null, "GET",
+				ChallengeV4.class);
+		return response;
+	}
+
+	/**
+	 * solve sync challenge
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public ChallengeV4 solveSyncChallenge(String accessId, String syncId, String challengeId, String methodId)
+			throws FigoException, IOException {
+		ChallengeV4 response = this.queryApi(
+				"/rest/accesses/" + accessId + "/syncs/" + syncId + "/challenges/" + challengeId + "/response",
+				new SyncChallengeRequest(methodId),
+				"POST", ChallengeV4.class);
+		return response;
+	}
+
+	/**
+	 * Retrieve the details of a specific provider access identified by its ID.
+	 * country
+	 * 
+	 * @return List of Accesses
+	 *
+	 * @exception FigoException
+	 *                              Base class for all figoExceptions
+	 * @exception IOException
+	 *                              IOException
+	 */
+	public StartProviderSyncResponse startProviderSync(String accessId, String state, String redirect_uri,
+			boolean disable_notifications,
+			boolean save_credentials, String loginId, String password) throws FigoException, IOException {
+
+		Credentials credentials = new Credentials(loginId, password);
+		StartProviderSyncRequest request = new StartProviderSyncRequest(state, redirect_uri, disable_notifications,
+				save_credentials, credentials);
+		StartProviderSyncResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs", request, "POST",
+				StartProviderSyncResponse.class);
+		return response;
+	}
+
+	/**
      * Returns a list of all supported credit cards and payment services for a country
      * @param countryCode
      * @return List of Services
@@ -213,6 +411,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin), "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      * Returns a TaskToken for a new account creation task
      * @param bankCode
@@ -229,6 +428,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, loginName, pin, syncTasks), "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      *
      * @param bankCode
@@ -261,6 +461,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, null), "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      * Returns a TaskToken for a new account creation task
      * @param bankCode
@@ -275,6 +476,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks), "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      *
      * @param bankCode
@@ -291,6 +493,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/rest/accounts", new SetupAccountRequest(bankCode, countryCode, credentials, syncTasks, savePin, disable_first_sync), "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      *
      * @param bankCode
@@ -324,6 +527,7 @@ public class FigoSession extends FigoApi {
     	return this.setupAndSyncAccount(bankCode, countryCode, loginName, pin, null);
     }
 
+	@Deprecated
     /**
      * Setups an account an starts the initial syncronization directly
      * @param bankCode
@@ -351,6 +555,7 @@ public class FigoSession extends FigoApi {
     	return taskStatus;
     }
 
+	@Deprecated
     /**
      * Exception handler for a wrong pin. Starts a new task for account creation with a new pin
      * @param exception
@@ -886,6 +1091,7 @@ public class FigoSession extends FigoApi {
     	this.queryApi("/rest/accounts/" + accountId + "/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
 
+	@Deprecated
     /**
      * Get bank
      *
@@ -900,6 +1106,7 @@ public class FigoSession extends FigoApi {
         return this.queryApi("/rest/banks/" + bankId, null, "GET", Bank.class);
     }
 
+	@Deprecated
     /**
      * Get Bank for account
      *
@@ -1194,6 +1401,7 @@ public class FigoSession extends FigoApi {
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
 
+	@Deprecated
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
      * the process is finished, the user is redirected to the provided URL.
@@ -1213,6 +1421,7 @@ public class FigoSession extends FigoApi {
         return getApiEndpoint() + "/task/start?id=" + response.task_token;
     }
 
+	@Deprecated
     /**
      * URL to trigger a synchronization. The user should open this URL in a web browser to synchronize his/her accounts with the respective bank servers. When
      * the process is finished, the user is redirected to the provided URL.
@@ -1321,6 +1530,7 @@ public class FigoSession extends FigoApi {
         return this.queryApi("/rest/sync", syncTokenRequest, "POST", TaskTokenResponse.class);
     }
 
+	@Deprecated
     /**
      * Get the current status of a Task
      * @param tokenResponse
@@ -1334,6 +1544,7 @@ public class FigoSession extends FigoApi {
     	return this.queryApi("/task/progress?id=" + tokenResponse.task_token, new TaskStatusRequest(tokenResponse), "POST", TaskStatusResponse.class);
     }
 
+	@Deprecated
     /**
      * Get the current status of a Task by id
      * @param tokenId
