@@ -42,17 +42,18 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
+import me.figo.internal.FakeTrustManager;
 import me.figo.internal.FigoSocketFactory;
-import me.figo.internal.FigoTrustManager;
 import me.figo.internal.GsonAdapter;
 
 /**
  *
- * 
+ *
  */
 public class FigoApi {
-    
+
     protected static final String API_FIGO_LIVE = "https://api.figo.me";
 	protected static final String API_FIGO_STAGE = "https://staging.figo.me";
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -61,9 +62,9 @@ public class FigoApi {
     private int timeout;
     private X509TrustManager trustManager;
     private Proxy proxy;
-    
+
     /**
-     * 
+     *
      * @param apiEndpoint
      * @param authorization
      * @param timeout
@@ -72,13 +73,13 @@ public class FigoApi {
         this.apiEndpoint = apiEndpoint;
         this.authorization = authorization;
         this.timeout = timeout;
-        this.trustManager = new FigoTrustManager();
+        this.trustManager = new FakeTrustManager();
     }
 
     public FigoApi(String authorization, int timeout)   {
         this.authorization = authorization;
         this.timeout = timeout;
-        this.trustManager = new FigoTrustManager();
+        this.trustManager = new FakeTrustManager();
         String endpointEnv = System.getenv("FIGO_API_ENDPOINT");
         if (endpointEnv != null)  {
             this.apiEndpoint = endpointEnv;
@@ -87,19 +88,15 @@ public class FigoApi {
             this.apiEndpoint = API_FIGO_LIVE;
         }
     }
-    
-    public void setTrustManager(X509TrustManager trustManager)	{
-    	this.trustManager = trustManager;
-    }
-    
+
     public void setProxy(Proxy proxy)	{
     	this.proxy = proxy;
     }
-    
-    
+
+
     /**
      * Helper method for making a OAuth2-compliant API call
-     * 
+     *
      * @param path
      *            path on the server to call
      * @param data
@@ -111,7 +108,7 @@ public class FigoApi {
      * @param <T>
      *            Type of expected response
      * @return the parsed result of the request
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -126,10 +123,10 @@ public class FigoApi {
         else	{
         	connection = (HttpURLConnection) url.openConnection();
         }
-        
+
         connection.setConnectTimeout(timeout);
         connection.setReadTimeout(timeout);
-        
+
         setupTrustManager(connection, trustManager);
 
         connection.setRequestMethod(method);
@@ -152,7 +149,7 @@ public class FigoApi {
     /**
      * Method to configure TrustManager.
      * @param connection
-     * 
+     *
      * @exception IOException IOException
      */
     protected void setupTrustManager(HttpURLConnection connection, X509TrustManager trustManager) throws IOException {
@@ -177,7 +174,7 @@ public class FigoApi {
      * @param connection
      * @param typeOfT
      * @return
-     * 
+     *
      * @exception FigoException Base class for all figoExceptions
      * @exception IOException IOException
      */
@@ -194,15 +191,15 @@ public class FigoApi {
     }
 
 	private void logError(FigoException.ErrorResponse errorResponse, HttpURLConnection connection) {
-		String errorString = errorResponse.getError().toString();
+		String errorString = (errorResponse!=null&&errorResponse.getError()!=null)?errorResponse.getError().toString():"";
 		if (connection != null)
 			errorString += " " + connection.getRequestMethod() + " " + connection.getURL().toString();
 		logger.log(Level.SEVERE, errorString);
 	}
-    
+
     /**
      * Handle the response of a request by decoding its JSON payload
-     * 
+     *
      * @param stream
      *            Stream containing the JSON data
      * @param typeOfT
@@ -221,12 +218,21 @@ public class FigoApi {
         s.close();
 
         // decode JSON payload
-        return createGson().fromJson(body, typeOfT);
+        T decodedJson;
+		try {
+			decodedJson = createGson().fromJson(body, typeOfT);
+			return decodedJson;
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.log(Level.SEVERE, body);
+			throw e;
+		}
     }
-    
+
     /**
      * Instantiate the GSON class. Meant to be overridden in order to provide custom Gson settings.
-     * 
+     *
      * @return GSON instance
      */
     protected Gson createGson() {
@@ -239,7 +245,7 @@ public class FigoApi {
 
     /**
      * The timeout used for queries.
-     * @return 
+     * @return
      */
     public int getTimeout() {
         return timeout;

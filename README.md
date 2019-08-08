@@ -1,7 +1,7 @@
 java-figo [![Build Status](https://travis-ci.org/figo-connect/java-figo.png)](https://travis-ci.org/figo-connect/java-figo)
 ===========
 
-Java bindings for the figo connect API. Find more detailed API docss at  http://docs.figo.io/v3
+Java bindings for the figo connect API. Find more detailed docs at [API V4](http://psd2-docs-preview.figo.io/index.html)
 
 Simply add to your pom.xml:
 
@@ -9,7 +9,7 @@ Simply add to your pom.xml:
 <dependency>
         <groupId>me.figo</groupId>
         <artifactId>sdk</artifactId>
-        <version>3.1.8</version>
+        <version>4.0.0</version>
 </dependency>
 ```
 
@@ -56,27 +56,7 @@ session.setProxy(proxy);
 // now do your API calls
 ```
 
-You can add valid SSL fingerprints by adding them to the `FIGO_API_FINGERPRINTS` environment variable. Fingerprints
-need to be added in HEX format without column delimiters. A column delimiter is used to indicate the next element in
-the list of fingerprints.
-
-
-To disable the SSL certificate pinning (not recommended) do the following:
-```java
-// first create the FigoSession object
-FigoSession session = new FigoSession("ASHWLIkouP2O6_bgA2wWReRhletgWKHYjLqDaqb0LFfamim9RjexTo22ujRIP_cjLiRiSyQXyt2kM1eXU2XLFZQ0Hro15HikJQT_eNeT_9XQ");
-
-// create FakeTrustManager and add it to your FigoConnection or FigoSession
-X509TrustManager trustManager = FakeTrustManager();
-session.setTrustManager(trustManager);
-
-// now do your API calls
-```
-
-To connect to the staging system of figo, you need to set the `FIGO_API_FINGERPRINTS` environment variable with the staging SHA256 fingerprint (`B752322B4BDCC974B165A79E8DF944E5A1622DD34327A7AAF5F7B7FAD9C31B0A`)
-
-
-A more detailed documentation of the figo connect API can be found at http://docs.figo.io/v3/.
+A more detailed documentation of the figo connect API can be found at [API V4](http://psd2-docs-preview.figo.io/index.html)
 
 Demos
 -----

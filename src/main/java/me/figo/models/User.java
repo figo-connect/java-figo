@@ -75,7 +75,7 @@ public class User {
      * Timestamp of figo Account registration
      */
     @Expose(serialize = false)
-    private Date                    join_date;
+	private Date joined_at;
 
     public User() {
     }
@@ -185,7 +185,7 @@ public class User {
     /**
      * @return the timestamp of figo Account registration
      */
-    public Date getJoinDate() {
-        return join_date;
+	public Date getJoinedAt() {
+		return joined_at;
     }
 }

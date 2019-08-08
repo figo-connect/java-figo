@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.internal.LinkedTreeMap;
 
 /**
  * object representing the response of a /catalog/banks/{country_code} request
@@ -21,7 +20,7 @@ public class CatalogBank {
 	private String bank_name;
 	
 	@Expose
-	private List<?> icon;
+	private Icon icon;
 	
 	@Expose
 	private Language language;
@@ -81,12 +80,37 @@ public class CatalogBank {
 
 	}
 
+	public static class Icon {
+		
+		@Expose
+		private Map<String,String> resolutions;
+		
+		@Expose
+		private String url;
+
+		public Map<String, String> getResolutions() {
+			return resolutions;
+		}
+
+		public void setResolutions(Map<String, String> resolutions) {
+			this.resolutions = resolutions;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
+	
 	/**
 	 * @return bank icon URL
 	 */
 	public String getIconUrl() {
-		if(icon!=null&&icon.size()>0){
-			return (String) icon.get(0);
+		if(icon!=null){
+			return getIcon().getUrl();
 		}
 		return "";
 	}
@@ -96,9 +120,13 @@ public class CatalogBank {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getAdditionalIcons() {
-		if(icon!=null&&icon.size()>1){
-			return (LinkedTreeMap<String, String>) icon.get(1);
+		if(icon!=null&&icon.getResolutions().size()>1){
+			return icon.getResolutions();
 		}
 		return null;
+	}
+
+	public Icon getIcon() {
+		return icon;
 	}
 }

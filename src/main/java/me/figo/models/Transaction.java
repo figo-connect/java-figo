@@ -87,13 +87,13 @@ public class Transaction {
      * Booking date
      */
     @Expose(serialize = false)
-    private Date    booking_date;
+	private Date booked_at;
 
     /**
      * Value date
      */
     @Expose(serialize = false)
-    private Date    value_date;
+	private Date settled_at;
 
     /**
      * Purpose text
@@ -226,15 +226,15 @@ public class Transaction {
     /**
      * @return the booking date
      */
-    public Date getBookingDate() {
-        return booking_date;
+	public Date getBookedAt() {
+		return booked_at;
     }
 
     /**
-     * @return the value date
-     */
-    public Date getValueDate() {
-        return value_date;
+	 * @return settled_at formerly the value date
+	 */
+	public Date getSettledAt() {
+		return settled_at;
     }
 
     /**
