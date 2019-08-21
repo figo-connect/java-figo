@@ -210,8 +210,10 @@ public class FigoSession extends FigoApi {
 	 *                              IOException
 	 */
 	public List<Access> getAccesses() throws FigoException, IOException {
-		Access.AccessResponse response = this.queryApi("/rest/accesses", null, "GET", Access.AccessResponse.class);
-		return response.getAccesses();
+		Type typeOfT = new TypeToken<List<Access>>() {
+		}.getType();
+		List<Access> response = this.queryApi("/rest/accesses", null, "GET", typeOfT);
+		return response;
 	}
 
 	/**

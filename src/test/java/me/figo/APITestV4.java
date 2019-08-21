@@ -26,6 +26,7 @@ import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.TokenResponse;
 import me.figo.models.Access;
 import me.figo.models.Account;
+import me.figo.models.CatalogBank;
 import me.figo.models.ChallengeV4;
 import me.figo.models.Consent;
 import me.figo.models.LoginSettings;
@@ -58,7 +59,7 @@ public class APITestV4 {
 		assertTrue(response.length() == 0);
 		accessToken = APITestV4.fc.credentialLogin(rand + USER, PASSWORD);
 		assertTrue(accessToken.access_token instanceof String);
-		Object catalog = fc.getCatalog("AT","666");
+		CatalogBank catalog = fc.getCatalog().get(0);
 		assertNotNull(catalog);
 	}
 
@@ -75,7 +76,6 @@ public class APITestV4 {
 		assertNotNull(version);
 	}
 
-	@Test
 	public void test_getAccesses() throws FigoException, IOException {
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		List<Access> accesses = fs.getAccesses();
