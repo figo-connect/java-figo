@@ -17,26 +17,32 @@ import com.google.gson.annotations.Expose;
 public class CatalogBank {
 
 	@Expose
-	private String bank_name;
+	private String id;
+	
+	@Expose
+	private String name;
 	
 	@Expose
 	private Icon icon;
 	
 	@Expose
+	private boolean supported;
+	
+	@Expose
+	private String country;
+	
+	@Expose
 	private Language language;
 
+	@Expose
+	private List<AccessMethod> access_methods;
+	
 	@Expose
 	private String bank_code;
 	
 	@Expose
 	private String bic;
 	
-	@Expose
-	private List<Credential> credentials;
-	
-	@Expose
-	private String advice;
-
 	public String getBic() {
 		return bic;
 	}
@@ -45,16 +51,8 @@ public class CatalogBank {
 		return language;
 	}
 
-	public List<Credential> getCredentials() {
-		return credentials;
-	}
-
-	public String getAdvice() {
-		return advice;
-	}
-
 	public String getBankName() {
-		return bank_name;
+		return name;
 	}
 
 	public String getBankCode() {
@@ -118,7 +116,6 @@ public class CatalogBank {
 	/**
 	 * @return the bank icon in other resolutions
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String, String> getAdditionalIcons() {
 		if(icon!=null&&icon.getResolutions().size()>1){
 			return icon.getResolutions();
@@ -128,5 +125,33 @@ public class CatalogBank {
 
 	public Icon getIcon() {
 		return icon;
+	}
+
+	public List<AccessMethod> getAccessMethods() {
+		return access_methods;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean isSupported() {
+		return supported;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public List<AccessMethod> getAccess_methods() {
+		return access_methods;
+	}
+
+	public String getBank_code() {
+		return bank_code;
 	}
 }

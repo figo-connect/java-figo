@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import com.google.common.io.BaseEncoding;
 
@@ -35,6 +36,7 @@ import me.figo.internal.CredentialLoginRequest;
 import me.figo.internal.TokenRequest;
 import me.figo.internal.TokenResponse;
 import me.figo.models.BusinessProcess;
+import me.figo.models.CatalogBank;
 import me.figo.models.CatalogBank.CatalogBanksResponse;
 import me.figo.models.ProcessToken;
 
@@ -201,12 +203,11 @@ public class FigoConnection extends FigoApi {
 
     /**
      * List complete catalog (client_auth)
-     * @param countryCode ISO 3166-1
      * @return CatalogBanksResponse containing a list of banks for that country
      * @throws FigoException
      * @throws IOException
      */
-    public Object getCatalog() throws FigoException, IOException	{
+    public List<CatalogBank> getCatalog() throws FigoException, IOException	{
     	CatalogBanksResponse response = this.queryApi("/catalog", null, "GET", CatalogBanksResponse.class);
 		return response.getBanks();
     }
