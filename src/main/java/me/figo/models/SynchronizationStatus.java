@@ -48,13 +48,13 @@ public class SynchronizationStatus {
      * Timestamp of last synchronization
      */
     @Expose(serialize = false)
-    private Date    sync_timestamp;
+    private Date    synced_at;
 
     /**
      * Timestamp of last successful synchronization
      */
     @Expose(serialize = false)
-    private Date    success_timestamp;
+    private Date    succeeded_at;
 
     public SynchronizationStatus() {
     }
@@ -73,17 +73,11 @@ public class SynchronizationStatus {
         return message;
     }
 
-    /**
-     * @return the timestamp of last synchronization
-     */
-    public Date getSyncTimestamp() {
-        return sync_timestamp;
-    }
+	public Date getSyncedAt() {
+		return synced_at;
+	}
 
-    /**
-     * @return the timestamp of last successful synchronization
-     */
-    public Date getSuccessTimestamp() {
-        return success_timestamp;
-    }
+	public Date getSucceededAt() {
+		return succeeded_at;
+	}
 }
