@@ -145,10 +145,6 @@ public class FigoConnection extends FigoApi {
      *         used to generate new access tokens, when the first one has expired. - `expires_in` - absolute time the access token expires
      */
     public TokenResponse convertAuthenticationCode(String authenticationCode) throws FigoException, IOException {
-        if (!authenticationCode.startsWith("O")) {
-            throw new FigoException("invalid_code", "Invalid authentication code");
-        }
-
         return this.queryApi("/auth/token", new TokenRequest(null, authenticationCode, this.redirectUri, "authorization_code"), "POST", TokenResponse.class);
     }
 
