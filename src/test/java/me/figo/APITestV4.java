@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -20,7 +19,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import me.figo.internal.Credentials;
-import me.figo.internal.StartProviderSyncResponse;
+import me.figo.internal.SyncStatusResponse;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
 import me.figo.internal.TokenResponse;
@@ -29,6 +28,7 @@ import me.figo.models.Account;
 import me.figo.models.CatalogBank;
 import me.figo.models.ChallengeV4;
 import me.figo.models.Consent;
+import me.figo.models.Consent.ConsentAccount;
 import me.figo.models.LoginSettings;
 import me.figo.models.Service;
 import me.figo.models.Transaction;
@@ -76,6 +76,7 @@ public class APITestV4 {
 		assertNotNull(version);
 	}
 
+//	@Test
 	public void test_getAccesses() throws FigoException, IOException {
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		List<Access> accesses = fs.getAccesses();
@@ -83,7 +84,7 @@ public class APITestV4 {
 		String accessId = accesses.get(0).getId();
 		Access access = fs.getAccess(accessId);
 		assertNotNull(access);
-		StartProviderSyncResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
+		SyncStatusResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
 				false,
 				"foo", "bar");
 		assertNotNull(startProviderSync);
@@ -97,7 +98,7 @@ public class APITestV4 {
 		// assertNotNull(syncChallenge);
 		// fs.solveSyncChallenge(accessId, syncId, challenge.getId().toString(),
 		// accessMethodId);
-		Consent consent = new Consent(false, 1, Arrays.asList(new String[] { "ACCOUNTS", "BALANCES" }), new Date());
+		Consent consent = new Consent(false, 1, Arrays.asList(new String[] { "ACCOUNTS", "BALANCES" }));
 		Credentials credentials = new Credentials("foo", "bar");
 		Access access2 = fs.addProviderAccess(accessMethodId, "account1", "EUR", false, credentials, consent);
 		assertNotNull(access2);
@@ -105,6 +106,31 @@ public class APITestV4 {
 		assertNotNull(accessWithRemovePin);
 	}
 
+	@Test
+	public void test_getSyncStatus() throws FigoException, IOException {
+		FigoSession fs = new FigoSession(accessToken.access_token);
+
+//		CatalogBank catalog = fc.getCatalog().get(0);
+//		List<AccessMethod> accessMethods = catalog.getAccessMethods();
+		String accessMethodId = "cb7bb077-d075-4fb5-aac9-5f73aa334165";
+		Consent consent = new Consent(false, 1, Arrays.asList(new String[] { "ACCOUNTS", "BALANCES" }));
+		List<ConsentAccount> accounts = consent.getAccounts();
+		accounts.add(new ConsentAccount("account1","EUR"));
+		consent.setAccounts(accounts);
+//		Credentials credentials = new Credentials("foo", "bar");
+		Credentials credentials = new Credentials("demo", "demo");
+		Access access = fs.addProviderAccess(accessMethodId, "account1", "EUR", false, credentials, consent);
+		assertNotNull(access);
+		String accessId = access.getId();
+		SyncStatusResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
+				false,
+				"demo", "demo");
+		assertNotNull(startProviderSync);
+		String syncId = startProviderSync.getId();
+		SyncStatusResponse accessSync = fs.getAccessSync(accessId, syncId);
+		assertNotNull(accessSync);
+	}
+	
 	public void test_getSupportedPaymentServices() throws FigoException, IOException	{
 		FigoSession fs = new FigoSession(accessToken.access_token);
 		List<Service> response = fs.getSupportedServices("de");

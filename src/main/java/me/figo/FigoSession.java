@@ -38,9 +38,9 @@ import me.figo.internal.Credentials;
 import me.figo.internal.ModifyStandingOrderRequest;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.StartProviderSyncRequest;
-import me.figo.internal.StartProviderSyncResponse;
 import me.figo.internal.SubmitPaymentRequest;
 import me.figo.internal.SyncChallengeRequest;
+import me.figo.internal.SyncStatusResponse;
 import me.figo.internal.SyncTokenRequest;
 import me.figo.internal.TaskResponseType;
 import me.figo.internal.TaskStatusRequest;
@@ -218,7 +218,6 @@ public class FigoSession extends FigoApi {
 
 	/**
 	 * Retrieve the details of a specific provider access identified by its ID.
-	 * country
 	 * 
 	 * @return List of Accesses
 	 *
@@ -249,18 +248,17 @@ public class FigoSession extends FigoApi {
 	}
 
 	/**
-	 * Retrieve the details of a specific provider access identified by its ID.
-	 * country
+	 * Retrieve the sync status of a specific provider access identified by its ID.
 	 * 
-	 * @return List of Accesses
+	 * @return SyncStatusResponse
 	 *
 	 * @exception FigoException
 	 *                              Base class for all figoExceptions
 	 * @exception IOException
 	 *                              IOException
 	 */
-	public Access getAccessSync(String accessId, String syncId) throws FigoException, IOException {
-		Access response = this.queryApi("/rest/accesses/" + accessId + "/syncs/" + syncId, null, "GET", Access.class);
+	public SyncStatusResponse getAccessSync(String accessId, String syncId) throws FigoException, IOException {
+		SyncStatusResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs/" + syncId, null, "GET", SyncStatusResponse.class);
 		return response;
 	}
 
@@ -331,15 +329,15 @@ public class FigoSession extends FigoApi {
 	 * @exception IOException
 	 *                              IOException
 	 */
-	public StartProviderSyncResponse startProviderSync(String accessId, String state, String redirect_uri,
+	public SyncStatusResponse startProviderSync(String accessId, String state, String redirect_uri,
 			boolean disable_notifications,
 			boolean save_credentials, String loginId, String password) throws FigoException, IOException {
 
 		Credentials credentials = new Credentials(loginId, password);
 		StartProviderSyncRequest request = new StartProviderSyncRequest(state, redirect_uri, disable_notifications,
 				save_credentials, credentials);
-		StartProviderSyncResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs", request, "POST",
-				StartProviderSyncResponse.class);
+		SyncStatusResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs", request, "POST",
+				SyncStatusResponse.class);
 		return response;
 	}
 

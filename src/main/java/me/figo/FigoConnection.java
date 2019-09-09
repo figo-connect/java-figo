@@ -215,7 +215,7 @@ public class FigoConnection extends FigoApi {
      * @throws FigoException
      * @throws IOException
      */
-    public Object getCatalog(String country, String q) throws FigoException, IOException	{
+    public List<CatalogBank> getCatalog(String country, String q) throws FigoException, IOException	{
     	CatalogBanksResponse response = this.queryApi("/catalog?country="+country+"&q="+q, null, "GET", CatalogBanksResponse.class);
     	return response.getBanks();
     }

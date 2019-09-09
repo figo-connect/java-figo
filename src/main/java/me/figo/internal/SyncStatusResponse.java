@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 
 import me.figo.models.ChallengeV4;
 
-public class StartProviderSyncResponse {
+public class SyncStatusResponse {
 
 	@Expose
 	public String id;
@@ -46,27 +46,27 @@ public class StartProviderSyncResponse {
 		this.status = status;
 	}
 
-	public Date getCreated_at() {
+	public Date getCreatedAt() {
 		return created_at;
 	}
 
-	public void setCreated_at(Date created_at) {
+	public void setCreatedAt(Date created_at) {
 		this.created_at = created_at;
 	}
 
-	public Date getStarted_at() {
+	public Date getStartedAt() {
 		return started_at;
 	}
 
-	public void setStarted_at(Date started_at) {
+	public void setStartedAt(Date started_at) {
 		this.started_at = started_at;
 	}
 
-	public Date getEnded_at() {
+	public Date getEndedAt() {
 		return ended_at;
 	}
 
-	public void setEnded_at(Date ended_at) {
+	public void setEndedAt(Date ended_at) {
 		this.ended_at = ended_at;
 	}
 
