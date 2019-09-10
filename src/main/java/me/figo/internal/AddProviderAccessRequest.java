@@ -1,8 +1,5 @@
 package me.figo.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 
 import me.figo.models.Consent;
@@ -11,9 +8,6 @@ public class AddProviderAccessRequest {
 
 	@Expose
 	private String access_method_id;
-	
-	@Expose
-	private List<AccountIdentifier> account_identifier;
 	
 	@Expose
 	private boolean save_credentials;
@@ -29,9 +23,6 @@ public class AddProviderAccessRequest {
 			Credentials credentials, Consent consent) {
 		super();
 		this.access_method_id = access_method_id;
-		this.account_identifier = new ArrayList<>();
-		this.account_identifier.add(account_identifier);
-		this.save_credentials = save_credentials;
 		this.credentials = credentials;
 		this.consent = consent;
 	}
@@ -66,14 +57,6 @@ public class AddProviderAccessRequest {
 
 	public void setAccess_method_id(String access_method_id) {
 		this.access_method_id = access_method_id;
-	}
-
-	public List<AccountIdentifier> getAccount_identifier() {
-		return account_identifier;
-	}
-
-	public void setAccount_identifier(List<AccountIdentifier> account_identifier) {
-		this.account_identifier = account_identifier;
 	}
 
 	public Credentials getCredentials() {

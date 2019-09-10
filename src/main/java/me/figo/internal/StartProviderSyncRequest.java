@@ -8,12 +8,12 @@ import com.google.gson.annotations.Expose;
 public class StartProviderSyncRequest {
     
 	public StartProviderSyncRequest(String state, String redirect_uri, boolean disable_notifications,
-			boolean save_credentials, Credentials credentials) {
+			boolean save_secrets, Credentials credentials) {
 		super();
 		this.state = state;
 		this.redirect_uri = redirect_uri;
 		this.disable_notifications = disable_notifications;
-		this.save_credentials = save_credentials;
+		this.save_secrets = save_secrets;
 		this.credentials = credentials;
 	}
 
@@ -36,7 +36,7 @@ public class StartProviderSyncRequest {
     public boolean disable_notifications;
     
 	@Expose
-	public boolean save_credentials;
+	public boolean save_secrets;
 
 	@Expose
 	public Credentials credentials;
@@ -55,14 +55,6 @@ public class StartProviderSyncRequest {
 
 	public void setDisable_notifications(boolean disable_notifications) {
 		this.disable_notifications = disable_notifications;
-	}
-
-	public boolean isSave_credentials() {
-		return save_credentials;
-	}
-
-	public void setSave_credentials(boolean save_credentials) {
-		this.save_credentials = save_credentials;
 	}
 
 	public Credentials getCredentials() {
@@ -96,4 +88,12 @@ public class StartProviderSyncRequest {
     public void setDisableNotifications(boolean disable_notifications) {
         this.disable_notifications = disable_notifications;
     }
+
+	public boolean isSaveSecrets() {
+		return save_secrets;
+	}
+
+	public void setSaveSecrets(boolean save_secrets) {
+		this.save_secrets = save_secrets;
+	}
 }

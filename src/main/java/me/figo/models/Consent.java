@@ -1,18 +1,40 @@
 package me.figo.models;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 
 public class Consent {
 
-	public Consent(boolean recurring, int period, List<String> scopes, Date expires_at) {
+	public static class ConsentAccount {
+		@Expose
+		String id;
+
+		@Expose
+		String currency;
+
+		public String getId() {
+			return id;
+		}
+
+		public String getCurrency() {
+			return currency;
+		}
+
+		public ConsentAccount(String id, String currency) {
+			super();
+			this.id = id;
+			this.currency = currency;
+		}
+		
+	}
+
+	public Consent(boolean recurring, int period, List<String> scopes) {
 		super();
 		this.recurring = recurring;
 		this.period = period;
 		this.scopes = scopes;
-		this.expires_at = expires_at;
 	}
 
 	@Expose
@@ -25,8 +47,8 @@ public class Consent {
 	List<String> scopes;
 
 	@Expose
-	Date expires_at;
-
+	List<ConsentAccount> accounts;
+	
 	public boolean isRecurring() {
 		return recurring;
 	}
@@ -51,12 +73,12 @@ public class Consent {
 		this.scopes = scopes;
 	}
 
-	public Date getExpires_at() {
-		return expires_at;
+	public List<ConsentAccount> getAccounts() {
+		return accounts==null?new ArrayList<ConsentAccount>():accounts;
 	}
 
-	public void setExpires_at(Date expires_at) {
-		this.expires_at = expires_at;
+	public void setAccounts(List<ConsentAccount> accounts) {
+		this.accounts = accounts;
 	}
 
 }
