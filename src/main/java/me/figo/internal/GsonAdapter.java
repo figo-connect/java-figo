@@ -24,11 +24,23 @@ package me.figo.internal;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 public class GsonAdapter {
     public static Gson createGson() {
@@ -43,20 +55,23 @@ public class GsonAdapter {
             }
         };
 
-        JsonDeserializer<Date> deserializer = new JsonDeserializer<Date>() {
-            @Override
-            public Date deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
-                if (json == null)
-                    return null;
+		JsonDeserializer<Date> deserializer = new JsonDeserializer<Date>() {
+			@Override
+			public Date deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+					throws JsonParseException {
+				if (json == null)
+					return null;
 
-                String s = json.getAsString().replace("Z", "+0000");
-                try {
-                    return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ").parse(s);
-                } catch (ParseException e) {
-                    return null;
-                }
-            }
-        };
+				try {
+					ZonedDateTime zdt = ZonedDateTime.parse(json.getAsString());
+					Instant instant = zdt.toInstant();
+					Date date = java.util.Date.from(instant);
+					return date;
+				} catch (DateTimeParseException e) {
+					return null;
+				}
+			}
+		};
 
 		JsonDeserializer<BigDecimal> bigDecimalDeserializer = new JsonDeserializer<BigDecimal>() {
 			@Override
