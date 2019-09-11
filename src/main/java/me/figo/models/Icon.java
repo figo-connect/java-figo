@@ -16,15 +16,7 @@ public class Icon {
 		return resolutions;
 	}
 
-	public void setResolutions(Map<String, String> resolutions) {
-		this.resolutions = resolutions;
-	}
-
 	public String getUrl() {
 		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 }
