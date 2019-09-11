@@ -10,20 +10,20 @@ public class TokenResponse {
     public String  access_token;
 
     @Expose
-    public String  refresh_token;    
+    public String  refresh_token;
 
-	@Expose
+    @Expose
     public Integer expires_in;
-	
-	public String getAccessToken() {
-		return access_token;
-	}
 
-	public String getRefreshToken() {
-		return refresh_token;
-	}
+    public String getAccessToken() {
+        return access_token;
+    }
 
-	public Integer getExpiresIn() {
-		return expires_in;
-	}
+    public String getRefreshToken() {
+        return refresh_token;
+    }
+
+    public Integer getExpiresIn() {
+        return expires_in;
+    }
 }
