@@ -110,7 +110,7 @@ public class Account {
      * Account icon URL
      */
     @Expose(serialize = false)
-    private String icon;
+    private Icon icon;
 
     /**
      * Account balance details
@@ -255,9 +255,9 @@ public class Account {
     }
 
     /**
-     * @return the account icon URL
+     * @return the account icon 
      */
-    public String getIconUrl() {
+    public Icon getIcon() {
         return icon;
     }
 
