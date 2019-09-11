@@ -160,10 +160,6 @@ public class FigoConnection extends FigoApi {
      * @exception IOException IOException        
      */
     public TokenResponse convertRefreshToken(String refreshToken) throws IOException, FigoException {
-        if (!refreshToken.startsWith("R")) {
-            throw new FigoException("invalid_code", "Invalid authentication code");
-        }
-
         return this.queryApi("/auth/token", new TokenRequest(refreshToken, null, this.redirectUri, "refresh_token"), "POST", TokenResponse.class);
     }
 
