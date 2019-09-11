@@ -78,31 +78,6 @@ public class CatalogBank {
 
 	}
 
-	public static class Icon {
-		
-		@Expose
-		private Map<String,String> resolutions;
-		
-		@Expose
-		private String url;
-
-		public Map<String, String> getResolutions() {
-			return resolutions;
-		}
-
-		public void setResolutions(Map<String, String> resolutions) {
-			this.resolutions = resolutions;
-		}
-
-		public String getUrl() {
-			return url;
-		}
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-	}
-	
 	/**
 	 * @return bank icon URL
 	 */
