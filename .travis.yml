@@ -1,8 +1,8 @@
 dist: trusty
 language: java
 jdk:
+- openjdk11
 - oraclejdk8
-- openjdk12
 install: mvn install -Dgpg.skip=true -DskipTests=true -Dmaven.javadoc.skip=true -B
   -V
 script: mvn test
