@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,7 +20,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import me.figo.internal.Credentials;
 import me.figo.internal.SyncStatusResponse;
 import me.figo.internal.TaskStatusResponse;
 import me.figo.internal.TaskTokenResponse;
@@ -84,9 +85,12 @@ public class APITestV4 {
 		String accessId = accesses.get(0).getId();
 		Access access = fs.getAccess(accessId);
 		assertNotNull(access);
+		Map<String,String> credentials = new HashMap<>();
+		credentials.put("login_id", "foo");
+		credentials.put("password", "bar");
 		SyncStatusResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
 				false,
-				"foo", "bar");
+				credentials);
 		assertNotNull(startProviderSync);
 		String syncId = startProviderSync.getId();
 		List<ChallengeV4> syncChallenges = fs.getSyncChallenges(accessId, syncId);
@@ -99,7 +103,6 @@ public class APITestV4 {
 		// fs.solveSyncChallenge(accessId, syncId, challenge.getId().toString(),
 		// accessMethodId);
 		Consent consent = new Consent(false, 1, Arrays.asList(new String[] { "ACCOUNTS", "BALANCES" }));
-		Credentials credentials = new Credentials("foo", "bar");
 		Access access2 = fs.addProviderAccess(accessMethodId, "account1", "EUR", false, credentials, consent);
 		assertNotNull(access2);
 		Object accessWithRemovePin = fs.removeStoredPin(accessId);
@@ -117,14 +120,16 @@ public class APITestV4 {
 		List<ConsentAccount> accounts = consent.getAccounts();
 		accounts.add(new ConsentAccount("account1","EUR"));
 		consent.setAccounts(accounts);
-//		Credentials credentials = new Credentials("foo", "bar");
-		Credentials credentials = new Credentials("demo", "demo");
+		Map<String,String> credentials = new HashMap<>();
+		credentials.put("login_id", "demo");
+		credentials.put("password", "demo");
+		credentials.put("param3", "any");
 		Access access = fs.addProviderAccess(accessMethodId, "account1", "EUR", false, credentials, consent);
 		assertNotNull(access);
 		String accessId = access.getId();
 		SyncStatusResponse startProviderSync = fs.startProviderSync(accessId, "4711", "http://localhost", false,
 				false,
-				"demo", "demo");
+				credentials);
 		assertNotNull(startProviderSync);
 		String syncId = startProviderSync.getId();
 		SyncStatusResponse accessSync = fs.getAccessSync(accessId, syncId);

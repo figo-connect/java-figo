@@ -29,12 +29,12 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.reflect.TypeToken;
 
 import me.figo.internal.AccountIdentifier;
 import me.figo.internal.AddProviderAccessRequest;
-import me.figo.internal.Credentials;
 import me.figo.internal.ModifyStandingOrderRequest;
 import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.StartProviderSyncRequest;
@@ -190,7 +190,7 @@ public class FigoSession extends FigoApi {
 	 */
 	public Access addProviderAccess(String access_method_id, String account_identifier_id,
 			String account_identifier_currency, boolean save_credentials,
-			Credentials credentials, Consent consent) throws FigoException, IOException {
+			Map<String, String> credentials, Consent consent) throws FigoException, IOException {
 		AccountIdentifier account_identifier = new AccountIdentifier(account_identifier_id,
 				account_identifier_currency);
 		AddProviderAccessRequest apar = new AddProviderAccessRequest(access_method_id, account_identifier,
@@ -331,9 +331,8 @@ public class FigoSession extends FigoApi {
 	 */
 	public SyncStatusResponse startProviderSync(String accessId, String state, String redirect_uri,
 			boolean disable_notifications,
-			boolean save_credentials, String loginId, String password) throws FigoException, IOException {
+			boolean save_credentials, Map<String, String> credentials) throws FigoException, IOException {
 
-		Credentials credentials = new Credentials(loginId, password);
 		StartProviderSyncRequest request = new StartProviderSyncRequest(state, redirect_uri, disable_notifications,
 				save_credentials, credentials);
 		SyncStatusResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs", request, "POST",

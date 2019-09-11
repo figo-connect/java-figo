@@ -1,5 +1,7 @@
 package me.figo.internal;
 
+import java.util.Map;
+
 import com.google.gson.annotations.Expose;
 
 import me.figo.models.Consent;
@@ -13,14 +15,14 @@ public class AddProviderAccessRequest {
 	private boolean save_credentials;
 
 	@Expose
-	private Credentials credentials;
+	private Map<String,String> credentials;
 
 	@Expose
 	private Consent consent;
 
 	public AddProviderAccessRequest(String access_method_id, AccountIdentifier account_identifier,
 			boolean save_credentials,
-			Credentials credentials, Consent consent) {
+			Map<String, String> credentials, Consent consent) {
 		super();
 		this.access_method_id = access_method_id;
 		this.credentials = credentials;
@@ -59,11 +61,11 @@ public class AddProviderAccessRequest {
 		this.access_method_id = access_method_id;
 	}
 
-	public Credentials getCredentials() {
+	public Map<String, String> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(Credentials credentials) {
+	public void setCredentials(Map<String, String> credentials) {
 		this.credentials = credentials;
 	}
 

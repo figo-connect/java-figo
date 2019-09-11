@@ -1,5 +1,7 @@
 package me.figo.internal;
 
+import java.util.Map;
+
 import com.google.gson.annotations.Expose;
 
 /**
@@ -8,7 +10,7 @@ import com.google.gson.annotations.Expose;
 public class StartProviderSyncRequest {
     
 	public StartProviderSyncRequest(String state, String redirect_uri, boolean disable_notifications,
-			boolean save_secrets, Credentials credentials) {
+			boolean save_secrets, Map<String,String> credentials) {
 		super();
 		this.state = state;
 		this.redirect_uri = redirect_uri;
@@ -39,7 +41,7 @@ public class StartProviderSyncRequest {
 	public boolean save_secrets;
 
 	@Expose
-	public Credentials credentials;
+	public Map<String,String> credentials;
 
 	public String getRedirect_uri() {
 		return redirect_uri;
@@ -57,11 +59,11 @@ public class StartProviderSyncRequest {
 		this.disable_notifications = disable_notifications;
 	}
 
-	public Credentials getCredentials() {
+	public Map<String, String> getCredentials() {
 		return credentials;
 	}
 
-	public void setCredentials(Credentials credentials) {
+	public void setCredentials(Map<String, String> credentials) {
 		this.credentials = credentials;
 	}
 
