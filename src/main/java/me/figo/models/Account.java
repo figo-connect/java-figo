@@ -41,10 +41,10 @@ public class Account {
     private String account_id;
 
     /**
-     * Internal figo Connect bank ID
+     * figo ID of the provider access.
      */
     @Expose(serialize = false)
-    private String bank_id;
+    private String access_id;
 
     /**
      * Account name
@@ -147,10 +147,10 @@ public class Account {
     }
 
     /**
-     * @return the internal figo Connect bank ID
+     * @return the figo ID of the provider access
      */
-    public String getBankId() {
-        return bank_id;
+    public String getAccessId() {
+        return access_id;
     }
 
     /**
