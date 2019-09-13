@@ -1090,36 +1090,6 @@ public class FigoSession extends FigoApi {
     	this.queryApi("/rest/accounts/" + accountId + "/securities", new VisitedRequest(visited == FieldVisited.VISITED), "PUT", null);
     }
 
-	@Deprecated
-    /**
-     * Get bank
-     *
-     * @param bankId
-     *            ID of the bank to be retrieved
-     * @return Bank or null
-     *
-     * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
-     */
-    public Bank getBank(String bankId) throws FigoException, IOException {
-        return this.queryApi("/rest/banks/" + bankId, null, "GET", Bank.class);
-    }
-
-	@Deprecated
-    /**
-     * Get Bank for account
-     *
-     * @param account
-     *            Account for which to return the Bank
-     * @return Bank or Null
-     *
-     * @exception FigoException Base class for all figoExceptions
-     * @exception IOException IOException
-     */
-    public Bank getBank(Account account) throws FigoException, IOException {
-        return getBank(account.getBankId());
-    }
-
     /**
      * Modify a bank
      *
