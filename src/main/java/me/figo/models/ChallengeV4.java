@@ -24,7 +24,7 @@ public class ChallengeV4 {
 	private String format;
 	
 	@Expose
-	private Integer id;
+	private String id;
 
 	@Expose
 	private String input_format;
@@ -43,6 +43,9 @@ public class ChallengeV4 {
 	private String type;
 
 	@Expose
+	private List<AuthMethod> auth_methods;
+	
+	@Expose
 	private String version;
 
 	public String getAdditional_info() {
@@ -59,10 +62,6 @@ public class ChallengeV4 {
 
 	public String getFormat() {
 		return format;
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public String getInput_format() {
@@ -98,5 +97,13 @@ public class ChallengeV4 {
 			return challenges;
 		}
 
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public List<AuthMethod> getAuthMethods() {
+		return auth_methods;
 	}
 }
