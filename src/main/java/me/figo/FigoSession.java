@@ -40,6 +40,7 @@ import me.figo.internal.SetupAccountRequest;
 import me.figo.internal.StartProviderSyncRequest;
 import me.figo.internal.SubmitPaymentRequest;
 import me.figo.internal.SyncChallengeRequest;
+import me.figo.internal.SyncScope;
 import me.figo.internal.SyncStatusResponse;
 import me.figo.internal.SyncTokenRequest;
 import me.figo.internal.TaskResponseType;
@@ -332,7 +333,7 @@ public class FigoSession extends FigoApi {
 	 */
 	public SyncStatusResponse startProviderSync(String accessId, String state, String redirect_uri,
 			boolean disable_notifications,
-			boolean save_credentials, Map<String, String> credentials, List<String> scope) throws FigoException, IOException {
+			boolean save_credentials, Map<String, String> credentials, List<SyncScope> scope) throws FigoException, IOException {
 
 		StartProviderSyncRequest request = new StartProviderSyncRequest(state, redirect_uri, disable_notifications,
 				save_credentials, credentials, scope);
@@ -345,7 +346,7 @@ public class FigoSession extends FigoApi {
 			boolean disable_notifications,
 			boolean save_credentials, Map<String, String> credentials) throws FigoException, IOException {
 		
-		List<String> scope = Collections.singletonList("TRANSACTIONS");
+		List<SyncScope> scope = Collections.singletonList(SyncScope.TRANSACTIONS);
 		StartProviderSyncRequest request = new StartProviderSyncRequest(state, redirect_uri, disable_notifications,
 				save_credentials, credentials, scope);
 		SyncStatusResponse response = this.queryApi("/rest/accesses/" + accessId + "/syncs", request, "POST",
