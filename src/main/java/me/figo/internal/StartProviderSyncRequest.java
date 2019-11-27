@@ -1,5 +1,6 @@
 package me.figo.internal;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.Expose;
@@ -10,13 +11,14 @@ import com.google.gson.annotations.Expose;
 public class StartProviderSyncRequest {
     
 	public StartProviderSyncRequest(String state, String redirect_uri, boolean disable_notifications,
-			boolean save_secrets, Map<String,String> credentials) {
+			boolean save_secrets, Map<String,String> credentials, List<SyncScope> scope) {
 		super();
 		this.state = state;
 		this.redirect_uri = redirect_uri;
 		this.disable_notifications = disable_notifications;
 		this.save_secrets = save_secrets;
 		this.credentials = credentials;
+		this.scope = scope;
 	}
 
 	/**
@@ -24,6 +26,12 @@ public class StartProviderSyncRequest {
      */
     @Expose
     public String state;
+
+    /**
+     * Defines the scope of the synchronization.
+     */
+    @Expose
+    public List<SyncScope> scope;
 
     /**
      * URL to redirect to when the synchronization finished
@@ -42,22 +50,6 @@ public class StartProviderSyncRequest {
 
 	@Expose
 	public Map<String,String> credentials;
-
-	public String getRedirect_uri() {
-		return redirect_uri;
-	}
-
-	public void setRedirect_uri(String redirect_uri) {
-		this.redirect_uri = redirect_uri;
-	}
-
-	public boolean isDisable_notifications() {
-		return disable_notifications;
-	}
-
-	public void setDisable_notifications(boolean disable_notifications) {
-		this.disable_notifications = disable_notifications;
-	}
 
 	public Map<String, String> getCredentials() {
 		return credentials;
@@ -97,5 +89,13 @@ public class StartProviderSyncRequest {
 
 	public void setSaveSecrets(boolean save_secrets) {
 		this.save_secrets = save_secrets;
+	}
+
+	public List<SyncScope> getScope() {
+		return scope;
+	}
+
+	public void setScope(List<SyncScope> scope) {
+		this.scope = scope;
 	}
 }
